@@ -1,0 +1,329 @@
+ 
+
+
+
+louise.harlandsson@lansforsakringar.se
+
+Bugg[] - När man tar bort grejer uppstår det problem
+Bugg[] - Spelet krashar om man ej trycker på knappar vid buildingdescription
+Bugg[x] - Hud är buggat, går knappt att trycka på visa knappar - 23:57 2014-01-18
+Bugg[x] - Finns osynliga touch areas - 23:56 2014-01-18
+Bugg[x] - Stocks bilderna bggas vid laddning - 22:49 2014-01-18
+Bugg[x] - krashar om man backar - 22:49 2014-01-18
+Bugg[x] - Borttagnar byggnader sparas - 00:44 2013-12-16
+Bugg[x] - Spelet krashar efter att man varit inne i mappen och trycker på spelet. - 00:36 2013-12-16
+Bugg[x] - Om building menyn är uppe krashar det när man ej trycker på en knapp - 00:36 2013-12-16
+Bugg[x] - Om en råvara nekas skapar den dubbelt så mycket senare. - 00:36 2013-12-16
+Bugg[x] - Spelet krashar vid menyn ibland - 00:36 2013-12-16
+Bugg[x] - Laddade stocks fungerar ej att fylla på - 16:31 2013-11-29
+Bugg[x] - Skinner och Wood Cutter sparas ej - 16:15 2013-11-29
+Bugg[x] - Tiden stannar efter första gången-14:15 2014-01-11
+
+TODO[] - Ny meny för beskrivning på byggnader
+TODO[] - Fixa bugs
+TODO[] - 
+TODO[] - Tutorial
+'
+
+Alla touch areas tas nu bort när ingame menyn tas upp och kommer tillbaks när den tas bort - 18:11 2014-03-06
+
+Fixade så att samma medelande ej kommer upp i chat historiken. 18:11 2014-03-06
+
+Lade dit svart bakgrund för meny knapparna - 18:02 2014-03-06
+
+Ändrade så att meddelande bakgrunden är mörkare - 19:40 2014-03-05
+
+Organiserade alla byggnads relaterade konstanta variabler till ConstantBuildings. -19:23 2014-03-05
+
+Fixade bugg där det ej gick att uppgradera ett hus till nivå 4 - 13:34 2014-01-25
+Husen kan förlora kultur och vatten - 13:51 2014-01-20
+
+Husen visar nu totala antalet invånare och drar bort det ifall husen tas bort - 13:50 2014-01-20
+
+Går att ha flera foodmarkets nu -13:48 2014-01-20
+
+Buy/cancel buttons skapas ej fler än en gång - 13:31 2014-01-20
+
+Går att ta bort hus lvl 2 nu - 13:27 2014-01-20
+
+FICK BORT ALLA osynliga touch areas! - 23:57 2014-01-18
+
+Fick bort den ena touch arean - 23:54 2014-01-18
+
+Tog bort hudworkers från en del metoder  - 23:46 2014-01-18
+Tagit bort alla gammla sätt att visa house - 23:13 2014-01-18
+
+Buybutton och cancelbutton skapas nu och tas bort - 23:02 2014-01-18
+
+Husen visar även hur mycket mat det har - 17:53 2014-01-18
+
+Husen visar nu info om populationen, behov och uppfyllda behov - 17:52 2014-01-18
+
+Har skapat ny typ av textobjekt som ska visa vad invånarna inne i ett hus behöver - 17:33 2014-01-18
+
+Har gett hus menyn en ny bakgrund - 02:48 2014-01-18
+
+Går nu att ladda stocks! - 13:18 2014-01-17
+
+Effektiviserade borttagningen, genom att kolla efter null vid varje avskrivning i removeentity - 17:49 2014-01-16
+
+Theatre placeras rätt nu - 17:44 2014-01-16
+
+Fontänen och silon passar nu in i griden - 21:42 2014-01-14
+
+Skapade en grid till placebuilding image, med syfte att förbättra byggnadernas positioner - 21:42 2014-01-14
+
+Guld texten förändras om man tjänar guld eller förlorar guld - 13:37 2014-01-11
+
+Kommer ej upp meddelanden när man trycker på farm / barrack - 13:37 2014-01-11
+
+Har gjort så att meddelanden tas bort när man går till huvudmeny - 19:53 2014-01-03
+
+Nu tas knapparna till menyerna bort - 01:43 2013-12-16
+
+4 menyknappar funkar bara att trycka på när mappen är uppe - 01:14 2013-12-16
+
+Man kan nu se antalet soldater varje stad. - 23:05 2013-12-11
+
+Menu knappen fungerar nu som den ska. Dvs det går även att stänga menyn med bakåt knappen. - 23:05 2013-12-11
+
+Remove knappen avaktiveras om man väljer byggnad - 21:20 2013-12-10
+
+Tryck på byggnads knappar lägger ej ut en svart text i huden längre - 21:14 2013-12-10
+
+Skapas ej en map menyknapp länger, detsamma gäller för quest knapp - 21:04 2013-12-10
+
+Skapade en metod och några booleans som stänger meny resources och income - 21:15 2013-12-10
+
+Income menyn går att stänga med bakåt knapp - 20:50 2013-12-10
+
+Huvud meny kanpparna skickar nu ut toast meddeladne vid tryck istället - 00:41 2013-12-10
+
+Börjar fräsha upp spelet lite -00:41 2013-12-10
+
+Har lagt in military knappen - 16:47 2013-12-09
+
+Går att förlora om man har skulder i ett år! - 00:06 2013-12-09
+
+Ändra main menu bilden lite, och lagt dit en dörr som öppnas - 23:14 2013-12-08
+
+Städer kan nu attackara en. Om man förlorar får man betala tribut - 20:43 2013-12-08
+
+Har börjat jobba på lite AI om när städer ska attackera - 16:16 2013-12-08
+
+Messagepopup skapar nu nya objekt, så meddelandet alltid kommer överts! - 15:11 2013-12-08
+
+Går att attackera och ta över en stad, de betalar tribute - 14:58 2013-12-08
+
+Ritade bild till clay mine och knappen - 23:51 2013-12-07
+
+Fixade bugg vid stänging av chatten - 23:50 2013-12-07
+
+Wood cutters hugger ner träd nu! -522:44 2013-12-07		
+
+Går ej att få samma meddelande 2 gånger i rad - 17:38 2013-12-07
+
+Går att se chatten nu - 17:37 2013-12-07
+
+Lade in en chat history knapp - 16:12 2013-12-07
+
+Uppdaterade grafen på träden - 15:18 2013-12-07
+
+Arbets menyn uppdaterad - 13:35 2013-12-06
+
+Finns meny för income expenses - 13:35 2013-12-06
+
+Income och expenses visas nu, - 13:35 2013-12-06
+
+fixade stone cutter 2x söligare bugg -05:19 2013-12-06 
+
+Workers,inhabitants,arraylists och guld resettas när man kommer från menyn - 04:51 2013-12-06
+
+Går att trycka av remove knappen nu -02:50 2013-12-06
+
+Lade in knapp för kartan- 02:50 2013-12-06
+
+Ritar ut avståndet som marblen kan ta ifrån - 02:36 2013-12-06
+
+Går förhopningsvis att ta bort alla sorters byggnader nu - 01:54 2013-12-06
+
+Måste lägga in ett sätt att ta bort byggnader - 00:51 2013-12-06
+
+Stone cutters kan nu ta marble från marble tiles - 20:08 2013-12-05
+
+Lade in några som exempel i spelet - 17:14 2013-12-05
+
+Skapade en bild för Marble tiles - 17:14 2013-12-05
+
+Fixade bugg med trainingbuybutton som hade en touch handler - 17:14 2013-12-05
+
+Stocks sparar nu sina globla resurser - 22:59 2013-12-04
+
+Stocks kan ha flera typer av råvaror - 21:11 2013-12-04
+
+Måste skapa en meny som kommer upp när man skapar en stock. Där man kan bestämma vilken typ stocken ska vara för - 21:00 2013-12-04
+
+Lade in moln objekt till brick foundries - 21:16 2013-12-03
+
+Förbättrade inloggninsmenyn lite - 21:16 2013-12-03
+
+Arbetare och militära arbetare sparas - 17:23 2013-12-03
+
+Hoplites tar nu arbetare - 17:23 2013-12-03
+
+Balanserat inkomsten lite, beroende på hus nivåer   - 01:34 2013-12-03
+
+Lagt in income + expenses för varje byggnad och invånare. Fungerar - 00:57 2013-12-03
+
+Arbetare och invånare sparas och laddas - 15:31 2013-12-02
+
+Måste fixa så att arbetare registreras. - 14:59 2013-12-02
+
+Workers och inhabitants systemet fungerar nu -14:59 2013-12-02
+
+Går ej att bygga om kraven ej är uppfyllda - 00:15 2013-12-02
+
+Om kraven för byggnaderna ej är uppfylda så visas det rött - 23:48 2013-12-01
+
+Varje byggnad har en egen hud med beskrivningar av syfte och kostnad - 15:08 2013-12-01
+
+Skapat variabler för arbetare som krävs, samt beskrivningar på varje byggnad - 02:40 2013-12-01
+
+Börjat på HUD till slagfält - 02:40 2013-12-01
+
+Har skapat en HUD till byggnader, barrack klar! -02:39 2013-12-01
+
+Hälften av soldaterna dör - 16:27 2013-11-30
+
+Går att återvända från battlefield nu! - 16:25 2013-11-30
+
+SObjects lägger sig utefter y koordinater - 18:40 2013-11-29d
+
+Gjorde så att asObjects sparas utefter deras Y koordinater - 18:23 2013-11-29
+
+Lade in så att man kan skapa brickfoundy och clay mine, behövs fortf bilder - 23:08 2013-11-28
+
+När man sparar tar man bort tidigare data! - 21:01 2013-11-28
+
+Resursmeny är tillbaks och fungerar - 19:54 2013-11-28
+
+Nya invånare skapas ej när hus laddas - 22:21 2013-11-27
+
+Ändrade så att byggnaders arbetare ej uppdateras vid laddning, -22:20 2013-11-27
+
+Ritade utt hjälma på hoplites - 19:50 2013-11-27
+
+Militära styrkan och guldet sparas  16:38 2013-11-27
+
+Fixade så att det går att ladda stocks med resurser - 514:41 2013-11-27
+
+Bugg[x] - Går ej att spara efter laddning
+
+Bugg[x] - Resurser ökas med två - 00:59 2013-11-27
+
+Bugg[x] - Går ej att trycka på byggnader - 00:06 2013-11-27
+
+
+Alla byggnader kan sparas, förutom stocks,  silo laddar mat, food market laddar mat - 23:39 2013-11-26
+
+Hus kan ladda sin lvl - 22:26 2013-11-26
+
+Save meny - 20:46 2013-11-26
+
+Laddar x och y koordinater! - 20:45 2013-11-26
+
+Går att spara och ladda vete och hus, teater och fontäner! - 18:16 2013-11-26
+
+Lagt dit grunden till slagfält, går att trycka på städerna och välja attack. Sedan tas allt bort och det sätts ut soldater - 21:36 2013-11-25
+
+PlaceBuildigns skapas nu, varje bild träffar rätt vid bygge - 21:34 2013-11-24
+
+Alla sobject,asobjects,textremove objects lägger till sgi själva i arraylist - 02:14 2013-11-24
+
+Lade dit text som kan tas bort - 02:14 2013-11-24
+
+Meny knappar detachas och läggs in -01:24 2013-11-24
+
+sObjects/asObjects äver remove, om remove är sant, tas de bort - 01:25 2013-11-24
+
+Lade dit en meny som tränar soldater vid tryck på barrack. -16:41 2013-11-23
+
+Skapade en barrack som kan byggas vid husnivåd 4 -16:41 2013-11-23
+
+Går att uppgradera hus till nivå 4. Skin bör tas bort. - 13:52 2013-11-22
+
+Sakeratt fixa - Positionera text till cois, inhabitants, månad. Positionera knapparna till byggnaderna. 
+Skala om och positionera, menu, map, map buttons, meny knapparna - 13:51 2013-11-22
+
+Ändrade HUDen till 1280,760 - 13:15 2013-11-19
+
+Uppdatera meddelande för städerna är testat - 12:40 2013-11-17
+
+Varje stad visar nu sina meddelande när de trycks på - 512:40 2013-11-17
+
+Lade in array för meddelande för städerna 12:40 2013-11-17
+
+Bugg[x] CityIkonerna försvinner om man går från mainmenu  - 23:25 2013-11-16
+
+Gjorde så att man flyttar snabbare om man är utzoomad - 22:32 2013-11-16
+
+ZOOM FUNKTION!! - 22:22 2013-11-16
+
+Går nu att ta bort och lägga in städer med hjälp av en subarray - 21:27 2013-11-16
+
+7 städer på rätt placering är utsatta - 20:23 2013-11-16
+
+Städerna visar relationer - 20:10 2013-11-16
+
+Städernas namn visas under, när städer trycks på poppar namnet upp - 19:44 2013-11-16
+
+Städer sätts nu ut utefter positioner som anges i arrayn - 19:44 2013-11-16
+
+Bugg[x], kan ej stänga kartan två gånger - 19:01 2013-11-16
+
+Skapade objekt för städer, dek an returnera typ av stad, namn av stad och relation -17:53 2013-11-16
+
+Lagt grunden till städer, array som innehåller namn,relation och typ av stad -17:40 2013-11-16
+
+RItade och lade in en karta, med hjälp utav meny knapparna. - 16:36 2013-11-16
+
+Kan inte placera object rakt ovanpå varandra längre - 02:17 2013-11-16
+
+Mål 1 och 2 fungerar nu - 01:27 2013-11-16
+
+Spelet håller nu reda på hur många invånare det finns av varje typ av hus - 01:27 2013-11-16
+
+Backa knappen stänger nu ner menyer, och tar upp meny knapparna om inget annat är uppe - 01:11 2013-11-16
+
+Gjorde så att man kan trycka på backa knappen - 00:49 2013-11-16
+
+Lade in en meny till som tar en till huvud menyn - 00:39 2013-11-16
+
+Gjorde så att uppdragen fungerar, måste bara fixa kontroller för lvl2,lvl3 invånare etc. - 00:03 2013-11-16
+
+Touchareas försvinner inte längre när man trycker på meny knapparna
+
+Spelete pausas när man tar upp menyn - 2013 - 11 -15
+
+LAde in funktion för att pausa och unpausa. Ej inlagt på rätt ställe ännu dock. - 2013-11-15
+
+
+Hus kan nu förfalla om det ej finns mat, fortfarande buggigt dock. - 2013-11-15
+
+Skapa en indikator som säger till om det ej finns mat - 2013-11-15
+
+Att göra[x]: Se till så att husen ej tar mat hela tiden (ska vara per månad), se även till så att
+gotfood förändras om de inte har mat! - 2013-11-15
+
+Gjorde så att man kunde se målen för banan - 2013-11-15
+
+Skapade en meny knapp, som kommer ta upp en meny där man kan se sina mål etc. - 2013-11-14
+
+Ritade en animering för en stenhuggare samt lade in den - 2013-11-14
+
+Skapa ikoner för varje krav för husen[x] - 2013-11-14
+
+Bug[x]: Trycka på hus ger upgrade menyn - 2013-11-14
+
+Ändrade så att alla byggnader ärver AniamtedSpriteObject / Sprite Object. Dessa har en metod som tar bort eller lägger dit
+touch areas. Dessa kallas i MainActivity vid removetouchareas.
