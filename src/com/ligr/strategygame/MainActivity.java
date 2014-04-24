@@ -10,6 +10,8 @@
 
 package com.ligr.strategygame;
 
+import huds.InGameMainHUD;
+
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -56,6 +58,7 @@ import org.andengine.ui.activity.SimpleBaseGameActivity;
 import org.andengine.util.debug.Debug;
 
 import other.DataBase;
+import shapes.RectangleModified;
 import text.HouseDescriptionText;
 import text.RemoveableText;
 import Maps.Levels;
@@ -126,6 +129,9 @@ import com.ligr.strategygame.maptiles.MarbleTile;
 import com.ligr.strategygame.maptiles.Tree;
 import com.ligr.strategygame.npc.Hoplite;
 
+import constants.Constant;
+import constants.ConstantBuildings;
+
 public class MainActivity extends SimpleBaseGameActivity implements
 		IOnSceneTouchListener, IScrollDetectorListener,
 		IPinchZoomDetectorListener {
@@ -138,7 +144,7 @@ public class MainActivity extends SimpleBaseGameActivity implements
 	public static int placeBuildingJumpX = 0;
 	public static int placeBuildingJumpY = 0;
 	private Mission checkMission;
-
+	public ArrayList<RectangleModified> rectanglesModified = new ArrayList<RectangleModified>();
 	/**
 	 * 
 	 * City information, {Name,Type,Relation,wealth,militaryoffensivestrength,
@@ -164,7 +170,7 @@ public class MainActivity extends SimpleBaseGameActivity implements
 					"40", "35", "10" }, };
 	// Constant variables that will not change
 
-	private static final int CAMERA_WIDTH = 1280; // Defines the width of the
+	public static final int CAMERA_WIDTH = 1280; // Defines the width of the
 													// screen
 	private static final int CAMERA_HEIGHT = 720; // Defines the height of the
 													// screen
@@ -177,27 +183,7 @@ public class MainActivity extends SimpleBaseGameActivity implements
 
 	public static String tempGlobalKind = "";
 	public static String[] messageHistory = new String[100];
-	/*
-	 * Military powers
-	 */
-	public static final int POWERSLINGER = 10;
-	public static final int POWERHOPLITE = 30;
-
-	/*
-	 * military strength
-	 */
-
-	public static int militaryHoplite = 0;
-	public static int militarySlinger = 0;
-	public static int militaryHopliteWar = 0;
-	public static int militarySlingerWar = 0;
-	/* Cost for resources */
-
-	public static int marbleBuy = 35, woodBuy = 25, skinBuy = 50,
-			brickBuy = 35;
-
-	public static int marbleSell = 25, woodSell = 20, skinSell = 40,
-			sbrickSell = 30;
+	
 
 	public static String choice = "";
 	public static Entity ID = null;
@@ -231,17 +217,18 @@ public class MainActivity extends SimpleBaseGameActivity implements
 	public static int tempID = 0; // Temporary ids that we store for different
 									// reasons
 
+	/*
+	 * military strength
+	 */
+
+	public static int militaryHoplite = 0;
+									public static int militarySlinger = 0;
+									public static int militaryHopliteWar = 0;
+									public static final int militarySlingerWar = 0;
+	
 	// Various resources which are used in the game
-	public static int Marble = 0;
-	public static int Wood = 0;
-	public static int Armor = 0;
-	public static int Skin = 0;
-	public static int Sculptures = 0;
-	public static int Fish = 0;
-	public static int Bronze = 0;
-	public static int Brick = 0;
-	public static int Meat = 0;
-	public static int Clay = 0;
+	public static int Marble = 0,Wood = 0, Armor = 0,Skin = 0,Sculptures = 0;
+	public static int Fish = 0,Bronze = 0,Brick = 0,Meat = 0,Clay = 0;
 
 	TimerHandler TimerHandlerMonthly; // The timer that updates each month
 
@@ -287,7 +274,7 @@ public class MainActivity extends SimpleBaseGameActivity implements
 
 	public static ZoomCamera camera;
 
-	public static final HUD inGameHUD = new HUD();
+	public static final InGameMainHUD inGameHUD = new InGameMainHUD();
 	private static final int HOUSEREQROAD = 1;
 	public static ArrayList<ClayTile> ClayTiles;
 	ITextureRegion inGameHUDImage;
@@ -311,7 +298,6 @@ public class MainActivity extends SimpleBaseGameActivity implements
 	public static Sprite resourcesMenu;
 	public static BuildingDescriptionCancel buildingDescriptionCancel;
 	public static FountainButton fountainButton;
-	public static MenuButton menuButton;
 	public static MenuQuestButton menuQuestButton;
 	public static FarmButton farmButton;
 	public static Fountain fountain;
@@ -357,18 +343,18 @@ public class MainActivity extends SimpleBaseGameActivity implements
 	private ITextureRegion buildingDescriptionHouseInhabitantsImage;
 	private ITextureRegion upgradeButtonImage;
 	private ITextureRegion MoreInfoImage;
-	private ITextureRegion hudMenuCollect;
-	private ITextureRegion hudMenuUtility;
+	public static  ITextureRegion hudMenuCollect;
+	public static  ITextureRegion hudMenuUtility;
 	private ITextureRegion hudMenuCulture;
 	private ITextureRegion hudMenuProduction;
 	private ITextureRegion trainingHUDImage;
 	private ITextureRegion trainingNextButtonImage;
 	private ITextureRegion trainingPreviousButtonImage;
 	private ITextureRegion trainingBuyButtonImage;
-	private ITextureRegion hudMenuStorage;
+	public static  ITextureRegion hudMenuStorage;
 	private ITextureRegion siloButtonImage;
 	private ITextureRegion fountainButtonImage;
-	private static ITextureRegion menuQuestButtonImage;
+	public static ITextureRegion menuQuestButtonImage;
 	private static ITextureRegion menuMainMenuImage;
 	private static ITextureRegion menuSaveButtonImage;
 	public static ITextureRegion menuMapImage;
@@ -386,14 +372,9 @@ public class MainActivity extends SimpleBaseGameActivity implements
 	private ITextureRegion skinResourceImage;
 	private ITextureRegion marbleResourceImage;
 	private ITextureRegion theatreButtonImage;
-	private ITextureRegion menuButtonImage;
+	public static ITextureRegion menuButtonImage;
 	private ITextureRegion grassTileImage;
 
-	private HUDMenuCultureButton hudmenuculturebutton;
-	private HUDMenuProductionButton hudmenuproductionbutton;
-	private HUDMenuUtilityButton hudmenuutilitybutton;
-	private HUDMenuCollectButton hudmenucollectbutton;
-	private HUDMenuStorageButton hudmenustoragebutton;
 
 	public static CustomScene mScene;
 
@@ -484,7 +465,6 @@ public class MainActivity extends SimpleBaseGameActivity implements
 	private Sprite marble;
 	private ITextureRegion marbleImage;
 	private ITextureRegion stockplacebuttonImage;
-	public static HUDResourceMenuButton HUDResources;
 	private FishSpot fishspot;
 	private TimerHandler TimerHandlerPause;
 	private static TextureRegion menuMapButtonImage;
@@ -499,8 +479,7 @@ public class MainActivity extends SimpleBaseGameActivity implements
 	private TextureRegion stoneCutterButtonImage;
 	private TextureRegion roadButtonImage;
 	private TextureRegion barrackButtonImage;
-	private HUDMenuMilitaryButton hudmenumilitarybutton;
-	private ITextureRegion hudMenuMilitaryImage;
+	public  static ITextureRegion hudMenuMilitaryImage;
 	private TiledTextureRegion hopliteImage;
 	private TiledTextureRegion DeerImage;
 	private TextureRegion trainingHopliteButtonImage;
@@ -509,7 +488,7 @@ public class MainActivity extends SimpleBaseGameActivity implements
 	public static ArrayList<BrickFoundry> brickFoundrys;
 	public static ITextureRegion brickFoundryImage;
 	private TextureRegion mineDepositClayImage;
-	private TextureRegion hudResourcesButtonImage;
+	public static TextureRegion hudResourcesButtonImage;
 	private static ITextureRegion mainMenuLoadButtonImage;
 	private static MainMenuLoadButton mainMenuLoadButton;
 	private TextureRegion stockChoiceWoodImage;
@@ -520,21 +499,16 @@ public class MainActivity extends SimpleBaseGameActivity implements
 	private TextureRegion stockChoiceClayImage;
 	private TextureRegion stockChoiceSkinImage;
 	private TiledTextureRegion marbleTileImage;
-	private HudRemoveBuildingButton hudRemoveBuildingButton;
-	private TextureRegion hudRemoveBuildingButtonImage;
-	private TextureRegion hudMapButtonImage;
-	public static HudMapButton hudMapButton;
-	public static MenuQuestButton hudObjectivesButton;
-	private static HUDIncomeButton incomeButton;
-	private TextureRegion incomeButtonImage;
+	public static TextureRegion hudRemoveBuildingButtonImage;
+	public static TextureRegion hudMapButtonImage;
+//	public static HudMapButton hudMapButton;
+	public static TextureRegion incomeButtonImage;
 	private TextureRegion brickFoundryButtonImage;
-	public static HUDChatButton hudChatButton;
-	private TextureRegion hudChatButtonImage;
+	public static TextureRegion hudChatButtonImage;
 	private TextureRegion clayButtonImage;
 	private TextureRegion clayBuildingImage;
 	private TiledTextureRegion clayTileImage;
-	private ITextureRegion hudMilitaryButtonImage;
-	public static HUDMilitaryButton hudMilitaryButton;
+	public static ITextureRegion hudMilitaryButtonImage;
 	public static boolean menuResourcesOpen = false;
 	public static AnimatedSprite mainMenuDoor;
 	private static ITiledTextureRegion mainMenuDoorImage;
@@ -676,7 +650,7 @@ public class MainActivity extends SimpleBaseGameActivity implements
 		} else {
 
 			MainActivity.removeBuildingHUD();
-			MainActivity.hudChatButton.closeChat();
+			inGameHUD.gethudChatButton().closeChat();
 			if (messageCancelButton != null)
 				removeEntity(messageCancelButton);
 
@@ -689,7 +663,7 @@ public class MainActivity extends SimpleBaseGameActivity implements
 			else if (MainActivity.buildingDescriptionCancel.getAlpha() == 1) {
 				BuildingDescriptionCancel.Cancel();
 			} else if (MainActivity.menuIncomeOpen) {
-				MainActivity.incomeButton.close();
+				inGameHUD.getIncomeButton().close();
 			} else if (MainActivity.hudMoreInfoInhabitants.getAlpha() == 1
 					|| MainActivity.resourcesMenu.getAlpha() == 1) {
 				hideHudMenu();
@@ -699,7 +673,7 @@ public class MainActivity extends SimpleBaseGameActivity implements
 				MainActivity.removeTrainingHUD();
 			} else if (MainActivity.menuMainMenuButton != null
 					&& MainActivity.menuMainMenuButton.getAlpha() == 0) {
-				MainActivity.menuButton.showMenu();
+				inGameHUD.getMenuButton().showMenu();
 			} else if (MainActivity.menuMainMenuButton == null) {
 				showMenu();
 			} else
@@ -1036,7 +1010,7 @@ public class MainActivity extends SimpleBaseGameActivity implements
 				camera.setCenter(mouse.getX(), mouse.getY());
 			}
 		}
-		return true;
+		return false;
 	}
 
 	/**
@@ -1044,8 +1018,7 @@ public class MainActivity extends SimpleBaseGameActivity implements
 	 */
 	public static void updateGoldMonthly() {
 		incomeInhabitants = 0;
-		militaryWorkers = MainActivity.militaryHoplite
-				+ MainActivity.militarySlinger;
+		militaryWorkers = getTotalMilitaryWorkers();
 		Workers = MainActivity.militaryWorkers + MainActivity.buildingWorkers;
 		for (int i = 1; i < MainActivity.Inhabitants.length; i++) {
 			incomeInhabitants += (float) (MainActivity.Inhabitants[i] * 9 * (0.75 + (0.25 * i)));
@@ -1061,6 +1034,10 @@ public class MainActivity extends SimpleBaseGameActivity implements
 		else
 			GoldText.setColor(1f, 0f, 0f);
 		GoldText.setText(Integer.toString(Gold));
+	}
+
+	private static int getTotalMilitaryWorkers() {
+		return MainActivity.militaryHoplite + MainActivity.militarySlinger ;
 	}
 
 	private static void updateIncome() {
@@ -1089,7 +1066,7 @@ public class MainActivity extends SimpleBaseGameActivity implements
 		expenses += StoneCutters.size() * ConstantBuildings.EXPENSESSTONECUTTER;
 		expenses += Theatres.size() * ConstantBuildings.EXPENSESTHEATRE;
 		expenses += WoodCutters.size() * ConstantBuildings.EXPENSESWOODCUTTER;
-		expenses += MainActivity.militaryHoplite
+		expenses += militaryHoplite
 				* ConstantBuildings.EXPENSESHOPLITE;
 		// expenses+=granarys.size()*main.EXPENSESGRANARY;
 
@@ -1126,11 +1103,11 @@ public class MainActivity extends SimpleBaseGameActivity implements
 	 * Update each level of the inhabitants
 	 */
 	public void updateLevelInhabitants(){
-		Inhabitants[0] = 0;
+		for(int j = 0; j < Inhabitants.length;j++){
+			Inhabitants[j] = 0;
 		for(int i = 0; i < this.Houses.size();i++){
-			Inhabitants[0] += Houses.get(i).getInhabitants(-1);
-		}
-		Debug.e("asda" +String.valueOf(Inhabitants[0]));
+			Inhabitants[j] += Houses.get(i).getInhabitants(j);
+		}}
 	}
 	
 	public static void updateWorkers(int workers, int maxworkers) {
@@ -1153,7 +1130,7 @@ public class MainActivity extends SimpleBaseGameActivity implements
 	}
 
 	public static void spawnArmy() {
-		for (int i = 0; i < MainActivity.militaryHopliteWar; i++) {
+		for (int i = 0; i < militaryHopliteWar; i++) {
 			Random rand = new Random();
 			int x, y;
 			x = rand.nextInt(96);
@@ -1513,16 +1490,9 @@ public class MainActivity extends SimpleBaseGameActivity implements
 									}
 									CheckForDebt();
 									UpdateMonth();
-									CheckGoals();
 									updateGoldMonthly(); 
 									checkMission.checkMission(Map, CurrentMission);
 									updateLevelInhabitants();
-
-									/*
-									 * UpdateFoodMarket(); UpdateStoneCutters();
-									 * UpdateWoodCutters(); UpdateSkinners();
-									 * UpdateHuntersLodges(); UpdateButchers();
-									 */
 									CheckHouseLevel();
 									// Update the houses
 									for (int i = 0; i < MainActivity.Houses
@@ -1788,36 +1758,6 @@ public class MainActivity extends SimpleBaseGameActivity implements
 	 * UpdateStocks.get(i).CheckForStocks(StoneCutters.get(i)); } }
 	 */
 
-	/**
-	 * Checks the goal of the map
-	 */
-	protected void CheckGoals() {
-		// TODO Auto-generated method stub
-
-		if (Map == "Map1") {
-			if (CurrentMission == 1) {
-				/*
-				 * If the total ammount of inhabitants are 300 or more And if
-				 * 80% of the houses have accses to food we will go to the next
-				 * mission
-				 */
-
-				if (Inhabitants[0] >= 150 && getAccsessToFood() >= .6) {
-					Debug.e("NEXT MISSION");
-					CurrentMission = 2;
-				}
-			} else if (CurrentMission == 2) {
-				if ((Inhabitants[1] + Inhabitants[2] + Inhabitants[3]
-						+ Inhabitants[4] + Inhabitants[5]) >= 200
-						&& getMarbleProductionYearly() >= 36) {
-					Debug.e("NEXT MISSION TO 3");
-					// CurrentMission =3;
-				}
-			}
-		} else if (Map == "Map2") {
-
-		}
-	}
 
 	int getMarbleProductionYearly() {
 		return MainActivity.StoneCutters.size() * 12;
@@ -1829,7 +1769,6 @@ public class MainActivity extends SimpleBaseGameActivity implements
 	 * @return true or false if we have food
 	 */
 	double getAccsessToFood() {
-		// TODO Auto-generated method stub
 		if (MainActivity.Houses.size() != 0) {
 			double percentoffood = 0;
 			double gotfoodammount = 0;
@@ -1966,10 +1905,9 @@ public class MainActivity extends SimpleBaseGameActivity implements
 					MainActivity.buildingWorkers = (int) x;
 					MainActivity.updateWorkers(0, 0);
 				} else if (load.contains("MilitaryHoplite")) {
-					MainActivity.militaryHoplite = (int) x;
-					Debug.e("Military");
+					militaryHoplite = (int) x;
 				} else if (load.contains("MilitarySlinger")) {
-					MainActivity.militarySlinger = (int) x;
+					militarySlinger = (int) x;
 				} else if (load.contains("Barrack")) {
 					MainActivity.barrack = new Barrack(x, y, barrackImage,
 							this.getVertexBufferObjectManager(), true);
@@ -2742,23 +2680,9 @@ public class MainActivity extends SimpleBaseGameActivity implements
 				menuInhabitantsButtonImage,
 				this.getVertexBufferObjectManager(), this);
 		HUDInhabitants.setAlpha(0);
-		HUDResources = new HUDResourceMenuButton(198, 0,
-				hudResourcesButtonImage, this.getVertexBufferObjectManager(),
-				this);
-		hudRemoveBuildingButton = new HudRemoveBuildingButton(0, 597,
-				hudRemoveBuildingButtonImage,
-				this.getVertexBufferObjectManager());
-		hudMapButton = new HudMapButton(0 + hudRemoveBuildingButton.getWidth(),
-				597, hudMapButtonImage, this.getVertexBufferObjectManager());
-		hudObjectivesButton = new MenuQuestButton(
-				0 + hudRemoveBuildingButton.getWidth() * 2, 597,
-				menuQuestButtonImage, this.getVertexBufferObjectManager());
-		hudChatButton = new HUDChatButton(
-				0 + hudRemoveBuildingButton.getWidth() * 3, 597,
-				hudChatButtonImage, this.getVertexBufferObjectManager());
-		hudMilitaryButton = new HUDMilitaryButton(
-				0 + hudRemoveBuildingButton.getWidth() * 4, 597,
-				hudMilitaryButtonImage, this.getVertexBufferObjectManager());
+
+		
+	
 
 		HUDWorkers = new AnimatedSprite(
 				640 - 256 - buildingDescriptionHouseInhabitantsImage.getWidth(),
@@ -2812,9 +2736,7 @@ public class MainActivity extends SimpleBaseGameActivity implements
 				this.getVertexBufferObjectManager());
 		messageText = new Text(300 + 8, 256 + 24, smallerFont, "", 5000,
 				this.getVertexBufferObjectManager());
-		incomeButton = new HUDIncomeButton(359, 0, incomeButtonImage,
-				this.getVertexBufferObjectManager());
-		incomeButton.setAlpha(0);
+
 		inGameHUD.attachChild(GoldText);
 		inGameHUD.attachChild(InhabitantsText);
 		inGameHUD.attachChild(MonthText);
@@ -2825,14 +2747,8 @@ public class MainActivity extends SimpleBaseGameActivity implements
 		inGameHUD.attachChild(buildingDescriptionDetail);
 		inGameHUD.attachChild(menuQuestText);
 		inGameHUD.attachChild(HUDWorkers);
-		inGameHUD.attachChild(HUDResources);
-		inGameHUD.attachChild(hudObjectivesButton);
-		inGameHUD.attachChild(hudChatButton);
-		inGameHUD.attachChild(hudMilitaryButton);
-		inGameHUD.attachChild(hudMapButton);
-		inGameHUD.attachChild(incomeButton);
+//		inGameHUD.attachChild(hudMapButton);
 		inGameHUD.attachChild(resourcesMenu);
-		inGameHUD.attachChild(hudRemoveBuildingButton);
 		inGameHUD.attachChild(upgradeButton);
 		inGameHUD.attachChild(woodResource);
 		inGameHUD.attachChild(brickResource);
@@ -2858,8 +2774,6 @@ public class MainActivity extends SimpleBaseGameActivity implements
 
 		// All the buttons in the game
 
-		menuButton = new MenuButton(0, 0, menuButtonImage,
-				this.getVertexBufferObjectManager());
 		housebutton = new HouseButton(CAMERA_WIDTH - 97 * 2, 67 * 2,
 				houseButtonImage, this.getVertexBufferObjectManager());
 		barrackButton = new BarrackButton(CAMERA_WIDTH - 97 * 2, 67 * 2,
@@ -2902,22 +2816,7 @@ public class MainActivity extends SimpleBaseGameActivity implements
 		huntersLodgeButton = new HuntersLodgeButton(CAMERA_WIDTH - 97, 67 * 3,
 				huntersLodgeButtonImage, this.getVertexBufferObjectManager());
 
-		hudmenucollectbutton = new HUDMenuCollectButton(CAMERA_WIDTH
-				- hudMenuCollect.getWidth(), 1 + hudMenuCollect.getHeight(),
-				hudMenuCollect, this.getVertexBufferObjectManager());
-		// hudmenuproductionbutton = new
-		// HUDMenuProductionButton(CAMERA_WIDTH-128-hudMenuCollect.getWidth(),1,hudMenuProduction,this.getVertexBufferObjectManager());
-		// hudmenuculturebutton = new
-		// HUDMenuCultureButton(CAMERA_WIDTH-128+hudMenuCollect.getWidth(),1+1+hudMenuCollect.getHeight(),hudMenuCulture,this.getVertexBufferObjectManager());
-		hudmenuutilitybutton = new HUDMenuUtilityButton(CAMERA_WIDTH
-				- hudMenuCollect.getWidth() * 2, hudMenuCollect.getHeight(),
-				hudMenuUtility, this.getVertexBufferObjectManager());
-		hudmenustoragebutton = new HUDMenuStorageButton(CAMERA_WIDTH
-				- hudMenuCollect.getWidth(), 1, hudMenuStorage,
-				this.getVertexBufferObjectManager());
-		hudmenumilitarybutton = new HUDMenuMilitaryButton(CAMERA_WIDTH
-				- hudMenuCollect.getWidth() * 2, 1, hudMenuMilitaryImage,
-				this.getVertexBufferObjectManager());
+	
 		trainingHUD = new Sprite(89, 143, trainingHUDImage,
 				this.getVertexBufferObjectManager());
 		trainingNextButton = new TrainingNextButton(trainingHUD.getX() + 192,
@@ -2952,28 +2851,12 @@ public class MainActivity extends SimpleBaseGameActivity implements
 		inGameHUD.attachChild(clayMineButton);
 		inGameHUD.attachChild(brickFoundryButton);
 		// inGameHUD.attachChild(hudmenuproductionbutton);
-		inGameHUD.attachChild(hudmenucollectbutton);
 		// inGameHUD.attachChild(hudmenuculturebutton);
-		inGameHUD.attachChild(hudmenuutilitybutton);
-		inGameHUD.attachChild(hudmenustoragebutton);
-		inGameHUD.attachChild(hudmenumilitarybutton);
 		inGameHUD.attachChild(fishingHutButton);
 		inGameHUD.attachChild(butcherButton);
-		inGameHUD.attachChild(menuButton);
-
-		inGameHUD.registerTouchArea(menuButton);
-		inGameHUD.registerTouchArea(hudmenucollectbutton);
-		inGameHUD.registerTouchArea(hudmenumilitarybutton);
-		// inGameHUD.registerTouchArea(hudmenuculturebutton);
-		// inGameHUD.registerTouchArea(hudmenuproductionbutton);
-		inGameHUD.registerTouchArea(hudmenuutilitybutton);
-		inGameHUD.registerTouchArea(hudmenustoragebutton);
-		inGameHUD.registerTouchArea(hudRemoveBuildingButton);
-		inGameHUD.registerTouchArea(hudMapButton);
-		inGameHUD.registerTouchArea(incomeButton);
-		inGameHUD.registerTouchArea(hudObjectivesButton);
-		inGameHUD.registerTouchArea(hudChatButton);
-		inGameHUD.registerTouchArea(hudMilitaryButton);
+		inGameHUD.initializeObjects();
+		inGameHUD.attachHUD();
+		inGameHUD.registerTouchAreas();
 		// inGameHUD.registerTouchArea(fishingHutButton);
 		// inGameHUD.registerTouchArea(skinnerButton);
 		// inGameHUD.registerTouchArea(butcherButton);
@@ -3102,9 +2985,9 @@ public class MainActivity extends SimpleBaseGameActivity implements
 		MainActivity.dataBase.add("Building Workers",
 				MainActivity.buildingWorkers, 2);
 		MainActivity.dataBase.add("MilitaryHoplite",
-				MainActivity.militaryHoplite, 3);
+				militaryHoplite, 3);
 		MainActivity.dataBase.add("MilitarySlinger",
-				MainActivity.militarySlinger, 4);
+				militarySlinger, 4);
 		MainActivity.dataBase.add("Marble", MainActivity.Marble, 5);
 		MainActivity.dataBase.add("Wood", MainActivity.Wood, 6);
 		MainActivity.dataBase.add("Armor", MainActivity.Armor, 7);
@@ -3363,12 +3246,12 @@ public class MainActivity extends SimpleBaseGameActivity implements
 		}
 	}
 
-	public static void changePlaceBuilding(String string) {
+	public static void changePlaceBuilding(String string) {//1
 		removePlaceBuildings();
+		MainActivity.boolplacebuilding = true;
 		placeBuildingJumpY = 0;
 		placeBuildingJumpX = 0;
 		MainActivity.currentBuilding = string;
-		Debug.e(MainActivity.currentBuilding);
 		if (MainActivity.currentBuilding == "Barrack")
 			placebuilding = new PlaceBuilding(touchx, touchy, barrackImage,
 					main.getVertexBufferObjectManager());
@@ -3427,7 +3310,7 @@ public class MainActivity extends SimpleBaseGameActivity implements
 		battleHUD.clearTouchAreas();
 		MainActivity.camera.setHUD(null);
 		leaveMainMenu("load");
-		MainActivity.militaryHoplite += MainActivity.militaryHopliteWar / 2;
+		militaryHoplite += militaryHopliteWar / 2;
 		Menu = "Game";
 	}
 
@@ -3494,11 +3377,12 @@ public class MainActivity extends SimpleBaseGameActivity implements
 				- buybuttonimage.getWidth(), CAMERA_HEIGHT
 				- (buybuttonimage.getHeight() * 2), cancelbuttonimage,
 				main.getVertexBufferObjectManager());
-
 		inGameHUD.attachChild(buybutton);
 		inGameHUD.attachChild(cancelbutton);
+		inGameHUD.registerTouchArea(buildingHUD);
 		inGameHUD.registerTouchArea(buybutton);
 		inGameHUD.registerTouchArea(cancelbutton);
+		
 		Text tempText;
 		for (int i = 0; i < 10; i++) {
 			tempText = new Text(buildingHUD.getX() + 48, buildingHUD.getY()
@@ -4225,6 +4109,15 @@ public class MainActivity extends SimpleBaseGameActivity implements
 		message = Msg;
 		Handles.sendEmptyMessage(0);
 	}
+	
+	/**
+	 * Creates a toast msg
+	 * 
+	 */
+	public static void MakeToast(String Msg, int time) {
+		message = Msg;
+		Handles.sendEmptyMessage(0);
+	}
 
 	static Handler Handles = new Handler() {
 		public void handleMessage(android.os.Message msg) {
@@ -4335,54 +4228,42 @@ public class MainActivity extends SimpleBaseGameActivity implements
 
 	public static int getMilitaryOffensivePower() {
 		int power = 0;
-		power += MainActivity.militarySlingerWar * MainActivity.POWERSLINGER;
-		power += MainActivity.militaryHopliteWar * MainActivity.POWERHOPLITE;
+		power += militarySlingerWar * Constant.POWERSLINGER;
+		power += militaryHopliteWar * Constant.POWERHOPLITE;
 
 		return power;
 	}
 
 	public static void closeMenus() {
 		if (MainActivity.menuIncomeOpen)
-			MainActivity.incomeButton.close();
+			inGameHUD.getIncomeButton().close();
 		if (MainActivity.menuResourcesOpen)
 			HUDResourceMenuButton.Cancel();
 	}
 
 	public static void removeHudTouchAreas() {
-		MainActivity.inGameHUD.unregisterTouchArea(hudMapButton);
-		MainActivity.inGameHUD.unregisterTouchArea(incomeButton);
-		MainActivity.inGameHUD.unregisterTouchArea(MainActivity.menuButton);
-		MainActivity.inGameHUD
-				.unregisterTouchArea(main.hudRemoveBuildingButton);
-		MainActivity.inGameHUD.unregisterTouchArea(main.hudMilitaryButton);
-		MainActivity.inGameHUD.unregisterTouchArea(main.hudObjectivesButton);
-		MainActivity.inGameHUD.unregisterTouchArea(main.hudmenumilitarybutton);
-		MainActivity.inGameHUD.unregisterTouchArea(main.hudmenucollectbutton);
-		MainActivity.inGameHUD.unregisterTouchArea(main.hudmenustoragebutton);
-		MainActivity.inGameHUD.unregisterTouchArea(main.hudmenuutilitybutton);
-		MainActivity.inGameHUD.unregisterTouchArea(main.menuButton);
-		MainActivity.inGameHUD.unregisterTouchArea(main.incomeButton);
-		MainActivity.inGameHUD.unregisterTouchArea(main.HUDResources);
+		inGameHUD.unregisterTouchAreas();
+//		MainActivity.inGameHUD.unregisterTouchArea(hudMapButton);
+//		MainActivity.inGameHUD.unregisterTouchArea(incomeButton);
+//		MainActivity.inGameHUD.unregisterTouchArea(MainActivity.menuButton);
+//		MainActivity.inGameHUD
+//				.unregisterTouchArea(main.hudRemoveBuildingButton);
+//		MainActivity.inGameHUD.unregisterTouchArea(main.hudMilitaryButton);
+//		MainActivity.inGameHUD.unregisterTouchArea(main.hudObjectivesButton);
+//		MainActivity.inGameHUD.unregisterTouchArea(main.hudmenumilitarybutton);
+//		MainActivity.inGameHUD.unregisterTouchArea(main.hudmenucollectbutton);
+//		MainActivity.inGameHUD.unregisterTouchArea(main.hudmenustoragebutton);
+//		MainActivity.inGameHUD.unregisterTouchArea(main.hudmenuutilitybutton);
+//		MainActivity.inGameHUD.unregisterTouchArea(main.menuButton);
+//		MainActivity.inGameHUD.unregisterTouchArea(main.incomeButton);
+//		MainActivity.inGameHUD.unregisterTouchArea(main.HUDResources);
 		MainActivity.menu = "";
 		unRegisterBuildingButtons();
 
 	}
 
 	public static void addHudTouchAreas() {
-		MainActivity.inGameHUD.registerTouchArea(hudMapButton);
-		MainActivity.inGameHUD.registerTouchArea(incomeButton);
-		MainActivity.inGameHUD.registerTouchArea(MainActivity.menuButton);
-		MainActivity.inGameHUD.registerTouchArea(main.hudRemoveBuildingButton);
-		MainActivity.inGameHUD.registerTouchArea(main.hudmenumilitarybutton);
-		MainActivity.inGameHUD.registerTouchArea(main.hudmenucollectbutton);
-		MainActivity.inGameHUD.registerTouchArea(main.hudmenustoragebutton);
-		MainActivity.inGameHUD.registerTouchArea(main.hudmenuutilitybutton);
-		MainActivity.inGameHUD.registerTouchArea(main.hudMilitaryButton);
-		MainActivity.inGameHUD.registerTouchArea(main.hudObjectivesButton);
-		MainActivity.inGameHUD.registerTouchArea(main.menuButton);
-		MainActivity.inGameHUD.registerTouchArea(main.incomeButton);
-		MainActivity.inGameHUD.registerTouchArea(main.HUDResources);
-
+		inGameHUD.registerTouchAreas();
 	}
 
 	public static void removeCityIconTexts() {

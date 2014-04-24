@@ -10,6 +10,8 @@ import org.andengine.util.debug.Debug;
 import com.ligr.strategygame.maptiles.ClayTile;
 import com.ligr.strategygame.maptiles.MarbleTile;
 
+import constants.ConstantBuildings;
+
 public class MineDepositClay extends SpriteObject {
 	
 	private boolean pressedDown = false;

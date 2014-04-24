@@ -1,11 +1,6 @@
- 
-
-
-
-louise.harlandsson@lansforsakringar.se
-
 Bugg[] - När man tar bort grejer uppstår det problem
-Bugg[] - Spelet krashar om man ej trycker på knappar vid buildingdescription
+Bugg[x] - Spelet krashar om man ej trycker på knappar vid buildingdescription - 17:20 2014-04-22
+Bugg[x] - Om man väljer ny byggnad när en byggnad redan är uppe, fastnar byggnaden. - 17:02 2014-04-22
 Bugg[x] - Hud är buggat, går knappt att trycka på visa knappar - 23:57 2014-01-18
 Bugg[x] - Finns osynliga touch areas - 23:56 2014-01-18
 Bugg[x] - Stocks bilderna bggas vid laddning - 22:49 2014-01-18
@@ -23,7 +18,26 @@ TODO[] - Ny meny för beskrivning på byggnader
 TODO[] - Fixa bugs
 TODO[] - 
 TODO[] - Tutorial
-'
+
+Om problem uppstår med resource knapp, så ändrade jag mainactivity till ingamehud - 20:21 2014-04-23 
+
+Lade in en del av hud knapparna inuti en egen klass, för att göra koden mer lättläslig - 20:28 2014-04-23
+
+Fyrkanterna kan tas bort lätt via missions - 19:20 2014-04-23
+
+Fyrkanterna kan ha egen färg och bredd - 19:20 2014-04-23
+
+Går att skapa fyrkanter med namn nu, som kommer kunna användas till tutorial - 19:04 2014-04-23
+
+Rensade upp en del i koden, flyttade konstanter till Constants mappen - 18:08 2014-04-22
+
+Fixade så att varje inhabitants[x] får invånar antal beroende på husnivåerna. -  20:15 2014-04-21 
+
+Lade upp det på github - 19:56 2014-04-21 
+
+LAde dit metoder som hämtar varje invånare lätt - 19:41 2014-04-21
+
+Lade dit en mission klass som kollar om uppdragen är utförda - 19:41 2014-04-21
 
 Alla touch areas tas nu bort när ingame menyn tas upp och kommer tillbaks när den tas bort - 18:11 2014-03-06
 

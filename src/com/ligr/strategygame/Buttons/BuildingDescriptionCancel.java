@@ -36,7 +36,7 @@ public class BuildingDescriptionCancel extends Sprite {
 	}
 	public static void Cancel(){
 		MainActivity.mScene.unregisterTouchArea(MainActivity.buildingDescriptionCancel);
-		MainActivity.menuButton.cancel();
+		MainActivity.inGameHUD.getMenuButton().cancel();
 		MainActivity.buildingDescriptionHUD.setAlpha(0);
 		MainActivity.removeEntity(MainActivity.houseInfo);
 		MainActivity.removeEntity(MainActivity.houseNeeds);

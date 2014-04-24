@@ -32,11 +32,11 @@ public class BuildingConfirmChoiceButton extends Sprite {
 		
 		if(pSceneTouchEvent.isActionUp()){
 			
-		Cancel();}
+		confirmChoice();}
 		return true;
 	
 	}
-	public static void Cancel(){
+	public static void confirmChoice(){
 		if(MainActivity.canBuild){
 		MainActivity.changePlaceBuilding(choice);
 		MainActivity.removeBuildingHUDKeepBuyButton();}

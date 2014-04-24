@@ -7,6 +7,8 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.color.Color;
 import org.andengine.util.debug.Debug;
 
+import constants.ConstantBuildings;
+
 import text.HouseDescriptionText;
 
 public class House extends AnimatedSpriteObject {
@@ -543,7 +545,6 @@ public class House extends AnimatedSpriteObject {
 
 	public void setLevel(int houselevel2) {
 		HouseLevel = houselevel2;
-		Debug.e("HOUSE LEVEL: " + String.valueOf(HouseLevel));
 		if (HouseLevel > 1) {
 			this.animate(new long[] { 50L, 50L, 50L, 50L },
 					ConstantBuildings.HOUSEANIMATIONLVLSTART[HouseLevel - 1],

@@ -11,6 +11,8 @@ import org.andengine.util.debug.Debug;
 
 import com.ligr.strategygame.maptiles.MarbleTile;
 
+import constants.ConstantBuildings;
+
 public class StoneCutter extends AnimatedSpriteObject {
 
 	private boolean pressedDown = false;

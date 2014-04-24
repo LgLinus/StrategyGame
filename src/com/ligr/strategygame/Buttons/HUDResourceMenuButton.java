@@ -1,5 +1,7 @@
 package com.ligr.strategygame.Buttons;
 
+import huds.InGameMainHUD;
+
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.input.touch.TouchEvent;
 import org.andengine.opengl.texture.region.ITextureRegion;
@@ -17,12 +19,12 @@ import com.ligr.strategygame.Silo;
 public class HUDResourceMenuButton extends Sprite {
 
 	private static String currentbuilding;
-	private MainActivity mainActivity;
+	private InGameMainHUD mainActivity;
 	public HUDResourceMenuButton(float pX, float pY, ITextureRegion pTextureRegion,
-			VertexBufferObjectManager pVertexBufferObjectManager,MainActivity mainactivity) {
+			VertexBufferObjectManager pVertexBufferObjectManager,InGameMainHUD inGameMainHUD) {
 		super(pX, pY, pTextureRegion, pVertexBufferObjectManager);
-		mainActivity = mainactivity;
-		mainActivity.inGameHUD.registerTouchArea(this);
+		mainActivity = inGameMainHUD;
+		mainActivity.registerTouchArea(this);
 		// TODO Auto-generated constructor stub
 	}
 

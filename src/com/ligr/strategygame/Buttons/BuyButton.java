@@ -13,7 +13,6 @@ import com.ligr.strategygame.AnimatedSpriteObject;
 import com.ligr.strategygame.Barrack;
 import com.ligr.strategygame.BrickFoundry;
 import com.ligr.strategygame.Butcher;
-import com.ligr.strategygame.ConstantBuildings;
 import com.ligr.strategygame.Farm;
 import com.ligr.strategygame.FishingHut;
 import com.ligr.strategygame.FoodMarket;
@@ -31,6 +30,8 @@ import com.ligr.strategygame.StoneCutter;
 import com.ligr.strategygame.Theatre;
 import com.ligr.strategygame.UpgradeArrowHouse;
 import com.ligr.strategygame.WoodCutter;
+
+import constants.ConstantBuildings;
 
 public class BuyButton extends Sprite {
 

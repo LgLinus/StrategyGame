@@ -15,6 +15,8 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.color.Color;
 import org.andengine.util.debug.Debug;
 
+import constants.ConstantBuildings;
+
 import other.DataBase;
 
 public class Farm extends AnimatedSpriteObject {

@@ -11,6 +11,8 @@ import org.andengine.util.debug.Debug;
 
 import com.ligr.strategygame.maptiles.Tree;
 
+import constants.ConstantBuildings;
+
 public class WoodCutter extends SpriteObject {
 
 boolean pressedDown = false;

@@ -10,6 +10,8 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.color.Color;
 import org.andengine.util.debug.Debug;
 
+import constants.ConstantBuildings;
+
 public class PlaceBuilding extends Sprite {
 
 

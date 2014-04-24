@@ -7,11 +7,12 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.color.Color;
 import org.andengine.util.debug.Debug;
 
-import com.ligr.strategygame.ConstantBuildings;
 import com.ligr.strategygame.House;
 import com.ligr.strategygame.MainActivity;
 import com.ligr.strategygame.PlaceBuilding;
 import com.ligr.strategygame.Buttons.BuyButton;
+
+import constants.ConstantBuildings;
 
 public class TrainingBuyButton extends BuyButton {
 

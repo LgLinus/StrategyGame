@@ -12,6 +12,8 @@ import org.andengine.util.debug.Debug;
 
 import com.ligr.strategygame.MainActivity;
 
+import constants.Constant;
+
 public class CityIcon extends Sprite {
 
 	public int index;
@@ -175,8 +177,8 @@ public class CityIcon extends Sprite {
 
 	public int getMilitaryPower(){
 		int power = 0;
-		power+= Integer.parseInt(MainActivity.CITY[index][11]) * MainActivity.POWERSLINGER;
-		power+= Integer.parseInt(MainActivity.CITY[index][12]) * MainActivity.POWERHOPLITE;
+		power+= Integer.parseInt(MainActivity.CITY[index][11]) * Constant.POWERSLINGER;
+		power+= Integer.parseInt(MainActivity.CITY[index][12]) * Constant.POWERHOPLITE;
 
 		return power;
 	}

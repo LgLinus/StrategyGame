@@ -6,6 +6,8 @@ import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.color.Color;
 
+import constants.ConstantBuildings;
+
 public class Theatre extends SpriteObject {
 
 	private boolean pressedDown = false;
