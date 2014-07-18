@@ -19,7 +19,7 @@ public class MainMenuButton extends Sprite{
     public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float pTouchAreaLocalX, float pTouchAreaLocalY) {
 		
 		if(pSceneTouchEvent.isActionUp()){
-			MainActivity.main.goToMainMenu();
+			MainActivity.main.getController().goToMainMenu();
 		}
 		return true;
 		}

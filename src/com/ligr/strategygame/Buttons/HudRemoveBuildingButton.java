@@ -11,9 +11,12 @@ import com.ligr.strategygame.MainActivity;
 
 public class HudRemoveBuildingButton extends Sprite{
 
+	private MainActivity main;
+	
 	public HudRemoveBuildingButton(float pX, float pY, ITextureRegion pTextureRegion,
-			VertexBufferObjectManager pVertexBufferObjectManager) {
+			VertexBufferObjectManager pVertexBufferObjectManager,MainActivity main) {
 		super(pX, pY, pTextureRegion, pVertexBufferObjectManager);
+		this.main = main;
 		// TODO Auto-generated constructor stub
 	}
 	
@@ -28,27 +31,37 @@ public class HudRemoveBuildingButton extends Sprite{
 	@Override
 	protected void onManagedUpdate(final float pSecondsElapsed){
 	super.onManagedUpdate(pSecondsElapsed);
-	if(MainActivity.removeBuildings)
+	if(thisMenu())
 		this.setAlpha(0.5f);
-	else
-		this.setAlpha(1);
+	else if (this.getAlpha() !=1.0f){
+		this.setAlpha(1.0f);
+		main.removeBuildings=false;}
 	
-	if(MainActivity.boolplacebuilding)
+	if(MainActivity.boolplacebuilding){
 		MainActivity.removeBuildings=false;
+		if(thisMenu())
+			resetCurrentMenu();}
 	}
 	private void removeActivated() {
 		if(MainActivity.removeBuildings == false){
-		
-		MainActivity.MakeToast("Click on buildings to remove them!");
-		MainActivity.removeBuildings = true;
-		MainActivity.boolplacebuilding = false;
-		MainActivity.addBuildingTouchAreas();
-		MainActivity.boolplacebuilding = false;
-		MainActivity.removePlaceBuildings();
+		main.setCurrentMenu("remove");
+		main.makeToast("Click on buildings to remove them!");
+		main.removeBuildings = true;
+		main.boolplacebuilding = false;
+		main.addBuildingTouchAreas();
+		main.boolplacebuilding = false;
+		main.removePlaceBuildings();
 		}
-		else
-			MainActivity.removeBuildings = false;
+		else{
+			main.removeBuildings = false;
+			resetCurrentMenu();
+		}}
+	
+	private void resetCurrentMenu() {
+		main.setCurrentMenu("");
 	}
-	
-	
+
+	private boolean thisMenu() {
+		return main.getCurrentMenu().equals("remove");
+	}
 }

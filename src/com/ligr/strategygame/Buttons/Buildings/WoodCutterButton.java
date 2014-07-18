@@ -6,19 +6,19 @@ import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.color.Color;
 
-import com.ligr.strategygame.House;
 import com.ligr.strategygame.MainActivity;
 import com.ligr.strategygame.PlaceBuilding;
+import com.ligr.strategygame.buildings.House;
 
 public class WoodCutterButton extends Sprite {
 
 	private static String currentbuilding;
-	
+	private MainActivity main;
 	public WoodCutterButton(float pX, float pY, ITextureRegion pTextureRegion,
-			VertexBufferObjectManager pVertexBufferObjectManager) {
-		super(pX, pY, pTextureRegion, pVertexBufferObjectManager);
-		this.setAlpha(0);
-		// TODO Auto-generated constructor stub
+			VertexBufferObjectManager pVertexBufferObjectManager,MainActivity main) {
+			super(pX, pY, pTextureRegion, pVertexBufferObjectManager);
+			this.setAlpha(0);
+			this.main = main;
 	}
 
 	@Override
@@ -31,11 +31,11 @@ public class WoodCutterButton extends Sprite {
 		
 		if(pSceneTouchEvent.isActionUp() && this.getAlpha()!=0){
 				
-			MainActivity.boolplacebuilding = true;
-			MainActivity.createBuildingHUD("Wood Cutter");
-			MainActivity.removeBuildingTouchAreas();
-			//MainActivity.MoreInfoText.setText("The wood cutter cuts wood for your city.\nmake sure you place it near trees and that it is connected to a Stock.");
-			MainActivity.MoreInfoText.setColor(Color.BLACK);
+			main.boolplacebuilding = true;
+			main.createBuildingHUD("Wood Cutter");
+			main.removeBuildingTouchAreas();
+			//main.MoreInfoText.setText("The wood cutter cuts wood for your city.\nmake sure you place it near trees and that it is connected to a Stock.");
+			main.MoreInfoText.setColor(Color.BLACK);
 		}
 		return true;
 	

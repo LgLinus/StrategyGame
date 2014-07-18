@@ -12,12 +12,19 @@ import org.andengine.util.debug.Debug;
 import com.ligr.strategygame.MainActivity;
 import com.ligr.strategygame.Map;
 import com.ligr.strategygame.SpriteObject;
-
+/**
+ * Button that displays our map when pressed
+ * @author LgLinuss
+ *
+ */
 public class HudMapButton extends Sprite{
 
+	private MainActivity main;
+	
 	public HudMapButton(float pX, float pY, ITextureRegion pTextureRegion,
-			VertexBufferObjectManager pVertexBufferObjectManager) {
+			VertexBufferObjectManager pVertexBufferObjectManager,MainActivity main) {
 		super(pX, pY, pTextureRegion, pVertexBufferObjectManager);
+		this.main = main;
 		// TODO Auto-generated constructor stub
 	}
 
@@ -30,28 +37,31 @@ public class HudMapButton extends Sprite{
 		return true;
 	}
 
+	/**
+	 * Show the map
+	 */
 	public void showMenu(){
-		if(MainActivity.menuMap==null){
-		MainActivity.menuMap = new Map(0, 0, MainActivity.menuMapImage,
+		if(main.menuMap==null){
+		main.menuMap = new Map(0, 0, main.getImages().getMenuMapImage(),
+				this.getVertexBufferObjectManager(),main.getController());
+		main.menuMapHUD = new Sprite(0 + main.menuMap.getWidth(), 0,
+				main.getImages().getMenuMapHUDImage(),
 				this.getVertexBufferObjectManager());
-		MainActivity.menuMapHUD = new Sprite(0 + MainActivity.menuMap.getWidth(), 0,
-				MainActivity.menuMapHUDImage,
-				this.getVertexBufferObjectManager());
-		MainActivity.inGameHUD.attachChild(MainActivity.menuMap);
-		MainActivity.inGameHUD.attachChild(MainActivity.menuMapHUD);
-		for (int i = 0; i < MainActivity.cityMessageSize; i++) {
-			Text tempText = new Text(MainActivity.menuMap.getWidth() + 4, 354 +  104 +  i * 25,
-					MainActivity.smallFont, "", 200, this.getVertexBufferObjectManager());
-			MainActivity.cityMessages.add(tempText);
-			MainActivity.inGameHUD.attachChild(MainActivity.cityMessages.get(i));
+		main.inGameHUD.attachChild(main.menuMap);
+		main.inGameHUD.attachChild(main.menuMapHUD);
+		for (int i = 0; i < main.cityMessageSize; i++) {
+			Text tempText = new Text(main.menuMap.getWidth() + 4, 354 +  104 +  i * 25,
+					main.smallFont, "", 200, this.getVertexBufferObjectManager());
+			main.cityMessages.add(tempText);
+			main.inGameHUD.attachChild(main.cityMessages.get(i));
 		}
-		for(int i = 0; i < MainActivity.cityIcons.size();i++){
-			MainActivity.inGameHUD.attachChild(MainActivity.cityIcons.get(i));
-			MainActivity.cityIcons.get(i).setText();
+		for(int i = 0; i < main.getController().getCityIcons().size();i++){
+			main.inGameHUD.attachChild(main.getController().getCityIcons().get(i));
+			main.getController().getCityIcons().get(i).setText();
 		}
-		MainActivity.addMapTouchAreas();
-		MainActivity.removeMenu();
-		MainActivity.removeHudTouchAreas();
+		main.getController().addMapTouchAreas();
+		main.removeMenu();
+		main.removeHudTouchAreas();
 		} 
 		}
 

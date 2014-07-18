@@ -10,11 +10,11 @@ import com.ligr.strategygame.MainActivity;
 public class MessageCancelButton extends Sprite {
 
 	private static String currentbuilding;
-	
+	private MainActivity main;
 	public MessageCancelButton(float pX, float pY, ITextureRegion pTextureRegion,
-			VertexBufferObjectManager pVertexBufferObjectManager) {
+			VertexBufferObjectManager pVertexBufferObjectManager, MainActivity main) {
 		super(pX, pY, pTextureRegion, pVertexBufferObjectManager);
-		// TODO Auto-generated constructor stub
+		this.main = main;
 	}
 
 
@@ -28,8 +28,8 @@ public class MessageCancelButton extends Sprite {
 		return true;
 	
 	}
-	public static void Cancel(){
-		MainActivity.removeMessage();
+	public void Cancel(){
+		main.removeMessage();
 	}
 	
 	

@@ -7,13 +7,19 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.debug.Debug;
 
 import com.ligr.strategygame.MainActivity;
-
+/**
+ * Class responsible of taking the user to the menu if pressed
+ * @author LgLinuss
+ *
+ */
 public class MenuButton extends Sprite{
 
+	private MainActivity main;
+	
 	public MenuButton(float pX, float pY, ITextureRegion pTextureRegion,
-			VertexBufferObjectManager pVertexBufferObjectManager) {
+			VertexBufferObjectManager pVertexBufferObjectManager, MainActivity main) {
 		super(pX, pY, pTextureRegion, pVertexBufferObjectManager);
-		// TODO Auto-generated constructor stub
+		this.main = main;
 	}
 	
 	@Override
@@ -25,17 +31,23 @@ public class MenuButton extends Sprite{
 		return true;
 		}
 	
+	/**
+	 * Show the menu
+	 */
 	public void showMenu(){
-		MainActivity.showMenu();
-		MainActivity.PAUSE = true;
-		MainActivity.buildingDescriptionCancel.setAlpha(1);
-		MainActivity.inGameHUD.registerTouchArea(MainActivity.buildingDescriptionCancel);
+		main.showMenu();
+		main.PAUSE = true;
+//		MainActivity.buildingDescriptionCancel.setAlpha(1);
+//		MainActivity.inGameHUD.registerTouchArea(MainActivity.buildingDescriptionCancel);
 	}
 	
+	/**
+	 * Remove the menu
+	 */
 	public void cancel(){
-		MainActivity.removeMenu();
+		main.removeMenu();
 		Debug.e("CANCEL");
-		MainActivity.menuQuestText.setText("");
-		MainActivity.PAUSE = false;
+		main.getMenuQuestButton().detachChildren();
+		main.PAUSE = false;
 	}
 }

@@ -6,23 +6,23 @@ import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.color.Color;
 
-import com.ligr.strategygame.House;
 import com.ligr.strategygame.MainActivity;
 import com.ligr.strategygame.PlaceBuilding;
+import com.ligr.strategygame.buildings.House;
 
 public class HUDMenuStorageButton extends Sprite {
 
 	private static String currentbuilding;
-	
+	private MainActivity main;
 	public HUDMenuStorageButton(float pX, float pY, ITextureRegion pTextureRegion,
-			VertexBufferObjectManager pVertexBufferObjectManager) {
+			VertexBufferObjectManager pVertexBufferObjectManager, MainActivity main) {
 		super(pX, pY, pTextureRegion, pVertexBufferObjectManager);
-		// TODO Auto-generated constructor stub
+		this.main = main;
 	}
 
 	@Override
 	protected void onManagedUpdate(final float pSecondsElapsed){
-		if(MainActivity.menu=="Storage")
+		if(thisMenu())
 			this.setAlpha(0.5f);
 		else
 			this.setAlpha(1);
@@ -33,15 +33,17 @@ public class HUDMenuStorageButton extends Sprite {
 		
 		if(pSceneTouchEvent.isActionUp() && this.getAlpha()!=0){
 			
-			MainActivity.menu="Storage";
+			main.setCurrentMenu("storeBuildings");
 			// Set the image of our placebuilding to the House image
-			MainActivity.MakeToast("This menu contains buildings that store various resources.");
-			MainActivity.unRegisterBuildingButtons();
-			MainActivity.menuhudstorage();
+			main.makeToast("This menu contains buildings that store various resources.");
+			main.unRegisterBuildingButtons();
+			main.menuhudstorage();
 		}
 		return true;
 	
 	}
-	
+	private boolean thisMenu() {
+		return main.getCurrentMenu().equals("storeBuildings");
+	}
 	
 }

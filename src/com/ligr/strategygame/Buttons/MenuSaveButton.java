@@ -12,10 +12,10 @@ import com.ligr.strategygame.SpriteObject;
 
 public class MenuSaveButton extends Sprite{
 
+	private MainActivity main;
 	public MenuSaveButton(float pX, float pY, ITextureRegion pTextureRegion,
-			VertexBufferObjectManager pVertexBufferObjectManager) {
+			VertexBufferObjectManager pVertexBufferObjectManager,MainActivity main) {
 		super(pX, pY, pTextureRegion, pVertexBufferObjectManager);
-		// TODO Auto-generated constructor stub
 	}
 	
 	@Override
@@ -28,6 +28,6 @@ public class MenuSaveButton extends Sprite{
 		}
 	
 	public void showMenu(){
-		MainActivity.MessagePopUpChoice("Are you sure you would like to save?", Color.WHITE, this, "Save", MainActivity.inGameHUD);
+		main.MessagePopUpChoice("Are you sure you would like to save?", Color.WHITE, this, "Save", MainActivity.inGameHUD);
 	}
 }

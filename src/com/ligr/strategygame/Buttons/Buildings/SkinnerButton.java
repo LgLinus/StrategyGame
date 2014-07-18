@@ -6,19 +6,20 @@ import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.color.Color;
 
-import com.ligr.strategygame.House;
 import com.ligr.strategygame.MainActivity;
 import com.ligr.strategygame.PlaceBuilding;
+import com.ligr.strategygame.buildings.House;
 
 public class SkinnerButton extends Sprite {
 
 	private static String currentbuilding;
+	private MainActivity main;
 	
 	public SkinnerButton(float pX, float pY, ITextureRegion pTextureRegion,
-			VertexBufferObjectManager pVertexBufferObjectManager) {
-		super(pX, pY, pTextureRegion, pVertexBufferObjectManager);
-		this.setAlpha(0);
-		// TODO Auto-generated constructor stub
+			VertexBufferObjectManager pVertexBufferObjectManager,MainActivity main) {
+			super(pX, pY, pTextureRegion, pVertexBufferObjectManager);
+			this.setAlpha(0);
+			this.main = main;
 	}
 
 	@Override
@@ -31,11 +32,11 @@ public class SkinnerButton extends Sprite {
 		
 		if(pSceneTouchEvent.isActionUp() && this.getAlpha()!=0){
 				
-			MainActivity.boolplacebuilding = true;
-			MainActivity.createBuildingHUD("Skinner");
-			MainActivity.removeBuildingTouchAreas();
-			//	MainActivity.MoreInfoText.setText("The skinner skins the hide from animals");
-			MainActivity.MoreInfoText.setColor(Color.BLACK);
+			main.boolplacebuilding = true;
+			main.createBuildingHUD("Skinner");
+			main.removeBuildingTouchAreas();
+			//	main.MoreInfoText.setText("The skinner skins the hide from animals");
+			main.MoreInfoText.setColor(Color.BLACK);
 		}
 		return true;
 	

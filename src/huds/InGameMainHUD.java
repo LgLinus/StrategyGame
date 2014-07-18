@@ -35,8 +35,9 @@ public class InGameMainHUD extends HUD {
 	private MenuButton menuButton;
 	private HUDResourceMenuButton HUDResources;
 	private HUDChatButton hudChatButton;
-
-	public InGameMainHUD() {
+	private MainActivity main;
+	public InGameMainHUD(MainActivity main) {
+		this.main = main;
 		// initializeObjects();
 		// attachHUD();
 	}
@@ -45,42 +46,42 @@ public class InGameMainHUD extends HUD {
 		VertexBufferObjectManager manager = MainActivity.main
 				.getVertexBufferObjectManager();
 
-		menuButton = new MenuButton(0, 0, MainActivity.menuButtonImage,
-				manager);
+		menuButton = new MenuButton(0, 0,main.getImages().getMenuButtonImage(),
+				manager,main);
 		hudRemoveBuildingButton = new HudRemoveBuildingButton(0, 597,
-				MainActivity.hudRemoveBuildingButtonImage, manager);
+				main.getImages().getHudRemoveBuildingButtonImage(), manager,main);
 		hudMapButton = new HudMapButton(hudRemoveBuildingButton.getWidth(), 597,
-				MainActivity.hudMapButtonImage,
-				MainActivity.main.getVertexBufferObjectManager());
+				main.getImages().getHudMapButtonImage(),
+				MainActivity.main.getVertexBufferObjectManager(),main);
 		hudObjectivesButton = new MenuQuestButton(
 				0 + hudRemoveBuildingButton.getWidth() * 2, 597,
-				MainActivity.menuQuestButtonImage, manager);
+				main.getImages().getMenuQuestButtonImage(), manager, main);
 		hudChatButton = new HUDChatButton(
 				0 + hudRemoveBuildingButton.getWidth() * 3, 597,
-				MainActivity.hudChatButtonImage, manager);
+				main.getImages().getHudChatButtonImage(), manager,main);
 		hudMilitaryButton = new HUDMilitaryButton(
 				0 + hudRemoveBuildingButton.getWidth() * 4, 597,
-				MainActivity.hudMilitaryButtonImage, manager);
+				main.getImages().getHudMilitaryButtonImage(), manager,main);
 		HUDResources = new HUDResourceMenuButton(198, 0,
-				MainActivity.hudResourcesButtonImage, manager,
-				this);
-		incomeButton = new HUDIncomeButton(359, 0, MainActivity.incomeButtonImage,
-				manager);
+				main.getImages().getHudResourcesButtonImage(), manager,
+				this,main);
+		incomeButton = new HUDIncomeButton(359, 0, main.getImages().getIncomeButtonImage(),
+				manager,main);
 		incomeButton.setAlpha(0);
-		menuButton = new MenuButton(0, 0, MainActivity.menuButtonImage,
-				manager);
+		menuButton = new MenuButton(0, 0, main.getImages().getMenuButtonImage(),
+				manager,main);
 		hudmenucollectbutton = new HUDMenuCollectButton(MainActivity.CAMERA_WIDTH
-				- MainActivity.hudMenuCollect.getWidth(), 1 + MainActivity.hudMenuCollect.getHeight(),
-				MainActivity.hudMenuCollect, manager);
+				- main.getImages().getHudMenuCollect().getWidth(), 1 + main.getImages().getHudMenuCollect().getHeight(),
+				main.getImages().getHudMenuCollect(), manager,main);
 		hudmenuutilitybutton = new HUDMenuUtilityButton(MainActivity.CAMERA_WIDTH
-				- MainActivity.hudMenuCollect.getWidth() * 2, MainActivity.hudMenuCollect.getHeight(),
-				MainActivity.hudMenuUtility, manager);
+				- main.getImages().getHudMenuCollect().getWidth() * 2, main.getImages().getHudMenuCollect().getHeight(),
+				main.getImages().getHudMenuUtility(), manager,main);
 		hudmenustoragebutton = new HUDMenuStorageButton(MainActivity.CAMERA_WIDTH
-				- MainActivity.hudMenuCollect.getWidth(), 1, MainActivity.hudMenuStorage,
-				manager);
+				- main.getImages().getHudMenuCollect().getWidth(), 1,main.getImages().getHudMenuStorage(),
+				manager,main);
 		hudmenumilitarybutton = new HUDMenuMilitaryButton(MainActivity.CAMERA_WIDTH
-				- MainActivity.hudMenuCollect.getWidth() * 2, 1, MainActivity.hudMenuMilitaryImage,
-				manager);
+				- main.getImages().getHudMenuCollect().getWidth() * 2, 1, main.getImages().getHudMenuMilitaryImage(),
+				manager,main);
 	}
 
 	/**
@@ -147,5 +148,9 @@ public class InGameMainHUD extends HUD {
 	public HUDIncomeButton getIncomeButton() {
 		// TODO Auto-generated method stub
 		return incomeButton;
+	}
+
+	public MenuQuestButton getHudObjectivesButton() {
+	return hudObjectivesButton;
 	}
 }

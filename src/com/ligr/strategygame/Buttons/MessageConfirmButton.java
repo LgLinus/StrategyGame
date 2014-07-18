@@ -9,18 +9,19 @@ import org.andengine.util.color.Color;
 import org.andengine.util.debug.Debug;
 
 import com.ligr.strategygame.AnimatedSpriteObject;
-import com.ligr.strategygame.House;
 import com.ligr.strategygame.MainActivity;
+import com.ligr.strategygame.buildings.House;
 
 public class MessageConfirmButton extends Sprite {
 
 	private static String currentbuilding;
-	
+	private MainActivity main;
 	public MessageConfirmButton(float pX, float pY, ITextureRegion pTextureRegion,
-			VertexBufferObjectManager pVertexBufferObjectManager) {
+			VertexBufferObjectManager pVertexBufferObjectManager,MainActivity main) {
 		super(pX, pY, pTextureRegion, pVertexBufferObjectManager);
 		// TODO Auto-generated constructor stub
-		MainActivity.PAUSE = true;
+		this.main = main;
+		main.PAUSE = true;
 	}
 
 
@@ -33,56 +34,56 @@ public class MessageConfirmButton extends Sprite {
 			return true;
 		
 		}
-		public static void Choice(){
-			if(MainActivity.choice =="Upgdradehouselvl4"){
+		public void Choice(){
+			if(main.choice =="Upgdradehouselvl4"){
 				upgradehouseLvl4();
 			}
-			else if(MainActivity.choice =="Attack City"){
+			else if(main.choice =="Attack City"){
 				attackCity();
-			}else if(MainActivity.choice =="Save"){
-				MainActivity.saveState();
-			}else if(MainActivity.choice =="Return"){
-				MainActivity.returnGameFromBattleField();
-			}else if(MainActivity.choice =="Attack Warning"){
+			}else if(main.choice =="Save"){
+				main.getController().saveState();
+			}else if(main.choice =="Return"){
+				main.getController().returnGameFromBattleField();
+			}else if(main.choice =="Attack Warning"){
 					attackWarning();
-			}else if(MainActivity.choice =="Remove"){
-				if(MainActivity.ID instanceof AnimatedSpriteObject)
-				MainActivity.removeAnimatedSpriteObject();
+			}else if(main.choice =="Remove"){
+				if(main.ID instanceof AnimatedSpriteObject)
+				main.removeAnimatedSpriteObject();
 				else
-				MainActivity.removeSpriteObject();
+				main.removeSpriteObject();
 			}
-			MainActivity.removeMessage();
+			main.removeMessage();
 		}
 
 
 
-		private static void attackWarning() {
-			if(MainActivity.Gold>=MainActivity.bribe){
+		private void attackWarning() {
+			if(main.getController().getGold()>=main.bribe){
 			CityIcon target;
-		    target = (CityIcon)MainActivity.ID;
+		    target = (CityIcon)main.ID;
 			target.atWar = false;
 			target.monthSinceAttack=0;
 			target.chanceofAttack = 0;
-			MainActivity.updateGold(-MainActivity.bribe);}
+			main.getController().updateGold(-main.bribe);}
 			else{
-				MainActivity.MakeToast("You can't afford the bribe. The attack will continue as planned");
+				main.makeToast("You can't afford the bribe. The attack will continue as planned");
 			}
 		}
 
 
 
-		private static void attackCity() {			
-			MainActivity.militaryHopliteWar = MainActivity.militaryHoplite;
-			MainActivity.militaryHoplite = 0;
-//			MainActivity.saveState();
-//			MainActivity.inGameHUD.detachChildren();
-//			MainActivity.inGameHUD.clearTouchAreas();
-//			MainActivity.resetArrayLists();
+		private void attackCity() {			
+			main.getController().setMilitaryHopliteWar(main.getController().getMilitaryHoplite());
+			main.getController().setMilitaryHoplite(0);
+//			main.saveState();
+//			main.inGameHUD.detachChildren();
+//			main.inGameHUD.clearTouchAreas();
+//			main.resetArrayLists();
 //			
 			CityIcon target;
-			MenuMapAttackButton id = (MenuMapAttackButton)MainActivity.ID;
+			MenuMapAttackButton id = (MenuMapAttackButton)main.ID;
 			target = id.getCity();
-//			MainActivity.enterBattlefield(target);
+//			main.enterBattlefield(target);
 			calculateWinner(target);
 			Debug.e(target.getName()+"xaxax");
 			
@@ -90,45 +91,45 @@ public class MessageConfirmButton extends Sprite {
 
 
 
-		public static void calculateWinner(CityIcon target) {
+		public void calculateWinner(CityIcon target) {
 			int powerPlayer = 0, powerEnemy = 0;
-			powerPlayer = MainActivity.getMilitaryOffensivePower();
+			powerPlayer = main.getController().getMilitaryOffensivePower();
 			powerEnemy = target.getMilitaryPower();
 			if(powerPlayer>powerEnemy){
-				MainActivity.MessagePopUp("You won the battle!", Color.WHITE);
-				MainActivity.CITY[target.index][11] = "0";
-				MainActivity.CITY[target.index][12] = "0";
-				MainActivity.CITY[target.index][9] = "1";
+				main.messagePopUp("You won the battle!", Color.WHITE);
+				main.CITY[target.index][11] = "0";
+				main.CITY[target.index][12] = "0";
+				main.CITY[target.index][9] = "1";
 			}
 			else{
-				MainActivity.MessagePopUp("You lost the battle..", Color.WHITE);
+				main.messagePopUp("You lost the battle..", Color.WHITE);
 			}
 		}
 
-		public static void calculateWinnerCityAttacked(CityIcon target) {
+		public void calculateWinnerCityAttacked(CityIcon target) {
 			int powerPlayer = 0, powerEnemy = 0;
-			powerPlayer = MainActivity.getMilitaryOffensivePower();
+			powerPlayer = main.getController().getMilitaryOffensivePower();
 			powerEnemy = target.getMilitaryPower();
 			if(powerPlayer>powerEnemy){
-				MainActivity.MessagePopUp("You protected your city from the attack!", Color.WHITE);
+				main.messagePopUp("You protected your city from the attack!", Color.WHITE);
 				target.atWar  = false;
 				target.monthSinceAttack = 0;
 			}
 			else{
-				MainActivity.CITY[target.index][9] = "2";
+				main.CITY[target.index][9] = "2";
 				target.atWar = false;
 				target.monthSinceAttack = 0;
-				MainActivity.MessagePopUp("You lost the battle!\nYour city will know pay 15 000 coins as tribute yearly to " + target.getName() + "\nIf you decide to attack their city they will respond and try to destroy your city.", Color.WHITE);
+				main.messagePopUp("You lost the battle!\nYour city will know pay 15 000 coins as tribute yearly to " + target.getName() + "\nIf you decide to attack their city they will respond and try to destroy your city.", Color.WHITE);
 			}
 		}
 
 
 
-		private static void upgradehouseLvl4() {
-			Entity ID = MainActivity.ID;
+		private void upgradehouseLvl4() {
+			Entity ID = main.ID;
 			House tempHouse = (House)ID;
 			if(tempHouse.HouseLevel==3){
-				if(MainActivity.Skin>=2 && MainActivity.Marble >= 1){
+				if(main.getController().Skin>=2 && main.getController().Marble >= 1){
 				tempHouse.upgradetolvl4();
 				}
 			

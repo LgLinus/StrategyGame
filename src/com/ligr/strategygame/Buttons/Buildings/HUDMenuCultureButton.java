@@ -6,17 +6,19 @@ import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.color.Color;
 
-import com.ligr.strategygame.House;
 import com.ligr.strategygame.MainActivity;
 import com.ligr.strategygame.PlaceBuilding;
+import com.ligr.strategygame.buildings.House;
 
 public class HUDMenuCultureButton extends Sprite {
 
 	private static String currentbuilding;
+	private MainActivity main;
 	
 	public HUDMenuCultureButton(float pX, float pY, ITextureRegion pTextureRegion,
-			VertexBufferObjectManager pVertexBufferObjectManager) {
+			VertexBufferObjectManager pVertexBufferObjectManager, MainActivity main) {
 		super(pX, pY, pTextureRegion, pVertexBufferObjectManager);
+		this.main = main;
 		// TODO Auto-generated constructor stub
 	}
 
@@ -35,9 +37,9 @@ public class HUDMenuCultureButton extends Sprite {
 				
 			MainActivity.menu="Culture";
 			// Set the image of our placebuilding to the House image
-			MainActivity.MakeToast("This menu contains buildings that spreads culture and entertainment.");
-			MainActivity.unRegisterBuildingButtons();
-			MainActivity.menuhudculture();
+			main.makeToast("This menu contains buildings that spreads culture and entertainment.");
+			main.unRegisterBuildingButtons();
+			main.menuhudculture();
 		}
 		return true;
 	

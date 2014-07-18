@@ -12,31 +12,31 @@ import com.ligr.strategygame.SpriteObject;
 public class MainMenuPlayButton extends Sprite{
 
 	
-	private MainActivity Mainactivity;
+	private MainActivity mainactivity;
 
 
 	public MainMenuPlayButton(float pX, float pY, ITextureRegion pTextureRegion,
 			VertexBufferObjectManager pVertexBufferObjectManager,MainActivity mainactivity) {
 		super(pX, pY, pTextureRegion, pVertexBufferObjectManager);
-		Mainactivity = mainactivity;
+		this.mainactivity = mainactivity;
 		// TODO Auto-generated constructor stub
 	}
 
 	@Override
 	protected void onManagedUpdate(final float pSecondsElapsed){
-		if(MainActivity.mainMenuDoor !=null)
-		if(MainActivity.mainMenuDoor.getCurrentTileIndex() == MainActivity.mainMenuDoor.getTileCount()-1){
-			MainActivity.PAUSE = false;
-			Debug.e(String.valueOf(MainActivity.PAUSE));
-			Mainactivity.leaveMainMenu("new");
-			MainActivity.attachStuffEnterGame();
+		if(mainactivity.getMainMenuDoor() !=null)
+		if(mainactivity.getMainMenuDoor().getCurrentTileIndex() == mainactivity.getMainMenuDoor().getTileCount()-1){
+			mainactivity.PAUSE = false;
+			Debug.e(String.valueOf(mainactivity.PAUSE));
+			mainactivity.getController().leaveMainMenu("new");
+			mainactivity.attachStuffEnterGame();
 		}
 	}
 	@Override
     public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float pTouchAreaLocalX, float pTouchAreaLocalY) {
 		
 		if(pSceneTouchEvent.isActionUp()){
-			MainActivity.mainMenuDoor.animate(50);
+			mainactivity.getMainMenuDoor().animate(50);
 			}
 		return true;
 	}

@@ -1,23 +1,91 @@
 Bugg[] - När man tar bort grejer uppstår det problem
-Bugg[x] - Spelet krashar om man ej trycker på knappar vid buildingdescription - 17:20 2014-04-22
-Bugg[x] - Om man väljer ny byggnad när en byggnad redan är uppe, fastnar byggnaden. - 17:02 2014-04-22
-Bugg[x] - Hud är buggat, går knappt att trycka på visa knappar - 23:57 2014-01-18
-Bugg[x] - Finns osynliga touch areas - 23:56 2014-01-18
-Bugg[x] - Stocks bilderna bggas vid laddning - 22:49 2014-01-18
-Bugg[x] - krashar om man backar - 22:49 2014-01-18
-Bugg[x] - Borttagnar byggnader sparas - 00:44 2013-12-16
-Bugg[x] - Spelet krashar efter att man varit inne i mappen och trycker på spelet. - 00:36 2013-12-16
-Bugg[x] - Om building menyn är uppe krashar det när man ej trycker på en knapp - 00:36 2013-12-16
-Bugg[x] - Om en råvara nekas skapar den dubbelt så mycket senare. - 00:36 2013-12-16
-Bugg[x] - Spelet krashar vid menyn ibland - 00:36 2013-12-16
-Bugg[x] - Laddade stocks fungerar ej att fylla på - 16:31 2013-11-29
-Bugg[x] - Skinner och Wood Cutter sparas ej - 16:15 2013-11-29
-Bugg[x] - Tiden stannar efter första gången-14:15 2014-01-11
-
+Bugg[] - Income/Expenses är obalanserat
+Bugg[] - Arbetare funkar ej
+Bugg[] - Building description cancel stänger ej ner menyn
 TODO[] - Ny meny för beskrivning på byggnader
 TODO[] - Fixa bugs
 TODO[] - 
 TODO[] - Tutorial
+
+--------------------------------------------------------------
+Bugg[x] - Mission 2 inhabitants klaras om hela tiden. - 18:35 2014-07-18
+Bugg[x] - Workers uppdateras ej direktl, bara under månads uppdateringen - 18:12 2014-07-18
+Bugg[x] - Animated sprite object uppdateras ej - 17:44 2014-07-18
+Bugg[x] - Woodcutter får knapp bilden när den sätts ut - 17:24 2014-07-18
+
+Ändrade i inhabitantsupdatemissions - 00:32 2014-07-13
+
+Bugg[x] - -Uppdatera hus fungerar ej - 17:30 2014-07-12
+Bugg[x] - Går ej att ta bort grejer - 17:30 2014-07-12
+Bugg[x]- Krash vid tryck på military buildings - 14:27 2014-07-10
+Bugg[x]- Vid tryck av två gånger på objectives knappen försvinner inte bakgrunden - 14:28 2014-07-10
+Bugg[x] - Krash vid hudworker tryck - 20:02 2014-07-05
+Bugg[x] - Krash vid öppning av quest - 
+Bugg[x] - Stone cutters krashar spelet rad 83 i stonecutter klassen - 22:36 2014-07-09
+Bugg[x] - Income/Expenses uppdateras ej
+Bugg[x] - Rött kors buildingdescriptioncancel försvinner ej vid bakåt knapptryck
+
+Gjorde så att byggnadernas z position berors på var deras bild börjar - 23:36 2014-07-17
+
+Nedan, buggar lite. - 23:06 2014-07-17
+
+Gjorde så att bildernas Z position uppdateras när ett nytt objekt släpps ut - 23:06 2014-07-17
+
+Lade dit likadant för menyerna till byggnaderna - 15:05 2014-07-10
+
+Tryck på någon av knapparna objectives, rmeove buildings eller chat knappen stänger ner andra fönster - 14:52 2014-07-10
+
+Gjorde så att man kan stänga ner och dra upp quest menyn. - 14:47 2014-07-10
+
+Fixade så att det bytas till nästa nivå av uppdrag - 22:33 2014-07-09
+
+Flyttade över save/load till controller klassen - 17:51 2014-07-09
+
+Lade in resurs variablerna i controller klassen, ex. Marble Clay - 17:51 2014-07-09
+
+Tog bort alla static metoder från MainActivity - 17:08 2014-07-09
+
+Tog bort static referens till removeentity - 16:56 2014-07-09
+
+Fixade så att buildingdescription fastnar på inGamEHUD och ej scenen
+
+Income / Expenses kallas nu - 16:19 2014-07-09
+
+Uppdaterade Stonecutter builden - 16:10 2014-07-09
+
+Går bara att klara ett uppdrag/månad. - 15:07 2014-07-09
+
+Removed the static reference to makeToast in MainActivity - 14:56 2014-07-09
+
+Tog bort kod för att kolla om det fanns tillräckligt med jobb inuti house objecten. - 14:40 2014-07-09
+
+Made it so the objective menu prints out the description of the missions - 14:35 2014-07-09
+
+Created a method that creates descriptions of the missions in the form of strings - 14:30 2014-07-09
+
+Missions fungerar som de ska, man måste klarat alla andra uppdrag för att klara mat uppdraget - 13:52 2014-07-09
+
+Går även att kolla om varje uppdrag är klarat, samt vad dess värde är - 13:31 2014-07-09
+
+Fungerar även med food - 13:25 2014-07-09
+
+Kontrollerade så att det gick att kolla om nuvarande uppdraget var inhabitants - 13:19 2014-07-09 
+
+Ändrade så att Mission klassen skapas från Controller klassen -13:12 2014-07-09
+
+Skapade ett missioninfo objekt som ska ha hand om all info om uppdragen för alla banor -13:12 2014-07-09
+
+Moved all of the buildings to a seperated package - 12:40 2014-07-09
+
+Fixade så att titel och beskrivning visas om man trycker på byggnader. - 20:21 2014-07-05
+
+Ändrade så att gold befinner sig i controller klassen -22:44 2014-07-04
+
+Ändrade alla MainActivity referenser i HUDIncomeButton fårn static till main
+
+Lägger in polygon objekt i placebuilding(för att kolla kollision vid skapande)
+
+Rensade upp mycket i koden, static referenser
 
 Om problem uppstår med resource knapp, så ändrade jag mainactivity till ingamehud - 20:21 2014-04-23 
 
@@ -341,3 +409,19 @@ Bug[x]: Trycka på hus ger upgrade menyn - 2013-11-14
 
 Ändrade så att alla byggnader ärver AniamtedSpriteObject / Sprite Object. Dessa har en metod som tar bort eller lägger dit
 touch areas. Dessa kallas i MainActivity vid removetouchareas.
+--------------------
+
+Bugg[x] - Spelet krashar om man ej trycker på knappar vid buildingdescription - 17:20 2014-04-22
+Bugg[x] - Om man väljer ny byggnad när en byggnad redan är uppe, fastnar byggnaden. - 17:02 2014-04-22
+Bugg[x] - Hud är buggat, går knappt att trycka på visa knappar - 23:57 2014-01-18
+Bugg[x] - Finns osynliga touch areas - 23:56 2014-01-18
+Bugg[x] - Stocks bilderna bggas vid laddning - 22:49 2014-01-18
+Bugg[x] - krashar om man backar - 22:49 2014-01-18
+Bugg[x] - Borttagnar byggnader sparas - 00:44 2013-12-16
+Bugg[x] - Spelet krashar efter att man varit inne i mappen och trycker på spelet. - 00:36 2013-12-16
+Bugg[x] - Om building menyn är uppe krashar det när man ej trycker på en knapp - 00:36 2013-12-16
+Bugg[x] - Om en råvara nekas skapar den dubbelt så mycket senare. - 00:36 2013-12-16
+Bugg[x] - Spelet krashar vid menyn ibland - 00:36 2013-12-16
+Bugg[x] - Laddade stocks fungerar ej att fylla på - 16:31 2013-11-29
+Bugg[x] - Skinner och Wood Cutter sparas ej - 16:15 2013-11-29
+Bugg[x] - Tiden stannar efter första gången-14:15 2014-01-11

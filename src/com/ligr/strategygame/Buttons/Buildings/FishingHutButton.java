@@ -6,19 +6,20 @@ import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.color.Color;
 
-import com.ligr.strategygame.House;
 import com.ligr.strategygame.MainActivity;
 import com.ligr.strategygame.PlaceBuilding;
+import com.ligr.strategygame.buildings.House;
 
 public class FishingHutButton extends Sprite {
 
 	private static String currentbuilding;
+	private MainActivity main;
 	
 	public FishingHutButton(float pX, float pY, ITextureRegion pTextureRegion,
-			VertexBufferObjectManager pVertexBufferObjectManager) {
-		super(pX, pY, pTextureRegion, pVertexBufferObjectManager);
-		this.setAlpha(0);
-		// TODO Auto-generated constructor stub
+			VertexBufferObjectManager pVertexBufferObjectManager,MainActivity main) {
+			super(pX, pY, pTextureRegion, pVertexBufferObjectManager);
+			this.setAlpha(0);
+			this.main = main;
 	}
 
 	@Override
@@ -31,11 +32,11 @@ public class FishingHutButton extends Sprite {
 		
 		if(pSceneTouchEvent.isActionUp()){
 			
-			MainActivity.boolplacebuilding = true;
-			MainActivity.createBuildingHUD("Fishing Hut");
-			MainActivity.removeBuildingTouchAreas();
-			//	MainActivity.MoreInfoText.setText("The fishing hut provides your city with another source of food");
-			MainActivity.MoreInfoText.setColor(Color.BLACK);
+			main.boolplacebuilding = true;
+			main.createBuildingHUD("Fishing Hut");
+			main.removeBuildingTouchAreas();
+			//	main.MoreInfoText.setText("The fishing hut provides your city with another source of food");
+			main.MoreInfoText.setColor(Color.BLACK);
 		}
 		return true;
 	

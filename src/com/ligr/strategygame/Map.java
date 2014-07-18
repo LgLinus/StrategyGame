@@ -6,18 +6,25 @@ import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.debug.Debug;
 
+import other.Controller;
+
+/**
+ * The map for the game
+ * @author LgLinuss
+ *
+ */
 public class Map extends Sprite{
 
 boolean pressedDown = false;
 
+	Controller controller;
 	public Map(float pX, float pY, ITextureRegion pTextureRegion,
-			VertexBufferObjectManager pVertexBufferObjectManager) {
+			VertexBufferObjectManager pVertexBufferObjectManager, Controller controller) {
 		super(pX, pY, pTextureRegion, pVertexBufferObjectManager);
-		// TODO Auto-generated constructor stub
-		}
+		this.controller = controller;}
 
 	public void cancel(){
-		MainActivity.leaveMap();
+	controller.getActivity().leaveMap();
 	}
 //	@Override
 //	public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float pTouchAreaLocalX, float pTouchAreaLocalY) {

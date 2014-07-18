@@ -6,19 +6,20 @@ import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.color.Color;
 
-import com.ligr.strategygame.House;
 import com.ligr.strategygame.MainActivity;
 import com.ligr.strategygame.PlaceBuilding;
+import com.ligr.strategygame.buildings.House;
 
 public class FarmButton extends Sprite {
 
 	private static String currentbuilding;
+	private MainActivity main;
 	
 	public FarmButton(float pX, float pY, ITextureRegion pTextureRegion,
-			VertexBufferObjectManager pVertexBufferObjectManager) {
-		super(pX, pY, pTextureRegion, pVertexBufferObjectManager);
-		this.setAlpha(0);
-		// TODO Auto-generated constructor stub
+			VertexBufferObjectManager pVertexBufferObjectManager,MainActivity main) {
+			super(pX, pY, pTextureRegion, pVertexBufferObjectManager);
+			this.setAlpha(0);
+			this.main = main;
 	}
 
 	@Override
@@ -30,11 +31,11 @@ public class FarmButton extends Sprite {
     public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float pTouchAreaLocalX, float pTouchAreaLocalY) {
 		
 		if(pSceneTouchEvent.isActionUp()){
-			MainActivity.boolplacebuilding = true;
-			MainActivity.createBuildingHUD("Farm");
-			MainActivity.removeBuildingTouchAreas();
-			//MainActivity.MoreInfoText.setText("The farm provides your city with food");
-			MainActivity.MoreInfoText.setColor(Color.BLACK);
+			main.boolplacebuilding = true;
+			main.createBuildingHUD("Farm");
+			main.removeBuildingTouchAreas();
+			//main.MoreInfoText.setText("The farm provides your city with food");
+			main.MoreInfoText.setColor(Color.BLACK);
 		}
 		return true;
 	

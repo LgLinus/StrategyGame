@@ -9,50 +9,84 @@ import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
 import com.ligr.strategygame.MainActivity;
+/**
+ * Button responsible of displaying the chat history when pressed. Pressing it again will remove the chat history
+ * @author LgLinuss
+ *
+ */
+public class HUDChatButton extends Sprite {
+	private MainActivity main;
 
-public class HUDChatButton extends Sprite{
-
-	private boolean chatShowed = false;
 	public HUDChatButton(float pX, float pY, ITextureRegion pTextureRegion,
-			VertexBufferObjectManager pVertexBufferObjectManager) {
+			VertexBufferObjectManager pVertexBufferObjectManager,
+			MainActivity main) {
 		super(pX, pY, pTextureRegion, pVertexBufferObjectManager);
-		// TODO Auto-generated constructor stub
+		this.main = main;
+		main.getInGameHUD().registerTouchArea(this);
 	}
-	
+
 	@Override
-    public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float pTouchAreaLocalX, float pTouchAreaLocalY) {
-		
-		if(pSceneTouchEvent.isActionUp()){
-			if(!chatShowed)
-			showChat();
-			else
+	public boolean onAreaTouched(TouchEvent pSceneTouchEvent,
+			float pTouchAreaLocalX, float pTouchAreaLocalY) {
+
+		if (pSceneTouchEvent.isActionUp()) {
+			if (!thisMenu())
+				showChat();
+			else{
 				closeChat();
+				resetCurrentMenu();}
 		}
 		return true;
+	}
+
+	@Override
+	protected void onManagedUpdate(final float pSecondsElapsed) {
+		super.onManagedUpdate(pSecondsElapsed);
+		if (thisMenu())
+			this.setAlpha(0.5f);
+		else if (this.getAlpha() != 1.0f) {
+			closeChat();
+			this.setAlpha(1.0f);
 		}
-	
-	public void showChat(){
-		chatShowed = true;
-		Text tempText;	
+	}
+
+	/**
+	 * Displays the chat history
+	 */
+	public void showChat() {
+		
+		main.setCurrentMenu("chat");
+		Text tempText;
 		String res = "";
 		int yPos = 128;
-		for(int i  = 0; i < MainActivity.messageHistory.length;i++){
+		for (int i = 0; i < MainActivity.messageHistory.length; i++) {
 			res += MainActivity.messageHistory[i];
-			tempText = new Text(128,yPos,MainActivity.gameFont,MainActivity.messageHistory[i],300,this.getVertexBufferObjectManager());
-			MainActivity.inGameHUD.attachChild(tempText);
-			MainActivity.chatHistoryTexts.add(tempText);
-			yPos+=tempText.getHeight();
+			tempText = new Text(128, yPos, MainActivity.gameFont,
+					main.messageHistory[i], 300,
+					this.getVertexBufferObjectManager());
+			main.getInGameHUD().attachChild(tempText);
+			main.chatHistoryTexts.add(tempText);
+			yPos += tempText.getHeight();
 			res = "";
 		}
-}
-	public void closeChat(){
-		chatShowed = false;
-		for(int i = 0; i < MainActivity.chatHistoryTexts.size();i++){
-			if(MainActivity.chatHistoryTexts.get(i)!=null)
-			MainActivity.removeEntity(MainActivity.chatHistoryTexts.get(i));
+	}
+
+	/**
+	 * Close the chat
+	 */
+	public void closeChat() {
+		for (int i = 0; i < MainActivity.chatHistoryTexts.size(); i++) {
+			if (MainActivity.chatHistoryTexts.get(i) != null)
+				main.removeEntity(MainActivity.chatHistoryTexts.get(i));
 		}
-		MainActivity.chatHistoryTexts = new ArrayList<Text>();
+		main.chatHistoryTexts = new ArrayList<Text>();
+	}
+
+	private void resetCurrentMenu(){
+		this.main.setCurrentMenu("");
 	}
 	
-	
+	private boolean thisMenu() {
+		return main.getCurrentMenu().equals("chat");
+	}
 }

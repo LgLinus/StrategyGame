@@ -6,19 +6,20 @@ import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.color.Color;
 
-import com.ligr.strategygame.House;
 import com.ligr.strategygame.MainActivity;
 import com.ligr.strategygame.PlaceBuilding;
+import com.ligr.strategygame.buildings.House;
 
 public class StockButton extends Sprite {
 
 	private static String currentbuilding;
+	private MainActivity main;
 	
 	public StockButton(float pX, float pY, ITextureRegion pTextureRegion,
-			VertexBufferObjectManager pVertexBufferObjectManager) {
-		super(pX, pY, pTextureRegion, pVertexBufferObjectManager);
-		this.setAlpha(0);
-		// TODO Auto-generated constructor stub
+			VertexBufferObjectManager pVertexBufferObjectManager,MainActivity main) {
+			super(pX, pY, pTextureRegion, pVertexBufferObjectManager);
+			this.setAlpha(0);
+			this.main = main;
 	}
 
 	@Override
@@ -30,13 +31,13 @@ public class StockButton extends Sprite {
     public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float pTouchAreaLocalX, float pTouchAreaLocalY) {
 		
 		if(pSceneTouchEvent.isActionUp() && this.getAlpha()!=0){
-			MainActivity.tempGlobalKind="";	
-			MainActivity.boolplacebuilding = true;
-			MainActivity.createBuildingHUD("Stock");
-			MainActivity.removeBuildingTouchAreas();
-			//MainActivity.MoreInfoText.setText("The stock is a building that stores your resources like wood and marble.");
-			MainActivity.MoreInfoText.setColor(Color.BLACK);
-			MainActivity.addStockchoices();
+			main.tempGlobalKind="";	
+			main.boolplacebuilding = true;
+			main.createBuildingHUD("Stock");
+			main.removeBuildingTouchAreas();
+			//main.MoreInfoText.setText("The stock is a building that stores your resources like wood and marble.");
+			main.MoreInfoText.setColor(Color.BLACK);
+			main.addStockchoices();
 		}
 		return true;
 	

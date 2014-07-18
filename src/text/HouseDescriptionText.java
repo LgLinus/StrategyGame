@@ -4,8 +4,8 @@ import org.andengine.entity.text.Text;
 import org.andengine.opengl.font.IFont;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
-import com.ligr.strategygame.House;
 import com.ligr.strategygame.MainActivity;
+import com.ligr.strategygame.buildings.House;
 
 public class HouseDescriptionText extends Text{
 

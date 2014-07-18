@@ -6,19 +6,20 @@ import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.color.Color;
 
-import com.ligr.strategygame.House;
 import com.ligr.strategygame.MainActivity;
 import com.ligr.strategygame.PlaceBuilding;
+import com.ligr.strategygame.buildings.House;
 
 public class BarrackButton extends Sprite {
 
 	private static String currentbuilding;
+	private MainActivity main;
 	
 	public BarrackButton(float pX, float pY, ITextureRegion pTextureRegion,
-			VertexBufferObjectManager pVertexBufferObjectManager) {
+			VertexBufferObjectManager pVertexBufferObjectManager,MainActivity main) {
 		super(pX, pY, pTextureRegion, pVertexBufferObjectManager);
 		this.setAlpha(0);
-		// TODO Auto-generated constructor stub
+		this.main = main;
 	}
 
 	@Override
@@ -31,11 +32,11 @@ public class BarrackButton extends Sprite {
 		
 		if(pSceneTouchEvent.isActionUp() && this.getAlpha()!=0){
 			
-			MainActivity.boolplacebuilding = true;
-			MainActivity.createBuildingHUD("Barrack");
-			MainActivity.removeBuildingTouchAreas();
-			//MainActivity.MoreInfoText.setText("You can train soldiers in the barracks");
-			MainActivity.MoreInfoText.setColor(Color.BLACK);
+			main.boolplacebuilding = true;
+			main.createBuildingHUD("Barrack");
+			main.removeBuildingTouchAreas();
+			//main.MoreInfoText.setText("You can train soldiers in the barracks");
+			main.MoreInfoText.setColor(Color.BLACK);
 		}
 		return true;
 	

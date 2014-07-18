@@ -13,10 +13,11 @@ import com.ligr.strategygame.MainActivity;
 public class MenuBattleReturnButton extends DetachableObjects {
 
 	private static String currentbuilding;
+	private MainActivity main;
 	public MenuBattleReturnButton(float pX, float pY, ITextureRegion pTextureRegion,
-			VertexBufferObjectManager pVertexBufferObjectManager) {
+			VertexBufferObjectManager pVertexBufferObjectManager,MainActivity main) {
 		super(pX, pY, pTextureRegion, pVertexBufferObjectManager);
-		// TODO Auto-generated constructor stub
+		this.main = main;
 	}
 
 
@@ -32,7 +33,7 @@ public class MenuBattleReturnButton extends DetachableObjects {
 	}
 	
 	public void Return(){
-		MainActivity.MessagePopUpChoice("Are you sure you want to leave the battlefield?\n half of your alive troops will die ", Color.WHITE, this, "Return", MainActivity.battleHUD);
+		main.MessagePopUpChoice("Are you sure you want to leave the battlefield?\n half of your alive troops will die ", Color.WHITE, this, "Return", MainActivity.battleHUD);
 	}
 	
 	

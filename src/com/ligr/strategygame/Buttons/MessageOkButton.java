@@ -10,10 +10,11 @@ import com.ligr.strategygame.MainActivity;
 public class MessageOkButton extends Sprite {
 
 	private static String currentbuilding;
-	
+	private MainActivity main;
 	public MessageOkButton(float pX, float pY, ITextureRegion pTextureRegion,
-			VertexBufferObjectManager pVertexBufferObjectManager) {
+			VertexBufferObjectManager pVertexBufferObjectManager,MainActivity main) {
 		super(pX, pY, pTextureRegion, pVertexBufferObjectManager);
+		this.main = main;
 		// TODO Auto-generated constructor stub
 	}
 
@@ -28,12 +29,12 @@ public class MessageOkButton extends Sprite {
 		return true;
 	
 	}
-	public static void Cancel(){
+	public void Cancel(){
 		if(MainActivity.gameOver){
-			MainActivity.goToMainMenu();
+			main.getController().goToMainMenu();
 		}
 		else{
-		MainActivity.removeMessage(); MainActivity.removeRecentMessage();}
+		main.removeMessage(); main.removeRecentMessage();}
 
 	}
 	

@@ -6,23 +6,24 @@ import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.color.Color;
 
-import com.ligr.strategygame.House;
 import com.ligr.strategygame.MainActivity;
 import com.ligr.strategygame.PlaceBuilding;
+import com.ligr.strategygame.buildings.House;
 
 public class HUDMenuCollectButton extends Sprite {
 
 	private static String currentbuilding;
-	
+	private MainActivity main;
 	public HUDMenuCollectButton(float pX, float pY, ITextureRegion pTextureRegion,
-			VertexBufferObjectManager pVertexBufferObjectManager) {
+			VertexBufferObjectManager pVertexBufferObjectManager, MainActivity main) {
 		super(pX, pY, pTextureRegion, pVertexBufferObjectManager);
+		this.main = main;
 		// TODO Auto-generated constructor stub
 	}
 
 	@Override
 	protected void onManagedUpdate(final float pSecondsElapsed){
-		if(MainActivity.menu=="Collect")
+		if(thisMenu())
 			this.setAlpha(0.5f);
 		else
 			this.setAlpha(1);
@@ -33,16 +34,18 @@ public class HUDMenuCollectButton extends Sprite {
 		
 		if(pSceneTouchEvent.isActionUp() && this.getAlpha()!=0){
 				
-			MainActivity.menu="Collect";
+			main.setCurrentMenu("collectbuildings");
 			// Set the image of our placebuilding to the House image
-			MainActivity.MakeToast("This menu contains buildings that collect resources");
+			main.makeToast("This menu contains buildings that collect resources");
 
-			MainActivity.unRegisterBuildingButtons();
-			MainActivity.menuhudcollect();
+			main.unRegisterBuildingButtons();
+			main.menuhudcollect();
 		}
 		return true;
 	
 	}
-	
+	private boolean thisMenu() {
+		return main.getCurrentMenu().equals("collectbuildings");
+	}
 	
 }

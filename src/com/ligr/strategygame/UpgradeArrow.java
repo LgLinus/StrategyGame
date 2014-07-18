@@ -10,15 +10,20 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.color.Color;
 import org.andengine.util.debug.Debug;
 
+/**
+ * Arrow displayed on top of a building if it can be upgraded manually
+ * @author LgLinuss
+ *
+ */
 public class UpgradeArrow extends AnimatedSprite {
 
 boolean pressedDown = false;
 Entity parent;
 
+
 	public UpgradeArrow(float pX, float pY, ITiledTextureRegion pTextureRegion,
 			VertexBufferObjectManager pVertexBufferObjectManager, Entity entity) {
 		super(pX, pY, pTextureRegion, pVertexBufferObjectManager);
-		// TODO Auto-generated constructor stub
 		parent = entity;
 		}
 	@Override
@@ -39,13 +44,10 @@ Entity parent;
 	protected void onManagedUpdate(final float pSecondsElapsed){
 	super.onManagedUpdate(pSecondsElapsed);
 		
-	
-		
 	}
 	
 	public void save() {
-		// TODO Auto-generated method stub
-		
+
 	}
 
 }

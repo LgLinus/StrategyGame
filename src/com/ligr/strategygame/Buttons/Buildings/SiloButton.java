@@ -6,19 +6,20 @@ import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.color.Color;
 
-import com.ligr.strategygame.House;
 import com.ligr.strategygame.MainActivity;
 import com.ligr.strategygame.PlaceBuilding;
+import com.ligr.strategygame.buildings.House;
 
 public class SiloButton extends Sprite {
 
 	private static String currentbuilding;
+	private MainActivity main;
 	
 	public SiloButton(float pX, float pY, ITextureRegion pTextureRegion,
-			VertexBufferObjectManager pVertexBufferObjectManager) {
-		super(pX, pY, pTextureRegion, pVertexBufferObjectManager);
-		this.setAlpha(0);
-		// TODO Auto-generated constructor stub
+			VertexBufferObjectManager pVertexBufferObjectManager,MainActivity main) {
+			super(pX, pY, pTextureRegion, pVertexBufferObjectManager);
+			this.setAlpha(0);
+			this.main = main;
 	}
 
 	@Override
@@ -31,12 +32,12 @@ public class SiloButton extends Sprite {
 		
 		if(pSceneTouchEvent.isActionUp() && this.getAlpha()!=0){
 				
-			MainActivity.boolplacebuilding = true;
-			MainActivity.removeBuildings = false;
-			MainActivity.createBuildingHUD("Silo");
-			MainActivity.removeBuildingTouchAreas();
-			//	MainActivity.MoreInfoText.setText("The silo stores the wheat from your farms");
-			//MainActivity.MoreInfoText.setColor(Color.BLACK);
+			main.boolplacebuilding = true;
+			main.removeBuildings = false;
+			main.createBuildingHUD("Silo");
+			main.removeBuildingTouchAreas();
+			//	main.MoreInfoText.setText("The silo stores the wheat from your farms");
+			//main.MoreInfoText.setColor(Color.BLACK);
 		}
 		return true;
 	

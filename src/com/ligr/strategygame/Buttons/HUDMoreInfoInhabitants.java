@@ -6,12 +6,12 @@ import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.color.Color;
 
-import com.ligr.strategygame.Farm;
-import com.ligr.strategygame.Fountain;
-import com.ligr.strategygame.House;
 import com.ligr.strategygame.MainActivity;
-import com.ligr.strategygame.Road;
-import com.ligr.strategygame.Silo;
+import com.ligr.strategygame.buildings.Farm;
+import com.ligr.strategygame.buildings.Fountain;
+import com.ligr.strategygame.buildings.House;
+import com.ligr.strategygame.buildings.Road;
+import com.ligr.strategygame.buildings.Silo;
 
 public class HUDMoreInfoInhabitants extends Sprite {
 

@@ -9,28 +9,28 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.color.Color;
 import org.andengine.util.debug.Debug;
 
-import com.ligr.strategygame.Farm;
-import com.ligr.strategygame.Fountain;
-import com.ligr.strategygame.House;
 import com.ligr.strategygame.MainActivity;
-import com.ligr.strategygame.Road;
-import com.ligr.strategygame.Silo;
+import com.ligr.strategygame.buildings.Farm;
+import com.ligr.strategygame.buildings.Fountain;
+import com.ligr.strategygame.buildings.House;
+import com.ligr.strategygame.buildings.Road;
+import com.ligr.strategygame.buildings.Silo;
 
 public class HUDResourceMenuButton extends Sprite {
 
 	private static String currentbuilding;
-	private InGameMainHUD mainActivity;
+	private MainActivity main;
 	public HUDResourceMenuButton(float pX, float pY, ITextureRegion pTextureRegion,
-			VertexBufferObjectManager pVertexBufferObjectManager,InGameMainHUD inGameMainHUD) {
+			VertexBufferObjectManager pVertexBufferObjectManager,InGameMainHUD inGameMainHUD, MainActivity main) {
 		super(pX, pY, pTextureRegion, pVertexBufferObjectManager);
-		mainActivity = inGameMainHUD;
-		mainActivity.registerTouchArea(this);
+		this.main = main;
+		main.getScene().registerTouchArea(this);
 		// TODO Auto-generated constructor stub
 	}
 
 	@Override
 	protected void onManagedUpdate(final float pSecondsElapsed){
-		if(MainActivity.resourcesMenu.getAlpha()==1)
+		if(main.resourcesMenu.getAlpha()==1)
 			this.setAlpha(0.5f);
 		else
 			this.setAlpha(1);
@@ -38,48 +38,48 @@ public class HUDResourceMenuButton extends Sprite {
 	@Override
     public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float pTouchAreaLocalX, float pTouchAreaLocalY) {
 		if(pSceneTouchEvent.isActionUp()){		
-		//	mainActivity.leaveGame();
-		if(MainActivity.resourcesMenu.getAlpha() == 0){
+		//	main.leaveGame();
+		if(main.resourcesMenu.getAlpha() == 0){
 		
-			MainActivity.closeMenus();	
-			MainActivity.menuResourcesOpen = true;
+			main.closeMenus();	
+			main.menuResourcesOpen = true;
 			try{
-				MainActivity.cancelbutton.Cancel();}
+				main.cancelButton.Cancel();}
 				catch(NullPointerException ex1){}
-			MainActivity.buildingDescriptionCancel.Cancel();
-			MainActivity.resourcesMenu.setAlpha(1);	
+//			main.buildingDescriptionCancel.Cancel();
+			main.resourcesMenu.setAlpha(1);	
 			
 			int i = 32;
-			if(MainActivity.Wood>0){
-				MainActivity.woodResource.setAlpha(1);
-				MainActivity.woodResource.setPosition(0,69+20+i);
-				MainActivity.woodResourceText.setText(Integer.toString(MainActivity.Wood));
-				MainActivity.woodResourceText.setPosition(76,69+24+i);
-				MainActivity.woodResourceText.setColor(Color.BLACK);
+			if(main.getController().Wood>0){
+				main.woodResource.setAlpha(1);
+				main.woodResource.setPosition(0,69+20+i);
+				main.woodResourceText.setText(Integer.toString(main.getController().Wood));
+				main.woodResourceText.setPosition(76,69+24+i);
+				main.woodResourceText.setColor(Color.BLACK);
 					i+=72;}
-			if(MainActivity.Marble>0){
-					MainActivity.marbleResource.setAlpha(1);
+			if(main.getController().Marble>0){
+					main.marbleResource.setAlpha(1);
 					Debug.e("SHOW ME MARBLE");
-					MainActivity.marbleResource.setPosition(0,69+20+i);
-					MainActivity.marbleResourceText.setText(Integer.toString(MainActivity.Marble));
-					MainActivity.marbleResourceText.setPosition(76,69+24+i);
-					MainActivity.marbleResourceText.setColor(Color.BLACK);
+					main.marbleResource.setPosition(0,69+20+i);
+					main.marbleResourceText.setText(Integer.toString(main.getController().Marble));
+					main.marbleResourceText.setPosition(76,69+24+i);
+					main.marbleResourceText.setColor(Color.BLACK);
 					
 					i+=72;}
-			if(MainActivity.Brick>0){
-				MainActivity.brickResource.setAlpha(1);
-				MainActivity.brickResource.setPosition(0,69+20+i);
-				MainActivity.brickResourceText.setText(Integer.toString(MainActivity.Brick));
-				MainActivity.brickResourceText.setPosition(76,69+24+i);
-				MainActivity.brickResourceText.setColor(Color.BLACK);
+			if(main.getController().Brick>0){
+				main.brickResource.setAlpha(1);
+				main.brickResource.setPosition(0,69+20+i);
+				main.brickResourceText.setText(Integer.toString(main.getController().Brick));
+				main.brickResourceText.setPosition(76,69+24+i);
+				main.brickResourceText.setColor(Color.BLACK);
 				
 				i+=72;}
-			if(MainActivity.Skin>0){
-				MainActivity.skinResource.setAlpha(1);
-				MainActivity.skinResource.setPosition(0,69+20+i);
-				MainActivity.skinResourceText.setText(Integer.toString(MainActivity.Skin));
-				MainActivity.skinResourceText.setPosition(76,69+24+i);
-				MainActivity.skinResourceText.setColor(Color.BLACK);
+			if(main.getController().Skin>0){
+				main.skinResource.setAlpha(1);
+				main.skinResource.setPosition(0,69+20+i);
+				main.skinResourceText.setText(Integer.toString(main.getController().Skin));
+				main.skinResourceText.setPosition(76,69+24+i);
+				main.skinResourceText.setColor(Color.BLACK);
 					
 				i+=72;}
 			/*
@@ -88,23 +88,23 @@ public class HUDResourceMenuButton extends Sprite {
 			 */
 			
 	}
-		else if(MainActivity.resourcesMenu.getAlpha() == 1){
+		else if(main.resourcesMenu.getAlpha() == 1){
 			Cancel();
 		}	}
 		return true;
 	
 	}
-	public static void Cancel(){
-		MainActivity.menuResourcesOpen = false;
-		MainActivity.resourcesMenu.setAlpha(0);
-		MainActivity.brickResource.setAlpha(0);
-		MainActivity.woodResource.setAlpha(0);
-		MainActivity.skinResource.setAlpha(0);
-		MainActivity.marbleResource.setAlpha(0);
-		MainActivity.woodResourceText.setText("");
-		MainActivity.brickResourceText.setText("");
-		MainActivity.marbleResourceText.setText("");
-		MainActivity.skinResourceText.setText("");
+	public void Cancel(){
+		main.menuResourcesOpen = false;
+		main.resourcesMenu.setAlpha(0);
+		main.brickResource.setAlpha(0);
+		main.woodResource.setAlpha(0);
+		main.skinResource.setAlpha(0);
+		main.marbleResource.setAlpha(0);
+		main.woodResourceText.setText("");
+		main.brickResourceText.setText("");
+		main.marbleResourceText.setText("");
+		main.skinResourceText.setText("");
 			
 			}
 	

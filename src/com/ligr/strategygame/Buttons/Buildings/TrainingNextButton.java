@@ -7,18 +7,18 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.color.Color;
 import org.andengine.util.debug.Debug;
 
-import com.ligr.strategygame.House;
 import com.ligr.strategygame.MainActivity;
 import com.ligr.strategygame.PlaceBuilding;
+import com.ligr.strategygame.buildings.House;
 
 public class TrainingNextButton extends Sprite {
 
 	private static String currentbuilding;
-	
+	private MainActivity main;
 	public TrainingNextButton(float pX, float pY, ITextureRegion pTextureRegion,
-			VertexBufferObjectManager pVertexBufferObjectManager) {
+			VertexBufferObjectManager pVertexBufferObjectManager, MainActivity main) {
 		super(pX, pY, pTextureRegion, pVertexBufferObjectManager);
-		// TODO Auto-generated constructor stub
+this.main = main;
 	}
 
 	@Override
@@ -31,7 +31,7 @@ public class TrainingNextButton extends Sprite {
 		
 		if(pSceneTouchEvent.isActionUp() && this.getAlpha()!=0){
 			MainActivity.trainingUnitCount++;
-				MainActivity.trainingHUDUpdateUnit();
+				main.trainingHUDUpdateUnit();
 		}
 		return true;
 	

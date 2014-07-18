@@ -7,18 +7,23 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.color.Color;
 import org.andengine.util.debug.Debug;
 
-import com.ligr.strategygame.House;
 import com.ligr.strategygame.MainActivity;
 import com.ligr.strategygame.PlaceBuilding;
+import com.ligr.strategygame.buildings.House;
 
+/**
+ * Class responsible of selecting the previous unit in the menu
+ * @author LgLinuss
+ *
+ */
 public class TrainingPreviousButton extends Sprite {
 
 	private static String currentbuilding;
-	
+	private MainActivity main;
 	public TrainingPreviousButton(float pX, float pY, ITextureRegion pTextureRegion,
-			VertexBufferObjectManager pVertexBufferObjectManager) {
+			VertexBufferObjectManager pVertexBufferObjectManager,MainActivity main) {
 		super(pX, pY, pTextureRegion, pVertexBufferObjectManager);
-		// TODO Auto-generated constructor stub
+		this.main = main;
 	}
 
 	@Override
@@ -30,8 +35,8 @@ public class TrainingPreviousButton extends Sprite {
     public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float pTouchAreaLocalX, float pTouchAreaLocalY) {
 		
 		if(pSceneTouchEvent.isActionUp() && this.getAlpha()!=0){
-			MainActivity.trainingUnitCount--;
-			MainActivity.trainingHUDUpdateUnit();
+			main.trainingUnitCount--;
+			main.trainingHUDUpdateUnit();
 		}
 		return true;
 	

@@ -9,17 +9,21 @@ import org.andengine.util.debug.Debug;
 import com.ligr.strategygame.MainActivity;
 import com.ligr.strategygame.SpriteObject;
 
+/**
+ * Class responsible of loading the game
+ * @author LgLinuss
+ *
+ */
 public class MainMenuLoadButton extends Sprite{
 
 	
-	private MainActivity Mainactivity;
+	private MainActivity main;
 
 
 	public MainMenuLoadButton(float pX, float pY, ITextureRegion pTextureRegion,
 			VertexBufferObjectManager pVertexBufferObjectManager,MainActivity mainactivity) {
 		super(pX, pY, pTextureRegion, pVertexBufferObjectManager);
-		Mainactivity = mainactivity;
-		// TODO Auto-generated constructor stub
+		main = mainactivity;
 	}
 
 	
@@ -27,9 +31,9 @@ public class MainMenuLoadButton extends Sprite{
     public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float pTouchAreaLocalX, float pTouchAreaLocalY) {
 		
 		if(pSceneTouchEvent.isActionUp()){
-			MainActivity.PAUSE = false;
-			Mainactivity.leaveMainMenu("load");
-			MainActivity.attachStuffEnterGame();
+			main.PAUSE = false;
+			main.getController().leaveMainMenu("load");
+			main.attachStuffEnterGame();
 			}
 		return true;
 	}

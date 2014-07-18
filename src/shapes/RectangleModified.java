@@ -18,8 +18,9 @@ public class RectangleModified extends Entity {
 	private float x,y,width,height;
 	private int lineWidth;
 	private Color color;
+	private MainActivity main;
 	private VertexBufferObjectManager vobm;
-	public RectangleModified(float pX, float pY, float pWidth, float pHeight,VertexBufferObjectManager vobm,String name, Color color, int lineWidth) {
+	public RectangleModified(float pX, float pY, float pWidth, float pHeight,VertexBufferObjectManager vobm,String name, Color color, int lineWidth, MainActivity main) {
 		super(pX, pY);
 		this.vobm = vobm;
 		this.x = pX;
@@ -30,6 +31,7 @@ public class RectangleModified extends Entity {
 		this.lineWidth = lineWidth;
 		createRectangle();
 		this.name = name;
+		this.main = main;
 	}
 	
 	private void createRectangle() {
@@ -62,7 +64,7 @@ public class RectangleModified extends Entity {
 	}
 
 	public void remove() {
-		MainActivity.removeEntity(this);
+		main.removeEntity(this);
 	}
 
 }

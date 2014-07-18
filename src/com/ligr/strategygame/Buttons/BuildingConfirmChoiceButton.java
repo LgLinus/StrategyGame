@@ -11,10 +11,11 @@ import com.ligr.strategygame.MainActivity;
 public class BuildingConfirmChoiceButton extends Sprite {
 
 	private static String choice;
-	
+	private MainActivity main;
 	public BuildingConfirmChoiceButton(float pX, float pY, ITextureRegion pTextureRegion,
-			VertexBufferObjectManager pVertexBufferObjectManager, String choice) {
+			VertexBufferObjectManager pVertexBufferObjectManager, String choice, MainActivity main) {
 		super(pX, pY, pTextureRegion, pVertexBufferObjectManager);
+		this.main = main;
 		this.choice = choice;
 		// TODO Auto-generated constructor stub
 	}
@@ -36,12 +37,12 @@ public class BuildingConfirmChoiceButton extends Sprite {
 		return true;
 	
 	}
-	public static void confirmChoice(){
+	public void confirmChoice(){
 		if(MainActivity.canBuild){
-		MainActivity.changePlaceBuilding(choice);
-		MainActivity.removeBuildingHUDKeepBuyButton();}
+		main.changePlaceBuilding(choice);
+		main.removeBuildingHUDKeepBuyButton();}
 		else
-			MainActivity.MakeToast("You can't build the building!");
+			main.makeToast("You can't build the building!");
 	}
 	
 	

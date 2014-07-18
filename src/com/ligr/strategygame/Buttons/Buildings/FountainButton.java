@@ -6,19 +6,20 @@ import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.color.Color;
 
-import com.ligr.strategygame.House;
 import com.ligr.strategygame.MainActivity;
 import com.ligr.strategygame.PlaceBuilding;
+import com.ligr.strategygame.buildings.House;
 
 public class FountainButton extends Sprite {
 
 	private static String currentbuilding;
+	private MainActivity main;
 	
 	public FountainButton(float pX, float pY, ITextureRegion pTextureRegion,
-			VertexBufferObjectManager pVertexBufferObjectManager) {
+	VertexBufferObjectManager pVertexBufferObjectManager,MainActivity main) {
 		super(pX, pY, pTextureRegion, pVertexBufferObjectManager);
 		this.setAlpha(0);
-		// TODO Auto-generated constructor stub
+		this.main = main;
 	}
 
 	@Override
@@ -31,11 +32,11 @@ public class FountainButton extends Sprite {
 		
 		if(pSceneTouchEvent.isActionUp()){
 			
-			MainActivity.boolplacebuilding = true;
-			MainActivity.createBuildingHUD("Fountain");
-			MainActivity.removeBuildingTouchAreas();
-			//	MainActivity.MoreInfoText.setText("The fountain provide water to nearby inhabitants.");
-			MainActivity.MoreInfoText.setColor(Color.BLACK);
+			main.boolplacebuilding = true;
+			main.createBuildingHUD("Fountain");
+			main.removeBuildingTouchAreas();
+			//	main.MoreInfoText.setText("The fountain provide water to nearby inhabitants.");
+			main.MoreInfoText.setColor(Color.BLACK);
 		}
 		return true;
 	

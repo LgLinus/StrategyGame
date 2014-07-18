@@ -7,20 +7,20 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.color.Color;
 import org.andengine.util.debug.Debug;
 
-import com.ligr.strategygame.House;
 import com.ligr.strategygame.MainActivity;
 import com.ligr.strategygame.PlaceBuilding;
 import com.ligr.strategygame.Buttons.BuyButton;
+import com.ligr.strategygame.buildings.House;
+import com.ligr.strategygame.constants.ConstantBuildings;
 
-import constants.ConstantBuildings;
 
 public class TrainingBuyButton extends BuyButton {
 
 	private static String currentbuilding;
 	
 	public TrainingBuyButton(float pX, float pY, ITextureRegion pTextureRegion,
-			VertexBufferObjectManager pVertexBufferObjectManager) {
-		super(pX, pY, pTextureRegion, pVertexBufferObjectManager);
+			VertexBufferObjectManager pVertexBufferObjectManager,MainActivity main) {
+		super(pX, pY, pTextureRegion, pVertexBufferObjectManager, main);
 		// TODO Auto-generated constructor stub
 	}
 
@@ -33,13 +33,13 @@ public class TrainingBuyButton extends BuyButton {
     public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float pTouchAreaLocalX, float pTouchAreaLocalY) {
 		
 		if(pSceneTouchEvent.isActionUp() && this.getAlpha()!=0){
-				if(MainActivity.trainingHopliteButton.getAlpha()==1){
-					if (MainActivity.Armor>=ConstantBuildings.COSTHOPLITEARMOR && MainActivity.Gold>=ConstantBuildings.COSTHOPLITECOIN);
+				if(main.trainingHopliteButton.getAlpha()==1){
+					if (main.getController().Armor>=ConstantBuildings.COSTHOPLITEARMOR && main.getController().getGold()>=ConstantBuildings.COSTHOPLITECOIN);
 					{
-						MainActivity.Gold-=ConstantBuildings.COSTHOPLITECOIN;
+						main.getController().updateGold(ConstantBuildings.COSTHOPLITECOIN);
 						this.RemoveResources("Armor", ConstantBuildings.COSTHOPLITEARMOR);
-						MainActivity.militaryHoplite++;
-						Debug.e(String.valueOf(MainActivity.militaryHoplite));
+						main.getController().setMilitaryHoplite(main.getController().getMilitaryHoplite()+1);
+						Debug.e(String.valueOf(main.getController().getMilitaryHoplite()));
 					}
 				}
 		}

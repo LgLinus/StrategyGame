@@ -10,9 +10,9 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.color.Color;
 import org.andengine.util.debug.Debug;
 
-import com.ligr.strategygame.House;
 import com.ligr.strategygame.MainActivity;
 import com.ligr.strategygame.PlaceBuilding;
+import com.ligr.strategygame.buildings.House;
 
 public class HUDIncomeButton extends Sprite {
 
@@ -20,17 +20,21 @@ public class HUDIncomeButton extends Sprite {
 	private ArrayList<Text> incomes;
 	private ArrayList<Text> expensesText;
 	private boolean menuOpen = false;
-	private Sprite incomeHUD = new Sprite(0,69,MainActivity.incomeHUDImage,this.getVertexBufferObjectManager());
+	private Sprite incomeHUD = null;
 	private MainActivity main;
-	private Text total = new Text(48,incomeHUD.getHeight()+incomeHUD.getY()-32,main.smallerFont,"",100,this.getVertexBufferObjectManager());
+	private Text total;
 	
-	private Text totalIncome = new Text(48,incomeHUD.getHeight()+incomeHUD.getY()-64,main.gameFont,"",20,this.getVertexBufferObjectManager());
+	private Text totalIncome;
 	
 	public HUDIncomeButton(float pX, float pY, ITextureRegion pTextureRegion,
-			VertexBufferObjectManager pVertexBufferObjectManager) {
+			VertexBufferObjectManager pVertexBufferObjectManager,MainActivity main) {
 		super(pX, pY, pTextureRegion, pVertexBufferObjectManager);
 		// TODO Auto-generated constructor stub
+		this.main = main;
 		expensesText = new ArrayList<Text>();incomes = new ArrayList<Text>();
+		incomeHUD = new Sprite(0,69,main.getImages().getIncomeHUDImage(),this.getVertexBufferObjectManager());
+		total  = new Text(48,incomeHUD.getHeight()+incomeHUD.getY()-32,main.smallerFont,"",100,this.getVertexBufferObjectManager());
+		totalIncome  = new Text(48,incomeHUD.getHeight()+incomeHUD.getY()-64,main.gameFont,"",20,this.getVertexBufferObjectManager());
 	}
 	@Override
     public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float pTouchAreaLocalX, float pTouchAreaLocalY) {
@@ -45,25 +49,25 @@ public class HUDIncomeButton extends Sprite {
 	
 	}
 	public void close() {
-		MainActivity.menuIncomeOpen = false;
+		main.menuIncomeOpen = false;
 		menuOpen = false;
 		for(int i = 0; i < incomes.size();i++){
-			MainActivity.removeEntity(incomes.get(i));
+			main.removeEntity(incomes.get(i));
 			}
 		incomes = new ArrayList<Text>();
 
 		for(int i = 0; i < expensesText.size();i++){
-			MainActivity.removeEntity(expensesText.get(i));
+			main.removeEntity(expensesText.get(i));
 			}
 		expensesText = new ArrayList<Text>();
-	MainActivity.removeEntity(incomeHUD);
- MainActivity.removeEntity(total);
-		MainActivity.removeEntity(totalIncome);
+	main.removeEntity(incomeHUD);
+ main.removeEntity(total);
+		main.removeEntity(totalIncome);
 	
 	}
 	public void open() {
-		MainActivity.closeMenus();
-		MainActivity.menuIncomeOpen = true;
+		main.closeMenus();
+		main.menuIncomeOpen = true;
 		menuOpen = true;expensesText = new ArrayList<Text>();incomes = new ArrayList<Text>();
 		main.inGameHUD.attachChild(incomeHUD);
 		openIncome();
@@ -72,11 +76,11 @@ public class HUDIncomeButton extends Sprite {
 		totalIncome.setText("Total");
 		totalIncome.setColor(Color.YELLOW);
 		//Text total = new Text(48,incomeHUD.getHeight()+incomeHUD.getY()-32,main.smallerFont,"",100,this.getVertexBufferObjectManager());
-		String res  =""+(main.income-main.expenses);
+		String res  =""+(main.getController().income-main.getController().expenses);
 		Color color = Color.YELLOW;
-		res = ""+(main.monthlygain);
+		res = ""+(main.getController().getMonthlygain());
 		total.setText("Total income: " + res);
-		if(main.monthlygain<0)
+		if(main.getController().monthlygain<0)
 			total.setColor(Color.RED);
 		main.inGameHUD.attachChild(total);
 		main.inGameHUD.attachChild(totalIncome);
@@ -87,10 +91,10 @@ public class HUDIncomeButton extends Sprite {
 		float startX = 0;
 		float startY = incomeHUD.getY()+48;
 		int tempY=1;
-		for(int i = 0; i < main.InhabitantsSize;i++){
-			if(main.Inhabitants[i] != 0){
+		for(int i = 0; i < main.getController().InhabitantsSize;i++){
+			if(main.getController().Inhabitants[i] != 0){
 				tempY++;
-				Text temp = new Text(startX,startY+tempY*24,main.smallerFont,"Inhabitants level " + i + "| " + MainActivity.Inhabitants[i] * 9 * (0.75+(0.25*i)),200,this.getVertexBufferObjectManager());
+				Text temp = new Text(startX,startY+tempY*24,main.smallerFont,"Inhabitants level " + i + "| " + main.getController().Inhabitants[i] * 9 * (0.75+(0.25*i)),200,this.getVertexBufferObjectManager());
 				temp.setColor(Color.WHITE);
 				incomes.add(temp);
 				main.inGameHUD.attachChild(temp);
@@ -105,41 +109,41 @@ public class HUDIncomeButton extends Sprite {
 		Text temp = new Text(startX,startY,main.smallerFont,"",1000,this.getVertexBufferObjectManager());
 		expensesText.add(temp);
 		String res ="";
-		res+=(String.valueOf(main.expenses));
+		res+=(String.valueOf(main.getController().getExpenses()));
 //		if(main.barracks.size()!=0)
-//		res+="Barrack: " + main.barracks.size()*MainActivity.EXPENSESBARRACK+"\n";
+//		res+="Barrack: " + main.barracks.size()*main.EXPENSESBARRACK+"\n";
 //		if(main.brickFoundrys.size()!=0)
-//		res+="Brick foundry: " + main.brickFoundrys.size()*MainActivity.EXPENSESBRICKFOUNNDRY+"\n";
+//		res+="Brick foundry: " + main.brickFoundrys.size()*main.EXPENSESBRICKFOUNNDRY+"\n";
 //		if(main.butchers.size()!=0)
-//		res+="Butcher: " + main.butchers.size()*MainActivity.EXPENSESBUTCHER+"\n";
+//		res+="Butcher: " + main.butchers.size()*main.EXPENSESBUTCHER+"\n";
 //		if(main.Farms.size()!=0)
-//		res+="Farm: " + main.Farms.size()*MainActivity.EXPENSESFARM+"\n";
+//		res+="Farm: " + main.Farms.size()*main.EXPENSESFARM+"\n";
 //		if(main.FishingHuts.size()!=0)
-//		res+="Fishing hut: " + main.FishingHuts.size()*MainActivity.EXPENSESFISHINGHUT+"\n";
+//		res+="Fishing hut: " + main.FishingHuts.size()*main.EXPENSESFISHINGHUT+"\n";
 //		if(main.FoodMarkets.size()!=0)
-//		res+="Food market: " + main.FoodMarkets.size()*MainActivity.EXPENSESFOODMARKET+"\n";
+//		res+="Food market: " + main.FoodMarkets.size()*main.EXPENSESFOODMARKET+"\n";
 //		if(main.Fountains.size()!=0)
-//		res+="Fountain: " + main.Fountains.size()*MainActivity.EXPENSESFOUNTAIN+"\n";
+//		res+="Fountain: " + main.Fountains.size()*main.EXPENSESFOUNTAIN+"\n";
 //		if(main.huntersLodges.size()!=0)
-//		res+="Hunters lodge: " + main.huntersLodges.size()*MainActivity.EXPENSESHUNTERSLODGE+"\n";
+//		res+="Hunters lodge: " + main.huntersLodges.size()*main.EXPENSESHUNTERSLODGE+"\n";
 //		if(main.mineDepositClays.size()!=0)
-//		res+="Clay mine: " + main.mineDepositClays.size()*MainActivity.EXPENSESMINEDEPOSITCLAY+"\n";
+//		res+="Clay mine: " + main.mineDepositClays.size()*main.EXPENSESMINEDEPOSITCLAY+"\n";
 //		if(main.mineDepositBronzes.size()!=0)
-//		res+="Bronze mine: " + main.mineDepositBronzes.size()*MainActivity.EXPENSESMINEDEPOSITBRONZE+"\n";
+//		res+="Bronze mine: " + main.mineDepositBronzes.size()*main.EXPENSESMINEDEPOSITBRONZE+"\n";
 //		if(main.Silos.size()!=0)
-//		res+="Silo: " + main.Silos.size()*MainActivity.EXPENSESSILO+"\n";
+//		res+="Silo: " + main.Silos.size()*main.EXPENSESSILO+"\n";
 //		if(main.skinners.size()!=0)
-//		res+="Skinner: " + main.skinners.size()*MainActivity.EXPENSESSKINNER+"\n";
+//		res+="Skinner: " + main.skinners.size()*main.EXPENSESSKINNER+"\n";
 //		if(main.Stocks.size()!=0)
-//		res+="Stock: " + main.Stocks.size()*MainActivity.EXPENSESSTOCK+"\n";
+//		res+="Stock: " + main.Stocks.size()*main.EXPENSESSTOCK+"\n";
 //		if(main.StoneCutters.size()!=0)
-//		res+="Stone cutter " + main.StoneCutters.size()*MainActivity.EXPENSESSTONECUTTER+"\n";
+//		res+="Stone cutter " + main.StoneCutters.size()*main.EXPENSESSTONECUTTER+"\n";
 //		if(main.Theatres.size()!=0)
-//		res+="Theatre: " + main.Theatres.size()*MainActivity.EXPENSESTHEATRE+"\n";
+//		res+="Theatre: " + main.Theatres.size()*main.EXPENSESTHEATRE+"\n";
 //		if(main.WoodCutters.size()!=0)
-//		res+="Wood cutter: " + main.WoodCutters.size()*MainActivity.EXPENSESWOODCUTTER+"\n";
+//		res+="Wood cutter: " + main.WoodCutters.size()*main.EXPENSESWOODCUTTER+"\n";
 //		if(main.militaryHoplite!=0)
-//		res+="Hoplite: " + MainActivity.militaryHoplite*MainActivity.EXPENSESHOPLITE+"\n";
+//		res+="Hoplite: " + main.militaryHoplite*main.EXPENSESHOPLITE+"\n";
 //		
 		temp.setText(res);
 		temp.setColor(Color.RED);

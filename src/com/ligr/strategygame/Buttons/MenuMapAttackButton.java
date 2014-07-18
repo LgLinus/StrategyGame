@@ -13,11 +13,13 @@ import com.ligr.strategygame.MainActivity;
 public class MenuMapAttackButton extends DetachableObjects {
 
 	private static String currentbuilding;
+	private MainActivity main;
 	public CityIcon city;
 	public MenuMapAttackButton(float pX, float pY, ITextureRegion pTextureRegion,
-			VertexBufferObjectManager pVertexBufferObjectManager, CityIcon city) {
+			VertexBufferObjectManager pVertexBufferObjectManager, CityIcon city,MainActivity main) {
 		super(pX, pY, pTextureRegion, pVertexBufferObjectManager);
 		this.city = city;
+		this.main = main;
 		// TODO Auto-generated constructor stub
 	}
 
@@ -37,7 +39,7 @@ public class MenuMapAttackButton extends DetachableObjects {
 	}
 	public void Attack(){
 		Debug.e(this.city.getName());
-		MainActivity.MessagePopUpChoice("Are you sure you want to attack " + this.city.getName() +"\nThis action will save the game", Color.WHITE, this, "Attack City", MainActivity.inGameHUD);
+		main.MessagePopUpChoice("Are you sure you want to attack " + this.city.getName() +"\nThis action will save the game", Color.WHITE, this, "Attack City", MainActivity.inGameHUD);
 
 	}
 	

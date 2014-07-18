@@ -7,18 +7,19 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.color.Color;
 import org.andengine.util.debug.Debug;
 
-import com.ligr.strategygame.House;
 import com.ligr.strategygame.MainActivity;
-import com.ligr.strategygame.Road;
+import com.ligr.strategygame.buildings.House;
+import com.ligr.strategygame.buildings.Road;
 
 public class CancelButton extends Sprite {
 
 	private static String currentbuilding;
+	private MainActivity main;
 	
 	public CancelButton(float pX, float pY, ITextureRegion pTextureRegion,
-			VertexBufferObjectManager pVertexBufferObjectManager) {
+			VertexBufferObjectManager pVertexBufferObjectManager,MainActivity main) {
 		super(pX, pY, pTextureRegion, pVertexBufferObjectManager);
-		// TODO Auto-generated constructor stub
+		this.main =main;
 	}
 
 	
@@ -31,17 +32,17 @@ public class CancelButton extends Sprite {
 		return true;
 	
 	}
-	public static void Cancel(){
-		MainActivity.addBuildingTouchAreas();
+	public void Cancel(){
+		main.addBuildingTouchAreas();
 		
-		if(MainActivity.placebuilding!=null)
-		MainActivity.placebuilding.setAlpha(0);
-		MainActivity.boolplacebuilding = false;
-		if(MainActivity.MoreInfoText!=null){
-		MainActivity.MoreInfoText.setText("");
-		MainActivity.MoreInfoText.setColor(Color.BLACK);}
-		MainActivity.removePlaceBuildings();
-		MainActivity.finishBuy();
+		if(main.placebuilding!=null)
+		main.placebuilding.setAlpha(0);
+		main.boolplacebuilding = false;
+		if(main.MoreInfoText!=null){
+		main.MoreInfoText.setText("");
+		main.MoreInfoText.setColor(Color.BLACK);}
+		main.removePlaceBuildings();
+		main.finishBuy();
 	
 	}
 	

@@ -6,16 +6,16 @@ import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.color.Color;
 
-import com.ligr.strategygame.House;
 import com.ligr.strategygame.MainActivity;
 import com.ligr.strategygame.PlaceBuilding;
+import com.ligr.strategygame.buildings.House;
 
 public class HUDMenuProductionButton extends Sprite {
 
 	private static String currentbuilding;
-	
+	private MainActivity main;
 	public HUDMenuProductionButton(float pX, float pY, ITextureRegion pTextureRegion,
-			VertexBufferObjectManager pVertexBufferObjectManager) {
+			VertexBufferObjectManager pVertexBufferObjectManager, MainActivity main) {
 		super(pX, pY, pTextureRegion, pVertexBufferObjectManager);
 		// TODO Auto-generated constructor stub
 	}
@@ -35,9 +35,9 @@ public class HUDMenuProductionButton extends Sprite {
 				
 			MainActivity.menu="Production";
 			// Set the image of our placebuilding to the House image
-			MainActivity.MakeToast("This menu contains buildings that refines your resources");
-			MainActivity.unRegisterBuildingButtons();
-			MainActivity.menuhudproduction();
+			main.makeToast("This menu contains buildings that refines your resources");
+			main.unRegisterBuildingButtons();
+			main.menuhudproduction();
 		}
 		return true;
 	

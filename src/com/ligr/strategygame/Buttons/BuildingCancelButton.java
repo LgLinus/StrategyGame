@@ -10,11 +10,11 @@ import com.ligr.strategygame.MainActivity;
 public class BuildingCancelButton extends Sprite {
 
 	private static String currentbuilding;
-	
+	private MainActivity main;
 	public BuildingCancelButton(float pX, float pY, ITextureRegion pTextureRegion,
-			VertexBufferObjectManager pVertexBufferObjectManager) {
+			VertexBufferObjectManager pVertexBufferObjectManager, MainActivity main) {
 		super(pX, pY, pTextureRegion, pVertexBufferObjectManager);
-		// TODO Auto-generated constructor stub
+		this.main = main;
 	}
 
 
@@ -28,9 +28,9 @@ public class BuildingCancelButton extends Sprite {
 		return true;
 	
 	}
-	public static void Cancel(){
-		MainActivity.cancelbutton.Cancel();	
-		MainActivity.removeBuildingHUD();
+	public void Cancel(){
+		main.cancelButton.Cancel();	
+		main.removeBuildingHUD();
 	}
 	
 	
