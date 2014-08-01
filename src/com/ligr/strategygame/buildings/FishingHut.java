@@ -95,7 +95,7 @@ public class FishingHut extends SpriteObject {
 
 	public void checkForStocks(FishingHut brickFoundry) {
 		for (int i = 0; i < main.getStocks().size(); i++) {
-			if (main.calculateDistance(this, main.getStocks().get(i)) < 512) {
+			if (main.getController().calculateDistance(this, main.getStocks().get(i)) < 512) {
 
 				if (main.getStocks().get(i).checkSpace("Fish") == true) {
 					main.getController().Fish += 1;

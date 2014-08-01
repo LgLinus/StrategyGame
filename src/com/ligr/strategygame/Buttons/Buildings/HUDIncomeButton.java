@@ -20,7 +20,6 @@ public class HUDIncomeButton extends Sprite {
 	private ArrayList<Text> incomes;
 	private ArrayList<Text> expensesText;
 	private boolean menuOpen = false;
-	private Sprite incomeHUD = null;
 	private MainActivity main;
 	private Text total;
 	
@@ -32,16 +31,16 @@ public class HUDIncomeButton extends Sprite {
 		// TODO Auto-generated constructor stub
 		this.main = main;
 		expensesText = new ArrayList<Text>();incomes = new ArrayList<Text>();
-		incomeHUD = new Sprite(0,69,main.getImages().getIncomeHUDImage(),this.getVertexBufferObjectManager());
-		total  = new Text(48,incomeHUD.getHeight()+incomeHUD.getY()-32,main.smallerFont,"",100,this.getVertexBufferObjectManager());
-		totalIncome  = new Text(48,incomeHUD.getHeight()+incomeHUD.getY()-64,main.gameFont,"",20,this.getVertexBufferObjectManager());
+		total  = new Text(48,main.getImages().getIncomeHUDImage().getHeight()+69-32,main.smallerFont,"",100,this.getVertexBufferObjectManager());
+		totalIncome  = new Text(48,main.getImages().getIncomeHUDImage().getHeight()+69-64,main.gameFont,"",20,this.getVertexBufferObjectManager());
 	}
 	@Override
     public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float pTouchAreaLocalX, float pTouchAreaLocalY) {
 		
 		if(pSceneTouchEvent.isActionUp()){
-			if(!menuOpen)
-				open();
+			if(!menuOpen){
+				main.closeMenus();
+				main.openIncomeMenu();}
 			else
 				close();
 		}
@@ -60,16 +59,14 @@ public class HUDIncomeButton extends Sprite {
 			main.removeEntity(expensesText.get(i));
 			}
 		expensesText = new ArrayList<Text>();
-	main.removeEntity(incomeHUD);
- main.removeEntity(total);
+		main.removeResourcesMenu();
+		main.removeEntity(total);
 		main.removeEntity(totalIncome);
 	
 	}
 	public void open() {
-		main.closeMenus();
 		main.menuIncomeOpen = true;
 		menuOpen = true;expensesText = new ArrayList<Text>();incomes = new ArrayList<Text>();
-		main.inGameHUD.attachChild(incomeHUD);
 		openIncome();
 		openExpenses();
 		//Text totalIncome = new Text(48,incomeHUD.getHeight()+incomeHUD.getY()-64,main.gameFont,"",20,this.getVertexBufferObjectManager());
@@ -89,7 +86,7 @@ public class HUDIncomeButton extends Sprite {
 
 	private void openIncome() {
 		float startX = 0;
-		float startY = incomeHUD.getY()+48;
+		float startY = 69+48;
 		int tempY=1;
 		for(int i = 0; i < main.getController().InhabitantsSize;i++){
 			if(main.getController().Inhabitants[i] != 0){
@@ -104,7 +101,7 @@ public class HUDIncomeButton extends Sprite {
 	
 	private void openExpenses() {
 		float startX = 0;
-		float startY = incomeHUD.getY()+256+24;
+		float startY = 69+256+24;
 		int tempY=1;
 		Text temp = new Text(startX,startY,main.smallerFont,"",1000,this.getVertexBufferObjectManager());
 		expensesText.add(temp);

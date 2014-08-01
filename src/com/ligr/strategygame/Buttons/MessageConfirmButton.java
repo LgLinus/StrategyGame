@@ -2,6 +2,7 @@ package com.ligr.strategygame.Buttons;
 
 import org.andengine.entity.Entity;
 import org.andengine.entity.sprite.Sprite;
+import org.andengine.entity.text.Text;
 import org.andengine.input.touch.TouchEvent;
 import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
@@ -16,6 +17,10 @@ public class MessageConfirmButton extends Sprite {
 
 	private static String currentbuilding;
 	private MainActivity main;
+	private MessageCancelButton messageCancelButton;
+	private Text messageText;
+	private Sprite messageHUD;
+	private MessageConfirmButton messageConfirmButton;
 	public MessageConfirmButton(float pX, float pY, ITextureRegion pTextureRegion,
 			VertexBufferObjectManager pVertexBufferObjectManager,MainActivity main) {
 		super(pX, pY, pTextureRegion, pVertexBufferObjectManager);
@@ -24,7 +29,9 @@ public class MessageConfirmButton extends Sprite {
 		main.PAUSE = true;
 	}
 
-
+	public void display(){
+	
+		}
 	
 	@Override
     public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float pTouchAreaLocalX, float pTouchAreaLocalY) {
@@ -84,44 +91,13 @@ public class MessageConfirmButton extends Sprite {
 			MenuMapAttackButton id = (MenuMapAttackButton)main.ID;
 			target = id.getCity();
 //			main.enterBattlefield(target);
-			calculateWinner(target);
+			main.getController().calculateWinner(target);
 			Debug.e(target.getName()+"xaxax");
 			
 		}
 
 
 
-		public void calculateWinner(CityIcon target) {
-			int powerPlayer = 0, powerEnemy = 0;
-			powerPlayer = main.getController().getMilitaryOffensivePower();
-			powerEnemy = target.getMilitaryPower();
-			if(powerPlayer>powerEnemy){
-				main.messagePopUp("You won the battle!", Color.WHITE);
-				main.CITY[target.index][11] = "0";
-				main.CITY[target.index][12] = "0";
-				main.CITY[target.index][9] = "1";
-			}
-			else{
-				main.messagePopUp("You lost the battle..", Color.WHITE);
-			}
-		}
-
-		public void calculateWinnerCityAttacked(CityIcon target) {
-			int powerPlayer = 0, powerEnemy = 0;
-			powerPlayer = main.getController().getMilitaryOffensivePower();
-			powerEnemy = target.getMilitaryPower();
-			if(powerPlayer>powerEnemy){
-				main.messagePopUp("You protected your city from the attack!", Color.WHITE);
-				target.atWar  = false;
-				target.monthSinceAttack = 0;
-			}
-			else{
-				main.CITY[target.index][9] = "2";
-				target.atWar = false;
-				target.monthSinceAttack = 0;
-				main.messagePopUp("You lost the battle!\nYour city will know pay 15 000 coins as tribute yearly to " + target.getName() + "\nIf you decide to attack their city they will respond and try to destroy your city.", Color.WHITE);
-			}
-		}
 
 
 

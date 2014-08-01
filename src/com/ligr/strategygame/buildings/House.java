@@ -16,6 +16,12 @@ import com.ligr.strategygame.constants.ConstantBuildings;
 
 import text.HouseDescriptionText;
 
+/**
+ * The house is the building which gives the city inhabitants. The house can be upgraded if 
+ * certain conditions are met
+ * @author LgLinuss
+ *
+ */
 public class House extends AnimatedSpriteObject {
 	UpgradeArrowHouse arrow;
 	private int Inhabitants, totalInhabitants;
@@ -28,6 +34,22 @@ public class House extends AnimatedSpriteObject {
 	private int ID = 0;
 	private int monthsWithoutFood = 0;
 
+	// Some booleans to keep track on what kind of resources the houses have
+	// accses too.
+	public boolean GotFood = false;
+	public boolean GotWater = false;
+	public boolean GotWood = false;
+	public boolean GotSkin = false;
+	public boolean GotEntertainment = false;
+	public boolean GotFood2 = false;
+	public boolean GotTheatre = false;
+	public int AmmountofEntertainment = 0;
+	private boolean GotWheat = false;
+	private int WheatAmmount = 0;
+	private int maxWheatAmmount = 40;
+	public int Range = 512;
+	public int HouseLevel = 0;
+	private Sprite gotFoodSymbol;
 	public House(float pX, float pY, ITiledTextureRegion pTiledTextureRegion,
 			VertexBufferObjectManager pVertexBufferObjectManager, MainActivity main,boolean load) {
 		super(pX, pY, pTiledTextureRegion, pVertexBufferObjectManager,main);
@@ -37,9 +59,8 @@ public class House extends AnimatedSpriteObject {
 		this.stopAnimation(0);
 		// If the unemployment is below 60% people will imigrate or if there are
 		// less than 100 unemployed workers
-		Inhabitants = 8;
-		totalInhabitants = Inhabitants;
-		updateInhabitantsPreset();
+		updateInhabitants();
+		HouseLevel++;
 		if (!load) {
 //			if (main.getController().getMaxWorkers() != 0 && main.getController().getWorkers() != 0) {
 //				if (main.getController().getWorkers() / main.getController().getMaxWorkers() >= .60
@@ -68,6 +89,7 @@ public class House extends AnimatedSpriteObject {
 //		createPolygon();
 	}
 
+	
 	public void save() {
 		main.getController().getDataBase().add(name(), this.getX(), this.getY(), this.id,
 				this.HouseLevel);
@@ -91,22 +113,6 @@ public class House extends AnimatedSpriteObject {
 		return "House";
 	}
 
-	// Some booleans to keep track on what kind of resources the houses have
-	// accses too.
-	public boolean GotFood = false;
-	public boolean GotWater = false;
-	public boolean GotWood = false;
-	public boolean GotSkin = false;
-	public boolean GotEntertainment = false;
-	public boolean GotFood2 = false;
-	public boolean GotTheatre = false;
-	public int AmmountofEntertainment = 0;
-	private boolean GotWheat = false;
-	private int WheatAmmount = 0;
-	private int maxWheatAmmount = 40;
-	public int Range = 512;
-	public int HouseLevel = 1;
-	private Sprite gotFoodSymbol;
 
 	public void createChilds() {
 		ID = main.getHouses().size();
@@ -176,37 +182,9 @@ public class House extends AnimatedSpriteObject {
 						"Upgrading the house costs 2 skins. Are you sure?",
 						Color.WHITE, this, "Upgdradehouselvl4",
 						main.inGameHUD);
-				Debug.e("After message");
-				// main.buildingDescriptionHUD.setAlpha(1);
-				// main.houseInfo = new
-				// HouseDescriptionText(0,0,main.gameFont,this.info,400,this.getVertexBufferObjectManager(),
-				// this);
-				// main.houseNeeds = new
-				// HouseDescriptionText(0,0,main.gameFont,this.needs,400,this.getVertexBufferObjectManager(),
-				// this);
-				// main.houseSatisfied = new
-				// HouseDescriptionText(0,0,main.gameFont,this.satisfied,400,this.getVertexBufferObjectManager(),
-				// this);
-				//
 				main.upgradeButton.parentHouse = this;
 				main.upgradeButton.level = HouseLevel;
 				main.upgradeButton.type = "House";
-				/*
-				 * main.buildingDescriptionTitleString =
-				 * "Upgrade house to Level "+(HouseLevel+1);
-				 * main.mScene.
-				 * registerTouchArea(main.buildingDescriptionCancel);
-				 * main.buildingDescriptionCancel.setAlpha(1);
-				 * main.buildingDescriptionTitle.setAlpha(1);
-				 * main.buildingDescriptionDetail.setAlpha(1);
-				 * main.upgradeButton.setAlpha(1);
-				 * main.buildingDescriptionTitle
-				 * .setText(main.buildingDescriptionTitleString);
-				 * main.buildingDescriptionDetailString =
-				 * "It will cost you " + cost;
-				 * main.buildingDescriptionDetail
-				 * .setText(main.buildingDescriptionDetailString);;
-				 */
 
 			}
 
@@ -264,13 +242,12 @@ public class House extends AnimatedSpriteObject {
 		monthlyFood = totalInhabitants * 2;
 		// Checks for nearby foodmarkets, and sets maxwheatammount to
 		// 12*totalinhabitants/4
-		for (int i = 0; i < main.getFoodMarkets().size(); i++) {
+		for (int i = 0; (i < main.getFoodMarkets().size()&&!(this.WheatAmmount>=this.maxWheatAmmount)); i++) {
 
-			double distance = main.calculateDistance(
+			double distance = main.getController().calculateDistance(
 					main.getFoodMarkets().get(i), house);
-			if (distance < 512
-					&& main.getFoodMarkets().get(i).FoodAmmount > 0) {
-				if (WheatAmmount > 0) {
+			if (distance < 512) {
+				if (WheatAmmount > 0 ) {
 					maxWheatAmmount = 12 * monthlyFood;
 					house.GotWheat = true;
 					house.GotFood = true;
@@ -279,18 +256,16 @@ public class House extends AnimatedSpriteObject {
 					else
 						monthsWithoutFood--;
 				}
-				if (main.getSilos().size() > i
-						&& main.getSilos().get(i) != null
-						&& main.getSilos().get(i).FoodAmmount >= monthlyFood * 6
-						&& WheatAmmount <= maxWheatAmmount / 2) {
-					WheatAmmount += monthlyFood * 6;
-					main.getSilos().get(i).FoodAmmount -= monthlyFood * 6;
-					house.GotWheat = true;
-					house.GotFood = true;
-					if (monthsWithoutFood > 0)
-						monthsWithoutFood = 0;
-					else
-						monthsWithoutFood--;
+				if(WheatAmmount< maxWheatAmmount){
+					if((main.getFoodMarkets().get(i).FoodAmmount>=monthlyFood*6 )){
+						this.WheatAmmount+=monthlyFood*6;
+						main.getFoodMarkets().get(i).FoodAmmount-=monthlyFood*6;
+						house.GotWheat = true;
+						house.GotFood = true;
+						Debug.e("Food on market: " + main.getFoodMarkets().get(i).FoodAmmount);
+					}else{
+						break;
+					}
 				}
 			}
 
@@ -302,14 +277,16 @@ public class House extends AnimatedSpriteObject {
 			house.GotFood = true;
 			monthsWithoutFood = 0;
 		} else {
+			WheatAmmount = 0;
 			house.GotFood = false;
 			house.GotWheat = false;
 			monthsWithoutFood++;
-			if (monthsWithoutFood >= 4)
-				deGradeLevel();
+			if (monthsWithoutFood >= 4){
+				Debug.e("DEGRADE HOUSE");
+				deGradeLevel();}
 		}
 		for (int i = 0; i < main.getTheatres().size(); i++) {
-			double distance = main.calculateDistance(
+			double distance = main.getController().calculateDistance(
 					main.getTheatres().get(i), house);
 			if (distance < 512) {
 				house.GotTheatre = true;
@@ -323,7 +300,7 @@ public class House extends AnimatedSpriteObject {
 		if (main.getTheatres().size() == 0)
 			GotTheatre = false;
 		for (int i = 0; i < main.getFountains().size(); i++) {
-			double distance = main.calculateDistance(
+			double distance = main.getController().calculateDistance(
 					main.getFountains().get(i), house);
 			if (distance < 512) {
 				GotWater = true;

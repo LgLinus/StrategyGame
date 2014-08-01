@@ -37,7 +37,7 @@ public class BuildingDescriptionHUD extends Sprite {
 		super(pX, pY, pTextureRegion, pVertexBufferObjectManager);
 		this.main = main;
 		this.house = house;
-		main.getScene().attachChild(this);
+		main.getInGameHUD().attachChild(this);
 		this.houseLevel = house.getHouseLevel();
 		this.setAlpha(0.95f);
 		createHouseHUD();
@@ -53,7 +53,7 @@ public class BuildingDescriptionHUD extends Sprite {
 		super(pX, pY, pTextureRegion, pVertexBufferObjectManager);
 		this.main = main;
 		this.setAlpha(0.95f);
-		main.getScene().attachChild(this);
+		main.getInGameHUD().attachChild(this);
 		main.setBuildingDescriptionHUD(this);
 		this.buildingDescriptionTitleString = title;
 		this.buildingDescriptionDetailString = detail;
@@ -93,8 +93,8 @@ public class BuildingDescriptionHUD extends Sprite {
 	private void createMainHUD(){
 		buildingDescriptionCancel = new BuildingDescriptionCancel(48,
 				81 + 1, main.getImages().getCancelImage(), this.getVertexBufferObjectManager(),main);
-		main.getInGameHUD().attachChild(buildingDescriptionCancel);
-		main.getInGameHUD().registerTouchArea(buildingDescriptionCancel);
+//		main.getInGameHUD().attachChild(buildingDescriptionCancel);
+//		main.getInGameHUD().registerTouchArea(buildingDescriptionCancel);
 	}
 	
 	private void createHouseHUD() {
@@ -119,7 +119,7 @@ public class BuildingDescriptionHUD extends Sprite {
 				this.getVertexBufferObjectManager());
 
 		main.getScene().attachChild(buildingDescriptionTitle);
-		main.getScene().registerTouchArea(buildingDescriptionCancel);
+//		main.getScene().registerTouchArea(buildingDescriptionCancel);
 		buildingDescriptionTitleString = "House";
 		buildingDescriptionTitle.setText(buildingDescriptionTitleString);
 		// main.buildingDescriptionDetailString =
@@ -159,13 +159,10 @@ public class BuildingDescriptionHUD extends Sprite {
 
 			}
 		}
-		try {
 			houseInfo.setText(this.info);
 			houseNeeds.setText(this.needs);
 			houseSatisfied.setText(this.satisfied);
-		} catch (NullPointerException e) {
-
-		}
+		
 	}
 
 	/**
@@ -187,9 +184,6 @@ public class BuildingDescriptionHUD extends Sprite {
 		if(buildingDescriptionDetail!=null)
 		main.removeEntity(buildingDescriptionDetail);
 		main.setBuildingDescriptionHUD(null);
-		if(option.equals("Quest") && main.getMenuQuestButton()!=null){
-			main.getMenuQuestButton().detachChildren();
-		}
 	}
 
 }

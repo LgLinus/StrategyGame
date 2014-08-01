@@ -47,7 +47,7 @@ public class MenuButton extends Sprite{
 	public void cancel(){
 		main.removeMenu();
 		Debug.e("CANCEL");
-		main.getMenuQuestButton().detachChildren();
+		main.getMenuObjectivesButton().detachChildren();
 		main.PAUSE = false;
 	}
 }

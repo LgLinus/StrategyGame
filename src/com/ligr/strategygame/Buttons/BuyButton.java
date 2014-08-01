@@ -1,20 +1,16 @@
 package com.ligr.strategygame.Buttons;
 
-import java.util.ArrayList;
-
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.input.touch.TouchEvent;
 import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.color.Color;
-import org.andengine.util.debug.Debug;
 
-import com.ligr.strategygame.AnimatedSpriteObject;
 import com.ligr.strategygame.MainActivity;
-import com.ligr.strategygame.SpriteObject;
-import com.ligr.strategygame.UpgradeArrowHouse;
+import com.ligr.strategygame.buildings.Armory;
 import com.ligr.strategygame.buildings.Barrack;
 import com.ligr.strategygame.buildings.BrickFoundry;
+import com.ligr.strategygame.buildings.BronzeMine;
 import com.ligr.strategygame.buildings.Butcher;
 import com.ligr.strategygame.buildings.Farm;
 import com.ligr.strategygame.buildings.FishingHut;
@@ -55,11 +51,11 @@ public class BuyButton extends Sprite {
 		
 		if(pSceneTouchEvent.isActionUp()){
 			HouseLevel = main.getController().getHouseLevel();
-			if(main.placebuilding.gotSpace()){
-			if(main.placebuilding.currentBuilding=="House"){
-				if(main.getController().getGold()>=ConstantBuildings.COSTHOUSE){
+			if(main.placeBuilding.gotSpace()){
+			if(main.placeBuilding.currentBuilding=="House"){
+				if(main.getController().getGold()>=ConstantBuildings.COSTHOUSECOIN){
 					
-					main.setHouseexample(new House(main.placebuilding.getX(), main.placebuilding.getY(), main.getImages().getHouseImage(), this.getVertexBufferObjectManager(),main, false));
+					main.setHouseexample(new House(main.placeBuilding.getX(), main.placeBuilding.getY(), main.getImages().getHouseImage(), this.getVertexBufferObjectManager(),main, false));
 					main.getHouses().add(main.getHouseexample());
 					main.mScene.attachChild(main.getHouseexample());
 					main.getController().updateGold(-100);
@@ -72,40 +68,40 @@ public class BuyButton extends Sprite {
 			
 				
 			}
-			else if(main.placebuilding.currentBuilding=="Road"){
-				main.road = new Road(main.placebuilding.getX(), main.placebuilding.getY(), main.getImages().getRoadimage(), this.getVertexBufferObjectManager(), main, mFlippedHorizontal);
+			else if(main.placeBuilding.currentBuilding=="Road"){
+				main.road = new Road(main.placeBuilding.getX(), main.placeBuilding.getY(), main.getImages().getRoadimage(), this.getVertexBufferObjectManager(), main, mFlippedHorizontal);
 				main.getRoads().add(main.road);
 				main.mScene.attachChild(main.road);
 			
 			}
-			else if(main.placebuilding.currentBuilding=="Fountain"){
-				main.fountain = new Fountain(main.placebuilding.getX(), main.placebuilding.getY(), main.getImages().getFountainImage(), this.getVertexBufferObjectManager(),main,  false);
+			else if(main.placeBuilding.currentBuilding=="Fountain"){
+				main.fountain = new Fountain(main.placeBuilding.getX(), main.placeBuilding.getY(), main.getImages().getFountainImage(), this.getVertexBufferObjectManager(),main,  false);
 				main.getFountains().add(main.fountain);
 				main.mScene.attachChild(main.fountain);
 				
 			}
-			else if(main.placebuilding.currentBuilding=="Farm"){
-				main.farm = new Farm(main.placebuilding.getX(), main.placebuilding.getY(), main.getImages().getFarmImage(), this.getVertexBufferObjectManager(),main,  false);
+			else if(main.placeBuilding.currentBuilding=="Farm"){
+				main.farm = new Farm(main.placeBuilding.getX(), main.placeBuilding.getY(), main.getImages().getFarmImage(), this.getVertexBufferObjectManager(),main,  false);
 				main.getFarms().add(main.farm);
 				main.mScene.attachChild(main.farm);
 				main.farm.animate(1000);
 			
 			
-			}else if(main.placebuilding.currentBuilding=="Silo"){
-				main.silo = new Silo(main.placebuilding.getX(), main.placebuilding.getY(), main.getImages().getSiloImage(), this.getVertexBufferObjectManager(),main,  false);
+			}else if(main.placeBuilding.currentBuilding=="Silo"){
+				main.silo = new Silo(main.placeBuilding.getX(), main.placeBuilding.getY(), main.getImages().getSiloImage(), this.getVertexBufferObjectManager(),main,  false);
 				main.getSilos().add(main.silo);
 				main.mScene.attachChild(main.silo);
 			
 			
-			}else if(main.placebuilding.currentBuilding=="Food Market"){
-				main.foodmarket = new FoodMarket(main.placebuilding.getX(), main.placebuilding.getY(), main.getImages().getFoodMarketImage(), this.getVertexBufferObjectManager(),main,  false);
+			}else if(main.placeBuilding.currentBuilding=="Food Market"){
+				main.foodmarket = new FoodMarket(main.placeBuilding.getX(), main.placeBuilding.getY(), main.getImages().getFoodMarketImage(), this.getVertexBufferObjectManager(),main,  false);
 				main.getFoodMarkets().add(main.foodmarket);
 				main.mScene.attachChild(main.foodmarket);
 				
 			
-			}else if(main.placebuilding.currentBuilding=="Theatre"){
+			}else if(main.placeBuilding.currentBuilding=="Theatre"){
 				if(main.getController().Marble >= ConstantBuildings.COSTTHEATREMARBLE && main.getController().getGold()>= ConstantBuildings.COSTTHEATRECOIN && HouseLevel >=2){
-				main.setTheatre(new Theatre(main.placebuilding.getX(), main.placebuilding.getY(), main.getImages().getTheatreImage(), this.getVertexBufferObjectManager(),main,  false));
+				main.setTheatre(new Theatre(main.placeBuilding.getX(), main.placeBuilding.getY(), main.getImages().getTheatreImage(), this.getVertexBufferObjectManager(),main,  false));
 				main.getTheatres().add(main.getTheatre());
 				main.mScene.attachChild(main.getTheatre());
 				main.getController().updateGold(-ConstantBuildings.COSTTHEATRECOIN);
@@ -121,9 +117,9 @@ public class BuyButton extends Sprite {
 				}
 			
 			}
-			else if(main.placebuilding.currentBuilding=="Stone Cutter"){
+			else if(main.placeBuilding.currentBuilding=="Stone Cutter"){
 				if(HouseLevel>=2 && main.getController().getGold() >= ConstantBuildings.COSTSTONECUTTERCOIN){
-				main.stonecutter = new StoneCutter(main.placebuilding.getX(), main.placebuilding.getY(), main.getImages().getStoneCutterImage(), this.getVertexBufferObjectManager(),main, false);
+				main.stonecutter = new StoneCutter(main.placeBuilding.getX(), main.placeBuilding.getY(), main.getImages().getStoneCutterImage(), this.getVertexBufferObjectManager(),main, false);
 				main.getStoneCutters().add(main.stonecutter);
 				main.mScene.attachChild(main.stonecutter);
 				main.getController().updateGold(-ConstantBuildings.COSTSTONECUTTERCOIN);
@@ -137,9 +133,9 @@ public class BuyButton extends Sprite {
 				main.Message("You cannot afford a Stone Cutter building", Color.RED);
 				}
 			}
-			else if(main.placebuilding.currentBuilding=="Stock" ){
+			else if(main.placeBuilding.currentBuilding=="Stock" ){
 				if(main.getController().getGold() >= ConstantBuildings.COSTSTOCKCOIN){
-					main.stock = new Stock(main.placebuilding.getX(), main.placebuilding.getY()-32, main.getImages().getStockplaceImage(), this.getVertexBufferObjectManager(),main, false);
+					main.stock = new Stock(main.placeBuilding.getX(), main.placeBuilding.getY()-32, main.getImages().getStockplaceImage(), this.getVertexBufferObjectManager(),main, false);
 					main.getStocks().add(main.stock);
 					main.stock.globalKind = main.tempGlobalKind;
 					main.mScene.attachChild(main.stock);
@@ -149,9 +145,9 @@ public class BuyButton extends Sprite {
 					main.Message("You cannot afford a Stock\nYou need "+ ConstantBuildings.COSTSTOCKCOIN + " gold", Color.RED);
 						
 					
-			}else if(main.placebuilding.currentBuilding=="Wood Cutter"){
+			}else if(main.placeBuilding.currentBuilding=="Wood Cutter"){
 				if(HouseLevel >=2 && main.getController().getGold() >= ConstantBuildings.COSTWOODCUTTERCOIN){
-				main.woodcutter = new WoodCutter(main.placebuilding.getX(), main.placebuilding.getY(), main.getImages().getWoodCutterImage(), this.getVertexBufferObjectManager(),main, false);
+				main.woodcutter = new WoodCutter(main.placeBuilding.getX(), main.placeBuilding.getY(), main.getImages().getWoodCutterImage(), this.getVertexBufferObjectManager(),main, false);
 				main.getWoodCutters().add(main.woodcutter);
 				main.mScene.attachChild(main.woodcutter);
 				main.getController().updateGold(-ConstantBuildings.COSTWOODCUTTERCOIN);
@@ -163,9 +159,9 @@ public class BuyButton extends Sprite {
 			else
 				main.Message("You cannot afford a Wood cutter building\nYou need "+ ConstantBuildings.COSTWOODCUTTERCOIN + " gold", Color.RED);
 				}
-			else if(main.placebuilding.currentBuilding=="Hunters Lodge" ){
+			else if(main.placeBuilding.currentBuilding=="Hunters Lodge" ){
 				if(HouseLevel >=3 && main.getController().getGold() >= ConstantBuildings.COSTHUNTERSLODGECOIN && main.getController().Wood >= ConstantBuildings.COSTHUNTERSLODGEWOOD){
-				main.huntersLodge = new HuntersLodge(main.placebuilding.getX(), main.placebuilding.getY(),main.getImages().getHuntersLodgeImage(), this.getVertexBufferObjectManager(),main, false);
+				main.huntersLodge = new HuntersLodge(main.placeBuilding.getX(), main.placeBuilding.getY(),main.getImages().getHuntersLodgeImage(), this.getVertexBufferObjectManager(),main, false);
 				main.huntersLodges.add(main.huntersLodge);
 				main.mScene.attachChild(main.huntersLodge);
 				main.getController().updateGold(-ConstantBuildings.COSTHUNTERSLODGECOIN);
@@ -177,9 +173,9 @@ public class BuyButton extends Sprite {
 				else{
 					main.Message("You cannot afford a Hunters lodge.\nYou need "+ ConstantBuildings.COSTHUNTERSLODGECOIN + " gold, and " + ConstantBuildings.COSTHUNTERSLODGEWOOD + " wood" , Color.RED);
 				}
-			}else if(main.placebuilding.currentBuilding=="Skinner" ){
+			}else if(main.placeBuilding.currentBuilding=="Skinner" ){
 				if(HouseLevel >=3 && main.getController().getGold() >= ConstantBuildings.COSTSKINNERCOIN && main.getController().Wood >= ConstantBuildings.COSTSKINNERWOOD){
-				main.setSkinner(new Skinner(main.placebuilding.getX(), main.placebuilding.getY(), main.getImages().getSkinnerImage(), this.getVertexBufferObjectManager(),main, false));
+				main.setSkinner(new Skinner(main.placeBuilding.getX(), main.placeBuilding.getY(), main.getImages().getSkinnerImage(), this.getVertexBufferObjectManager(),main, false));
 				main.getSkinners().add(main.getSkinner());
 				main.mScene.attachChild(main.getSkinner());
 				main.getController().updateGold(-ConstantBuildings.COSTSKINNERCOIN);
@@ -191,9 +187,9 @@ public class BuyButton extends Sprite {
 				else{
 					main.Message("You cannot afford a Skinner.\nYou need "+ ConstantBuildings.COSTSKINNERCOIN + " gold, and " + ConstantBuildings.COSTSKINNERWOOD + " wood" , Color.RED);
 				}
-			}else if(main.placebuilding.currentBuilding=="Butcher" ){
+			}else if(main.placeBuilding.currentBuilding=="Butcher" ){
 				if(HouseLevel >=3 && main.getController().getGold() >= ConstantBuildings.COSTSKINNERCOIN && main.getController().Wood >= ConstantBuildings.COSTSKINNERWOOD){
-				main.butcher = new Butcher(main.placebuilding.getX(), main.placebuilding.getY(), main.getImages().getButcherImage(), this.getVertexBufferObjectManager(),main, false);
+				main.butcher = new Butcher(main.placeBuilding.getX(), main.placeBuilding.getY(), main.getImages().getButcherImage(), this.getVertexBufferObjectManager(),main, false);
 				main.getButchers().add(main.butcher);
 				main.mScene.attachChild(main.butcher);
 				main.getController().updateGold(-ConstantBuildings.COSTBUTCHERCOIN);
@@ -207,9 +203,9 @@ public class BuyButton extends Sprite {
 					main.Message("You cannot afford a butcher.\nYou need "+ ConstantBuildings.COSTBUTCHERCOIN + " gold, and " + ConstantBuildings.COSTBUTCHERWOOD + " wood" , Color.RED);
 				}
 			}
-			else if(main.placebuilding.currentBuilding=="Fishing Hut" ){
+			else if(main.placeBuilding.currentBuilding=="Fishing Hut" ){
 				if(HouseLevel >=3 && main.getController().getGold() >= ConstantBuildings.COSTHUNTERSLODGECOIN && main.getController().Wood >= ConstantBuildings.COSTFISHINGHUTWOOD){
-				main.fishinghut = new FishingHut(main.placebuilding.getX(), main.placebuilding.getY(), main.getImages().getFishingHutButtonImage(), this.getVertexBufferObjectManager(),main, false);
+				main.fishinghut = new FishingHut(main.placeBuilding.getX(), main.placeBuilding.getY(), main.getImages().getFishingHutButtonImage(), this.getVertexBufferObjectManager(),main, false);
 				main.getFishingHuts().add(main.fishinghut);
 				main.mScene.attachChild(main.fishinghut);
 				main.getController().updateGold(ConstantBuildings.COSTFISHINGHUTWOOD);
@@ -221,9 +217,9 @@ public class BuyButton extends Sprite {
 				else{
 					main.Message("You cannot afford a Fishing hut.\nYou need "+ ConstantBuildings.COSTFISHINGHUTCOIN + " gold, and " + ConstantBuildings.COSTFISHINGHUTWOOD + " wood" , Color.RED);
 				}}
-			else if(main.placebuilding.currentBuilding=="Barrack" ){
+			else if(main.placeBuilding.currentBuilding=="Barrack" ){
 				if(HouseLevel >=4 && main.getController().getGold() >= ConstantBuildings.COSTBARRACKCOIN && main.getController().Wood >= ConstantBuildings.COSTBARRACKWOOD && main.getController().Marble >= ConstantBuildings.COSTBARRACKMARBLE && main.getController().Brick >= ConstantBuildings.COSTBARRACKBRICK){
-				main.barrack = new Barrack(main.placebuilding.getX(), main.placebuilding.getY(), main.getImages().getBarrackImage(), this.getVertexBufferObjectManager(),main, false);
+				main.barrack = new Barrack(main.placeBuilding.getX(), main.placeBuilding.getY(), main.getImages().getBarrackImage(), this.getVertexBufferObjectManager(),main, false);
 				main.getBarracks().add(main.barrack);
 				main.mScene.attachChild(main.barrack);
 				main.getController().updateGold(ConstantBuildings.COSTBARRACKCOIN);
@@ -237,9 +233,9 @@ public class BuyButton extends Sprite {
 				else{
 					main.Message("You cannot afford a Fishing hut.\nYou need "+ ConstantBuildings.COSTBARRACKCOIN + " gold, and " + ConstantBuildings.COSTBARRACKWOOD + " wood"+ ConstantBuildings.COSTBARRACKBRICK + " bricks" , Color.RED);
 				}}
-			else if(main.placebuilding.currentBuilding=="Clay Mine" ){
+			else if(main.placeBuilding.currentBuilding=="Clay Mine" ){
 				if(HouseLevel >=4 && main.getController().getGold() >= ConstantBuildings.COSTCLAYMINECOIN && main.getController().Wood >= ConstantBuildings.COSTCLAYMINEWOOD && main.getController().Marble >= ConstantBuildings.COSTCLAYMINEMARBLE ){
-				main.clayMine = new MineDepositClay(main.placebuilding.getX(), main.placebuilding.getY(), main.getImages().getClayMineImage(), this.getVertexBufferObjectManager(),main, false);
+				main.clayMine = new MineDepositClay(main.placeBuilding.getX(), main.placeBuilding.getY(), main.getImages().getClayMineImage(), this.getVertexBufferObjectManager(),main, false);
 				main.getClayMines().add(main.clayMine);
 				main.mScene.attachChild(main.clayMine);
 				main.getController().updateGold(ConstantBuildings.COSTCLAYMINECOIN);
@@ -252,9 +248,9 @@ public class BuyButton extends Sprite {
 				else{
 					main.Message("You cannot afford a clay mine.\nYou need "+ ConstantBuildings.COSTCLAYMINECOIN + " gold, and " + ConstantBuildings.COSTCLAYMINEWOOD + " wood" , Color.RED);
 				}}
-			else if(main.placebuilding.currentBuilding=="Brick Foundry" ){
+			else if(main.placeBuilding.currentBuilding=="Brick Foundry" ){
 				if(HouseLevel >=4 && main.getController().getGold() >= ConstantBuildings.COSTBRICKFOUNDRYCOIN && main.getController().Wood >= ConstantBuildings.COSTBRICKFOUNDRYWOOD && main.getController().Marble >= ConstantBuildings.COSTBRICKFOUNDRYMARBLE ){
-				main.brickFoundry = new BrickFoundry(main.placebuilding.getX(), main.placebuilding.getY(), main.getImages().getBrickFoundryImage(), this.getVertexBufferObjectManager(),main, false);
+				main.brickFoundry = new BrickFoundry(main.placeBuilding.getX(), main.placeBuilding.getY(), main.getImages().getBrickFoundryImage(), this.getVertexBufferObjectManager(),main, false);
 				main.getBrickFoundrys().add(main.brickFoundry);
 				main.mScene.attachChild(main.brickFoundry);
 				main.getController().updateGold(ConstantBuildings.COSTBRICKFOUNDRYCOIN);
@@ -267,110 +263,48 @@ public class BuyButton extends Sprite {
 				else{
 					main.Message("You cannot afford a brick foundry.\nYou need "+ ConstantBuildings.COSTBRICKFOUNDRYCOIN + " gold, and " + ConstantBuildings.COSTBRICKFOUNDRYWOOD + " wood" , Color.RED);
 				}}
+			else if(main.placeBuilding.currentBuilding=="Bronze Mine" ){
+				if(HouseLevel >=ConstantBuildings.HOUSEREQBRONZEMINE && main.getController().getGold() >= ConstantBuildings.COSTBRONZEMINECOIN && main.getController().Wood >= ConstantBuildings.COSTBRONZEMINEWOOD && main.getController().Marble >= ConstantBuildings.COSTBRONZEMINEMARBLE ){
+				main.bronzeMine = new BronzeMine(main.placeBuilding.getX(), main.placeBuilding.getY(), main.getImages().getBronzeMineImage(), this.getVertexBufferObjectManager(),main, false);
+				main.getBronzeMines().add(main.bronzeMine);
+				main.mScene.attachChild(main.bronzeMine);
+				main.getController().updateGold(ConstantBuildings.COSTBRONZEMINECOIN);
+				RemoveResources("Wood",ConstantBuildings.COSTBRONZEMINEWOOD);
+				RemoveResources("Marble",ConstantBuildings.COSTBRONZEMINEMARBLE);
+				RemoveResources("Brick",ConstantBuildings.COSTBRONZEMINEBRICK);
+				}
+				else if (HouseLevel <ConstantBuildings.HOUSEREQBRONZEMINE){
+					main.Message("You need a house with a level 5 upgrade in order to build a bronze mine",Color.RED);	
+					}
+				else{
+					main.Message("You cannot afford a bronze mine.", Color.RED);
+				}}
+			else if(main.placeBuilding.currentBuilding=="Armory" ){
+				if(HouseLevel >=ConstantBuildings.HOUSEREQARMORY && main.getController().getGold() >= ConstantBuildings.COSTARMORYCOIN  && main.getController().Marble >= ConstantBuildings.COSTARMORYMARBLE ){
+				main.armory = new Armory(main.placeBuilding.getX(), main.placeBuilding.getY(), main.getImages().getArmoryImage(), this.getVertexBufferObjectManager(),main, false);
+				main.getArmories().add(main.armory);
+				main.mScene.attachChild(main.armory);
+				main.getController().updateGold(ConstantBuildings.COSTARMORYCOIN);
+				RemoveResources("Marble",ConstantBuildings.COSTARMORYMARBLE);
+				RemoveResources("Brick",ConstantBuildings.COSTARMORYBRICK);
+				}
+				else if (HouseLevel <ConstantBuildings.HOUSEREQARMORY){
+					main.Message("You need a house with a level 5 upgrade in order to build a bronze mine",Color.RED);	
+					}
+				else{
+					main.Message("You cannot afford a bronze mine.", Color.RED);
+				}}
 			
 		}}
 		return true;
 	
 	}
 	public void RemoveResources(String kind, int ammount) {
-	for(int i = 0;i<main.getStocks().size();i++){
-			if(kind =="Marble"){
-				if(main.getStocks().get(i).Marble >= ammount){
-					main.getStocks().get(i).Marble -= ammount;
-					main.getStocks().get(i).removeResource(kind, ammount);
-					main.getController().Marble -= ammount;
-					break;
-				}}
-			if(kind =="Wood"){
-				if(main.getStocks().get(i).Wood >= ammount){
-					main.getStocks().get(i).Wood -= ammount;
-					Debug.e("GOGOGO");
-					main.getController().Wood -= ammount;
-					main.getStocks().get(i).removeResource(kind, ammount);
-					break;
-				}}
-			if(kind =="Brick"){
-				if(main.getStocks().get(i).Brick >= ammount){
-					main.getStocks().get(i).Brick -= ammount;
-					main.getStocks().get(i).removeResource(kind, ammount);
-					main.getController().Brick -= ammount;
-					break;
-				}}
-			if(kind =="Bronze"){
-				if(main.getStocks().get(i).Bronze >= ammount){
-					main.getStocks().get(i).Bronze -= ammount;
-					main.getStocks().get(i).removeResource(kind, ammount);
-					main.getController().Bronze -= ammount;
-					break;
-				}}
+			main.getController().removeResources(kind,ammount);
+		}
 
-			if(kind =="Skin"){
-				if(main.getStocks().get(i).Skin >= ammount){
-					main.getStocks().get(i).Skin -= ammount;
-					main.getStocks().get(i).removeResource(kind, ammount);
-					main.getController().Skin -= ammount;
-					break;
-				}}
-			if(kind =="Armor"){
-				if(main.getStocks().get(i).Armor >= ammount){
-					main.getStocks().get(i).Armor -= ammount;
-					main.getStocks().get(i).removeResource(kind, ammount);
-					main.getController().Armor -= ammount;
-					break;
-				}}
-			if(kind =="Clay"){
-				if(main.getStocks().get(i).Clay >= ammount){
-					main.getStocks().get(i).Clay -= ammount;
-					main.getStocks().get(i).removeResource(kind, ammount);
-					main.getController().Clay-= ammount;
-					break;
-				}}
-
-	
-		}}
 
 	public void RemoveResources(String kind, int ammount, Stock stock) {
-			if(kind =="Marble"){
-					if(stock.Marble >= ammount){
-						stock.Marble -= ammount;
-						stock.removeResource(kind, ammount);
-						main.getController().Marble -= ammount;
-					}}
-				if(kind =="Wood"){
-					if(stock.Wood >= ammount){
-						stock.Wood -= ammount;
-						main.getController().Wood -= ammount;
-						stock.removeResource(kind, ammount);
-					}}
-				if(kind =="Brick"){
-					if(stock.Brick >= ammount){
-						stock.Brick -= ammount;
-						stock.removeResource(kind, ammount);
-						main.getController().Brick -= ammount;
-					}}
-				if(kind =="Bronze"){
-					if(stock.Bronze >= ammount){
-						stock.Bronze -= ammount;
-						stock.removeResource(kind, ammount);
-						main.getController().Bronze -= ammount;
-					}}
-
-				if(kind =="Skin"){
-					if(stock.Skin >= ammount){
-						stock.Skin -= ammount;
-						stock.removeResource(kind, ammount);
-						main.getController().Skin -= ammount;
-					}}
-				if(kind =="Armor"){
-					if(stock.Armor >= ammount){
-						stock.Armor -= ammount;
-						stock.removeResource(kind, ammount);
-						main.getController().Armor -= ammount;
-					}}
-				if(kind =="Clay"){
-					if(stock.Clay >= ammount){
-						stock.Clay -= ammount;
-						stock.removeResource(kind, ammount);
-						main.getController().Clay-= ammount;
-					}}
-}}
+		main.getController().removeResources(kind, ammount, stock);
+	}
+	}

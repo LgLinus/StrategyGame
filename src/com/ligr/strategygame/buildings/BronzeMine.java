@@ -20,14 +20,15 @@ import com.ligr.strategygame.constants.ConstantBuildings;
 public class BronzeMine extends SpriteObject {
 
 boolean pressedDown = false;
-private MineDepositBronze deposit;
+//private MineDepositBronze deposit;
 public int ammount=0,maxammount = 4;
 
 	public BronzeMine(float pX, float pY, ITextureRegion pTextureRegion,
 			VertexBufferObjectManager pVertexBufferObjectManager, MainActivity main, boolean load) {
 		super(pX, pY, pTextureRegion, pVertexBufferObjectManager,main);
+		yBaseStart = 32;
 		if(!load)
-		main.getController().updateWorkers(ConstantBuildings.WORKERSMINEDEPOSITBRONZE,0);
+		main.getController().updateWorkers(ConstantBuildings.WORKERSBRONZEMINE,0);
 		}
 	@Override
     public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float pTouchAreaLocalX, float pTouchAreaLocalY) {
@@ -48,7 +49,7 @@ public int ammount=0,maxammount = 4;
 	return true;
 }
 	public void removeEntity(){
-		//main.bronzeMines.remove(this);
+		main.getBronzeMines().remove(this);
 		main.mScene.unregisterTouchArea(this);
 		this.detachSelf();
 		main.removeEntity(this);
@@ -60,9 +61,9 @@ public int ammount=0,maxammount = 4;
 	
 		
 	}
-	public void CheckForStocks(BronzeMine brickFoundry){
+	public void checkForStocks(){
 		for(int i = 0;i<main.getStocks().size();i++){
-			if(main.calculateDistance(this, main.getStocks().get(i))<512){
+			if(main.getController().calculateDistance(this, main.getStocks().get(i))<512){
 
 				if(main.getStocks().get(i).checkSpace("Bronze") ==true){
 					main.getController().Bronze +=1;

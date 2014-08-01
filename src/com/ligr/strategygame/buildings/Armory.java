@@ -13,10 +13,17 @@ import com.ligr.strategygame.MainActivity;
 import com.ligr.strategygame.SpriteObject;
 import com.ligr.strategygame.constants.ConstantBuildings;
 
-
+/**
+ * The Armory will create the armor resource, which is needed used for military units
+ * @author LgLinuss
+ *
+ */
 public class Armory extends SpriteObject {
 
 boolean pressedDown = false;
+private int month = 0;
+private int wood = 0;
+private boolean produced = false;
 
 	public Armory(float pX, float pY, ITextureRegion pTextureRegion,
 			VertexBufferObjectManager pVertexBufferObjectManager, MainActivity main, boolean load) {
@@ -52,7 +59,7 @@ boolean pressedDown = false;
 		main.getController().getDataBase().add(name(), this.getX(), this.getY(),this.id);
 	}
 	private String name() {
-		return "Barrack";
+		return "Armory";
 	}
 	@Override
 	protected void onManagedUpdate(final float pSecondsElapsed){
@@ -63,7 +70,7 @@ boolean pressedDown = false;
 	}
 	public void CheckForStocks(Armory brickFoundry){
 		for(int i = 0;i<main.getStocks().size();i++){
-			if(main.calculateDistance(this, main.getStocks().get(i))<512){
+			if(main.getController().calculateDistance(this, main.getStocks().get(i))<512){
 
 				if(main.getStocks().get(i).checkSpace("Armor") ==true){
 					main.getController().Armor +=1;
@@ -72,7 +79,47 @@ boolean pressedDown = false;
 			}
 		}
 	}
-	
+	public void checkForStocks() {
+		month ++;
+		if ((month > 1) && (wood<1)) {
+			if (main.getController().Wood >= ConstantBuildings.COSTARMORYWOODMONTHLY) {
+				Debug.e(String.valueOf(main.getController().Wood));
+				main.RemoveResources("Wood", ConstantBuildings.COSTARMORYWOODMONTHLY);
+				Debug.e("Remove wood for resource");
+				Debug.e(String.valueOf(main.getController().Wood));
+				wood  = 2;
+			} 
+			month = 0;
+		}
+		if (wood>0) {
+			if (!produced ) {
+				for (int i = 0; i < main.getStocks().size(); i++) {
+					if (main.getController().calculateDistance(this, main.getStocks().get(i)) < 512) {
+
+						if (main.getStocks().get(i).Bronze >= 2) {
+							main.getController().removeResources("Bronze", 2, main.getStocks().get(i));
+							
+							produced = true;
+							break;
+						}
+					}
+				}
+			} else if (produced) {
+				for (int i = 0; i < main.getStocks().size(); i++) {
+					if (main.getController().calculateDistance(this, main.getStocks().get(i)) < 512) {
+
+						if (main.getStocks().get(i).checkSpace("Armor") == true) {
+							main.getController().Armor += 1;
+							produced = false;
+							wood--;
+							break;
+						}
+					}
+				}
+			}
+		}
+
+	}
 	public float getZ(){
 		return this.z + yBaseStart;
 	}

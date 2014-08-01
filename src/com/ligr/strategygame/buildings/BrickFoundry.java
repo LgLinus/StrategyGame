@@ -105,11 +105,12 @@ public class BrickFoundry extends SpriteObject {
 
 	public void checkForStocks() {
 		month++;
-		if (month > 1) {
+		if (month > 3) {
 			if (main.getController().Wood >= ConstantBuildings.COSTBRICKFOUNDRYWOODMONTHLY) {
-
-				main.buybutton.RemoveResources("Wood",
-						ConstantBuildings.COSTBRICKFOUNDRYWOODMONTHLY);
+				Debug.e(String.valueOf(main.getController().Wood));
+				main.RemoveResources("Wood", ConstantBuildings.COSTBRICKFOUNDRYWOODMONTHLY);
+				Debug.e("Remove wood for resource");
+				Debug.e(String.valueOf(main.getController().Wood));
 				gotWood = true;
 			} else
 				gotWood = false;
@@ -118,11 +119,11 @@ public class BrickFoundry extends SpriteObject {
 		if (gotWood) {
 			if (!produced) {
 				for (int i = 0; i < main.getStocks().size(); i++) {
-					if (main.calculateDistance(this, main.getStocks().get(i)) < 512) {
+					if (main.getController().calculateDistance(this, main.getStocks().get(i)) < 512) {
 
 						if (main.getStocks().get(i).Clay >= 2) {
-							main.buybutton.RemoveResources("Clay", 2, main
-									.getStocks().get(i));
+							main.getController().removeResources("Clay", 2, main.getStocks().get(i));
+							
 							produced = true;
 							break;
 						}
@@ -130,7 +131,7 @@ public class BrickFoundry extends SpriteObject {
 				}
 			} else if (produced) {
 				for (int i = 0; i < main.getStocks().size(); i++) {
-					if (main.calculateDistance(this, main.getStocks().get(i)) < 512) {
+					if (main.getController().calculateDistance(this, main.getStocks().get(i)) < 512) {
 
 						if (main.getStocks().get(i).checkSpace("Brick") == true) {
 							main.getController().Brick += 1;

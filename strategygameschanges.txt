@@ -1,13 +1,108 @@
 Bugg[] - När man tar bort grejer uppstår det problem
-Bugg[] - Income/Expenses är obalanserat
-Bugg[] - Arbetare funkar ej
-Bugg[] - Building description cancel stänger ej ner menyn
+Bugg[] - remove resources fungerar ej som det ska 
 TODO[] - Ny meny för beskrivning på byggnader
 TODO[] - Fixa bugs
-TODO[] - 
+TODO[] - Mer Objectives
+TODO[] - Bättre AI
 TODO[] - Tutorial
 
 --------------------------------------------------------------
+
+
+Fixade bugg som skedde när man tryckte på skärmen efter att ha tagit upp en hus meny - 14:18 2014-08-01
+
+Fixade bugg där det krashade om man tryckte på buildingHUd - 14:10 2014-08-01
+
+Bugg[x] - Spelet krashar ibalnd (förmodligen stone cutter s) - 13:34 2014-07-31
+Bugg[x] - Krash vid sparning - 13:34 2014-07-31
+Bugg[x] - Krash vid attack - 13:34 2014-07-31
+TODO[x] - Bronze Mine - 13:34 2014-07-31
+TODO[x] - Armory - 13:34 2014-07-31
+Ändrade bilderna på armory - 13:33 2014-07-31
+
+Fixade bugg när man skulle skapa en stock och ej kunde välja typen bronze - 14:04 2014-08-01
+
+Fixade bugg där man ej kunde växla mellan resourceshud och incomehud - 14:04 2014-08-01
+
+Fixade bugg när man blir attackerad - 15:44 2014-07-30
+
+Armory fungerar som det ska, behövs dock bilder - 14:43 2014-07-30
+
+Började skapa armory - 14:17 2014-07-30
+
+Fixade klart resoursehud - 14:17 2014-07-30
+
+Gjorde så att resurser och income menyerna rullas ner när de öppnas - 20:27 2014-07-29
+
+Föröskte slå ihop en mer generell klass för att skapa en animerade inflyttning av en bild - 16:47 2014-07-29
+
+Flyttade calculate distance till controller - 14:59 2014-07-29
+
+Vissa meddelanden kan ej tas bort med bakåtknappen - 13:56 2014-07-29
+
+Gjorde så att meddelanden kan tas bort med bakåttryck -13:56 2014-07-29
+
+Fixade så att meddelandet poppas upp, och gjorde massa beräkningar - 01:22 2014-07-29
+
+Skapade en superklass till messages - 00:02 2014-07-29
+
+Flyttade koden som skapar messagepopupchoice in till message klassen - 00:02 2014-07-29
+
+Lade in så att man kan se hur mycket armor man har - 17:21 2014-07-27 
+
+Lade in så att man kan se hur mycket brons man har - 17:21 2014-07-27
+
+Lade in så att man kan sammla bronze - 16:45 2014-07-27
+
+Gjorde så att resurser tas bort även om det ej finns i stocks  - 16:10 2014-07-27
+
+Gjorde så att mapattackbbutton göms vid bakåttryck - 16:09 2014-07-27
+
+Flyttade removeresources till controller - 16:09 2014-07-27
+
+Fixade bugg vid krash när man gick till anfall / köpte hoplite -  16:06 2014-07-27
+
+Freestuff ger 1000 till varje råvara - 19:56 2014-07-26
+
+Kommandon som fungerar är setgold och house levle - 19:53 2014-07-26
+
+Lade in så man kunde fuska till spelet - 19:53 2014-07-26 
+
+Skapade bronze mine byggnaden - 18:06 2014-07-25
+
+Ritade en bronze mine -14:53 2014-07-25
+
+Har fixat upphöjning på högra sidan samt en hörna - 14:29 2014-07-25
+
+Ritade en upphöjning
+
+Bugg[x] - Arbetare funkar ej - 18:40 2014-07-22
+
+Gjorde så att objectives hud är lite finare  19:18 2014-07-21
+
+Ritade ny quest HUD och implementerade den - 17:20 2014-07-21
+
+Fixade krash för brickFoundry - 15:26 2014-07-21
+
+Gjorde så att man kan bygga byggnader som kostar resurser per månad- 15:13 2014-07-21
+
+
+Gjorde så att brick foundry och clay mine visar sina bilder när man ska placera de -21:11 2014-07-20
+
+Gjorde så att resource menyn stängs vid bakåtpress - 19:11 2014-07-20
+
+Fixade så att description för husen ligger på huden och ej scenen - 19:05 2014-07-20
+
+Uppdaterade alla button buildings för att lättare se vilken nivå de kräver - 17:46 2014-07-20
+
+Bugg[x] - Income/Expenses är obalanserat - 16:15 2014-07-20
+
+Gjorde så att maten tas ifrån foodmarket och ej silon - 16:12 2014-07-20
+
+Foodmarket bilden anpassas utefter om där är någon mat kvar i foodmarket
+
+Ritade om en bild för foodmarket - 20:36 2014-07-18
+ 
 Bugg[x] - Mission 2 inhabitants klaras om hela tiden. - 18:35 2014-07-18
 Bugg[x] - Workers uppdateras ej direktl, bara under månads uppdateringen - 18:12 2014-07-18
 Bugg[x] - Animated sprite object uppdateras ej - 17:44 2014-07-18

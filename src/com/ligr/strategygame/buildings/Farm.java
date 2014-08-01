@@ -69,7 +69,7 @@ public class Farm extends AnimatedSpriteObject {
 	}
 	public void ProduceWheat(Entity thisfarm){
 		for(int i = 0;i<main.getSilos().size();i++){
-			double distance = main.calculateDistance(main.getSilos().get(i), thisfarm);
+			double distance = main.getController().calculateDistance(main.getSilos().get(i), thisfarm);
 			if(distance<512 && main.getSilos().get(i).MaxFoodAmmount > main.getSilos().get(i).FoodAmmount){
 				main.getSilos().get(i).FoodAmmount+=2500;
 				Debug.e("produced wheat");

@@ -28,19 +28,19 @@ public class Road extends SpriteObject {
 			if(roadprev.mX > this.mX){
 				//To the right, below our road
 				if(roadprev.mY > this.mY){
-					main.placebuilding.setPosition(main.placebuilding.getX()-24,main.placebuilding.getY()-12);
+					main.placeBuilding.setPosition(main.placeBuilding.getX()-24,main.placeBuilding.getY()-12);
 				}
 				if(roadprev.mY < this.mY){
-					main.placebuilding.setPosition(main.placebuilding.getX()-24,main.placebuilding.getY()+12);
+					main.placeBuilding.setPosition(main.placeBuilding.getX()-24,main.placeBuilding.getY()+12);
 				}
 				}
 			else if(roadprev.mX < this.mX){
 					//To the right, below our road
 				if(roadprev.mY > this.mY){
-						main.placebuilding.setPosition(main.placebuilding.getX()+24,main.placebuilding.getY()-12);
+						main.placeBuilding.setPosition(main.placeBuilding.getX()+24,main.placeBuilding.getY()-12);
 				}
 				if(roadprev.mY < this.mY){
-						main.placebuilding.setPosition(main.placebuilding.getX()+24,main.placebuilding.getY()+12);
+						main.placeBuilding.setPosition(main.placeBuilding.getX()+24,main.placeBuilding.getY()+12);
 				}
 			}
 			}

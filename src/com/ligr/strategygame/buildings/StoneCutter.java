@@ -82,12 +82,12 @@ public class StoneCutter extends AnimatedSpriteObject {
 		double temprange= ConstantBuildings.RANGE+1;
 		if(target==null){
 		for(int i = 0; i < main.getMarbleTiles().size();i++){
-			if(main.calculateDistance(this, main.getMarbleTiles().get(i)) < ConstantBuildings.RANGE){
+			if(main.getController().calculateDistance(this, main.getMarbleTiles().get(i)) < ConstantBuildings.RANGE){
 				marbleInRange = true;
 				if(!main.getMarbleTiles().get(i).used){
-					if(temprange > main.calculateDistance(this, main.getMarbleTiles().get(i))){
+					if(temprange > main.getController().calculateDistance(this, main.getMarbleTiles().get(i))){
 						target = main.getMarbleTiles().get(i);
-						temprange = main.calculateDistance(this, main.getMarbleTiles().get(i));}
+						temprange = main.getController().calculateDistance(this, main.getMarbleTiles().get(i));}
 					
 				}
 				
@@ -99,12 +99,12 @@ public class StoneCutter extends AnimatedSpriteObject {
 		}
 		else if(target.used==true){
 			for(int i = 0; i < main.getMarbleTiles().size();i++){
-				if(main.calculateDistance(this, main.getMarbleTiles().get(i)) < ConstantBuildings.RANGE){
+				if(main.getController().calculateDistance(this, main.getMarbleTiles().get(i)) < ConstantBuildings.RANGE){
 					marbleInRange = true;
 					if(!main.getMarbleTiles().get(i).used){
-						if(temprange > main.calculateDistance(this, main.getMarbleTiles().get(i))){
+						if(temprange > main.getController().calculateDistance(this, main.getMarbleTiles().get(i))){
 							target = main.getMarbleTiles().get(i);
-							temprange = main.calculateDistance(this, main.getMarbleTiles().get(i));}
+							temprange = main.getController().calculateDistance(this, main.getMarbleTiles().get(i));}
 						
 					}
 					
@@ -120,7 +120,7 @@ public class StoneCutter extends AnimatedSpriteObject {
 	public void checkForStocks(){
 		if(this.marbleMonth<4 && marbleInRange){				
 		for(int i = 0;i<main.getStocks().size();i++){
-			if(main.calculateDistance(this, main.getStocks().get(i))<ConstantBuildings.RANGE){				
+			if(main.getController().calculateDistance(this, main.getStocks().get(i))<ConstantBuildings.RANGE){				
 				if(main.getStocks().get(i).checkSpace("Marble") ==true){
 
 					main.getController().Marble +=1;

@@ -35,8 +35,8 @@ public class CancelButton extends Sprite {
 	public void Cancel(){
 		main.addBuildingTouchAreas();
 		
-		if(main.placebuilding!=null)
-		main.placebuilding.setAlpha(0);
+		if(main.placeBuilding!=null)
+		main.placeBuilding.setAlpha(0);
 		main.boolplacebuilding = false;
 		if(main.MoreInfoText!=null){
 		main.MoreInfoText.setText("");

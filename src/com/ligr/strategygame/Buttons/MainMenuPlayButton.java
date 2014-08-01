@@ -9,6 +9,11 @@ import org.andengine.util.debug.Debug;
 import com.ligr.strategygame.MainActivity;
 import com.ligr.strategygame.SpriteObject;
 
+/**
+ * Class that starts the game when pressed
+ * @author LgLinuss
+ *
+ */
 public class MainMenuPlayButton extends Sprite{
 
 	
@@ -27,7 +32,6 @@ public class MainMenuPlayButton extends Sprite{
 		if(mainactivity.getMainMenuDoor() !=null)
 		if(mainactivity.getMainMenuDoor().getCurrentTileIndex() == mainactivity.getMainMenuDoor().getTileCount()-1){
 			mainactivity.PAUSE = false;
-			Debug.e(String.valueOf(mainactivity.PAUSE));
 			mainactivity.getController().leaveMainMenu("new");
 			mainactivity.attachStuffEnterGame();
 		}

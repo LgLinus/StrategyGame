@@ -64,7 +64,7 @@ public boolean gotprovider = false;
 	public void checkForStocks(){
 		if(this.gotprovider == true){
 		for(int i = 0;i<main.getStocks().size();i++){
-			if(main.calculateDistance(this, main.getStocks().get(i))<ConstantBuildings.RANGE){
+			if(main.getController().calculateDistance(this, main.getStocks().get(i))<ConstantBuildings.RANGE){
 
 				if(main.getStocks().get(i).checkSpace("Meat") ==true){
 					main.getController().Meat+=1;
@@ -72,7 +72,7 @@ public boolean gotprovider = false;
 				}
 			}
 				for(int j = 0;j<main.getSkinners().size();j++){
-					if(main.calculateDistance(this, main.getSkinners().get(j))<512 && main.getSkinners().get(j).gotprovider == false){
+					if(main.getController().calculateDistance(this, main.getSkinners().get(j))<512 && main.getSkinners().get(j).gotprovider == false){
 						main.getSkinners().get(j).gotprovider = true;
 						Debug.e("Provide");
 							break;

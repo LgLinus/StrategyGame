@@ -81,13 +81,13 @@ public class WoodCutter extends SpriteObject {
 		double temprange = ConstantBuildings.RANGE + 1;
 		if (target == null) {
 			for (int i = 0; i < main.getTrees().size(); i++) {
-				if (main.calculateDistance(this, main.getTrees().get(i)) < ConstantBuildings.RANGE) {
+				if (main.getController().calculateDistance(this, main.getTrees().get(i)) < ConstantBuildings.RANGE) {
 					woodInRange = true;
 					if (!main.getTrees().get(i).used) {
-						if (temprange > main.calculateDistance(this, main
+						if (temprange > main.getController().calculateDistance(this, main
 								.getTrees().get(i))) {
 							target = main.getTrees().get(i);
-							temprange = main.calculateDistance(this, main
+							temprange = main.getController().calculateDistance(this, main
 									.getTrees().get(i));
 						}
 
@@ -100,13 +100,13 @@ public class WoodCutter extends SpriteObject {
 			return true;
 		} else if (target.used == true) {
 			for (int i = 0; i < main.getTrees().size(); i++) {
-				if (main.calculateDistance(this, main.getTrees().get(i)) < ConstantBuildings.RANGE) {
+				if (main.getController().calculateDistance(this, main.getTrees().get(i)) < ConstantBuildings.RANGE) {
 					woodInRange = true;
 					if (!main.getTrees().get(i).used) {
-						if (temprange > main.calculateDistance(this, main
+						if (temprange > main.getController().calculateDistance(this, main
 								.getTrees().get(i))) {
 							target = main.getTrees().get(i);
-							temprange = main.calculateDistance(this, main
+							temprange = main.getController().calculateDistance(this, main
 									.getTrees().get(i));
 						}
 
@@ -126,10 +126,9 @@ public class WoodCutter extends SpriteObject {
 	}
 
 	public void checkForStocks() {
-		Debug.e("XAXAXA");
 		if (this.woodMonth < 4 && woodInRange) {
 			for (int i = 0; i < main.getStocks().size(); i++) {
-				if (main.calculateDistance(this, main.getStocks().get(i)) < ConstantBuildings.RANGE) {
+				if (main.getController().calculateDistance(this, main.getStocks().get(i)) < ConstantBuildings.RANGE) {
 					if (main.getStocks().get(i).checkSpace("Wood") == true) {
 
 						main.getController().Wood += 1;

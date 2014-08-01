@@ -166,7 +166,7 @@ public class Stock extends SpriteObject {
 
 				}
 				else if (string == "Bronze"){
-					Brick  	+=1;
+					Bronze+=1;
 				}else if (string == "Armor"){
 					Armor  	+=1;
 				}else if (string == "Skin"){
@@ -192,9 +192,9 @@ public class Stock extends SpriteObject {
 					Stockchilds.get(i).Kind ="Brick";
 					Brick+=1;
 				}else if (string == "Bronze"){
-					Stockchilds.get(i).stopAnimation(9);
+					Stockchilds.get(i).stopAnimation(27);
 					Stockchilds.get(i).Kind ="Bronze";
-					Brick+=1;
+					Bronze+=1;
 				}else if (string == "Skin"){
 					Stockchilds.get(i).stopAnimation(14);
 					Stockchilds.get(i).Kind ="Skin";

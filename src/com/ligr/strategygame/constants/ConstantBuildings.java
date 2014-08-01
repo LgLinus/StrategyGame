@@ -13,8 +13,8 @@ public class ConstantBuildings {
 	public static final int WORKERSFOODMARKET = 5;
 	public static final int WORKERSFOUNTAIN = 4;
 	public static final int WORKERSHUNTERSLODGE = 12;
-	public static final int WORKERSMINEDEPOSITBRONZE = 0;
-	public static final int WORKERSMINEDEPOSITCLAY = 12;
+	public static final int WORKERSBRONZEMINE = 0;
+	public static final int WORKERSCLAYMINE = 12;
 	public static final int WORKERSSILO = 5;
 	public static final int WORKERSSKINNER = 10;
 	public static final int WORKERSSTOCK = 8;
@@ -42,7 +42,7 @@ public class ConstantBuildings {
 	public static final int EXPENSESFOUNTAIN = 60;
 	public static final int EXPENSESHOUSE = 0;
 	public static final int EXPENSESHUNTERSLODGE = 250;
-	public static final int EXPENSESMINEDEPOSITBRONZE = 400;
+	public static final int EXPENSESBRONZEMINE = 400;
 	public static final int EXPENSESMINEDEPOSITCLAY = 300;
 	public static final int EXPENSESSILO = 80;
 	public static final int EXPENSESSKINNER = 275;
@@ -66,8 +66,8 @@ public class ConstantBuildings {
 	public static final String DESCRIPTIONFOUNTAIN = "The fountain provides nearby houses with water";
 	public static final String DESCRIPTIONHOUSE = "People live in the houses. By meeting certain \nconditions you can upgrade the houses\nthis will increase your gold income and population";
 	public static final String DESCRIPTIONHUNTERSLODGE = "The hunters lodge hunts animals";
-	public static final String DESCRIPTIONMINEDEPOSITBRONZE = "The bronz emine collects bronze, which is used in armor and sculptures.";
-	public static final String DESCRIPTIONMINEDEPOSITCLAY= "The clay mine collects clay, which is used in bricks";
+	public static final String DESCRIPTIONBRONZEMINE = "The bronz emine collects bronze, which is used in armor and sculptures.";
+	public static final String DESCRIPTIONCLAYMINE= "The clay mine collects clay, which is used in bricks";
 	public static final String DESCRIPTIONROAD= "A road connects your city";
 	public static final String DESCRIPTIONSILO= "The silo stores wheat";
 	public static final String DESCRIPTIONSKINNER= "The skinner produces skin abd ckithes from \nthe butcher";
@@ -79,7 +79,7 @@ public class ConstantBuildings {
 	/*
 	 * Levels needed for various buildings
 	 */	
-	public static final int HOUSEREQARMORY = 5;
+	public static final int HOUSEREQARMORY = 4;
 	public static final int HOUSEREQBARRACK = 4;
 	public static final int HOUSEREQBRICKFOUNDRY = 4;
 	public static final int HOUSEREQBUTCHER = 3;
@@ -88,8 +88,8 @@ public class ConstantBuildings {
 	public static final int HOUSEREQFOODMARKET = 1;
 	public static final int HOUSEREQFOUNTAIN = 1;
 	public static final int HOUSEREQHUNTERSLODGE = 3;
-	public static final int HOUSEREQMINEDEPOSITBRONZE = 5;
-	public static final int HOUSEREQMINEDEPOSITCLAY = 4;
+	public static final int HOUSEREQBRONZEMINE = 4;
+	public static final int HOUSEREQCLAYMINE = 4;
 	public static final int HOUSEREQSILO = 1;
 	public static final int HOUSEREQSKINNER = 3;
 	public static final int HOUSEREQSTOCK = 1;
@@ -108,9 +108,9 @@ public class ConstantBuildings {
 	
 	public static final int COSTTHEATRECOIN = 650;
 	
-	public static final int COSTFARM = 300;
+	public static final int COSTFARMCOIN = 300;
 	
-	public static final int COSTSILO = 200;
+	public static final int COSTSILOCOIN = 200;
 	
 	public static final int COSTFOODMARKETCOIN = 200;
 	
@@ -128,16 +128,17 @@ public class ConstantBuildings {
 	public static final int COSTFISHINGHUTWOOD = 5;
 	public static final int COSTFISHINGHUTCOIN = 600;
 	
-	public static final int COSTHOUSE = 100;
+	public static final int COSTHOUSECOIN = 100;
 	
 	public static final int COSTARMORYCOIN = 600;
 	public static final int COSTARMORYBRICK = 2;
 	public static final int COSTARMORYWOODMONTHLY = 1;
-	public static final int COSTARMORYMARLBE = 1;
+	public static final int COSTARMORYMARBLE = 1;
 	
-	public static final int COSTBRONZEMINEBRICK = 1;
+	public static final int COSTBRONZEMINEBRICK = 4;
 	public static final int COSTBRONZEMINECOIN = 700;
-	public static final int COSTBRONZEMINEMARBLE = 2;
+	public static final int COSTBRONZEMINEMARBLE = 4;
+	public static final int COSTBRONZEMINEWOOD = 3;
 	
 	public static final int COSTSKINNERWOOD = 3;
 	public static final int COSTSKINNERCOIN = 500;

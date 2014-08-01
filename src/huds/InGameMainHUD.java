@@ -13,7 +13,7 @@ import com.ligr.strategygame.Buttons.HUDResourceMenuButton;
 import com.ligr.strategygame.Buttons.HudMapButton;
 import com.ligr.strategygame.Buttons.HudRemoveBuildingButton;
 import com.ligr.strategygame.Buttons.MenuButton;
-import com.ligr.strategygame.Buttons.MenuQuestButton;
+import com.ligr.strategygame.Buttons.MenuObjectivesButton;
 import com.ligr.strategygame.Buttons.Buildings.HUDIncomeButton;
 import com.ligr.strategygame.Buttons.Buildings.HUDMenuCollectButton;
 import com.ligr.strategygame.Buttons.Buildings.HUDMenuMilitaryButton;
@@ -31,9 +31,13 @@ public class InGameMainHUD extends HUD {
 	private HUDMenuStorageButton hudmenustoragebutton;
 	private HUDMenuUtilityButton hudmenuutilitybutton;
 	private HUDMilitaryButton hudMilitaryButton;
-	private MenuQuestButton hudObjectivesButton;
+	private MenuObjectivesButton hudObjectivesButton;
 	private MenuButton menuButton;
-	private HUDResourceMenuButton HUDResources;
+	private HUDResourceMenuButton hudResources;
+	public HUDResourceMenuButton getHudResources() {
+		return hudResources;
+	}
+
 	private HUDChatButton hudChatButton;
 	private MainActivity main;
 	public InGameMainHUD(MainActivity main) {
@@ -53,7 +57,7 @@ public class InGameMainHUD extends HUD {
 		hudMapButton = new HudMapButton(hudRemoveBuildingButton.getWidth(), 597,
 				main.getImages().getHudMapButtonImage(),
 				MainActivity.main.getVertexBufferObjectManager(),main);
-		hudObjectivesButton = new MenuQuestButton(
+		hudObjectivesButton = new MenuObjectivesButton(
 				0 + hudRemoveBuildingButton.getWidth() * 2, 597,
 				main.getImages().getMenuQuestButtonImage(), manager, main);
 		hudChatButton = new HUDChatButton(
@@ -62,7 +66,7 @@ public class InGameMainHUD extends HUD {
 		hudMilitaryButton = new HUDMilitaryButton(
 				0 + hudRemoveBuildingButton.getWidth() * 4, 597,
 				main.getImages().getHudMilitaryButtonImage(), manager,main);
-		HUDResources = new HUDResourceMenuButton(198, 0,
+		hudResources = new HUDResourceMenuButton(198, 0,
 				main.getImages().getHudResourcesButtonImage(), manager,
 				this,main);
 		incomeButton = new HUDIncomeButton(359, 0, main.getImages().getIncomeButtonImage(),
@@ -84,6 +88,10 @@ public class InGameMainHUD extends HUD {
 				manager,main);
 	}
 
+	public HUDResourceMenuButton getHUDResources() {
+		return hudResources;
+	}
+
 	/**
 	 * Attach the children to the hud
 	 */
@@ -94,7 +102,7 @@ public class InGameMainHUD extends HUD {
 		attachChild(hudMilitaryButton);
 		attachChild(hudRemoveBuildingButton);
 		attachChild(incomeButton);
-		attachChild(HUDResources);
+		attachChild(hudResources);
 		attachChild(hudmenuutilitybutton);
 		attachChild(hudmenustoragebutton);
 		attachChild(hudmenumilitarybutton);
@@ -117,7 +125,7 @@ public class InGameMainHUD extends HUD {
 		unregisterTouchArea(hudObjectivesButton);
 		unregisterTouchArea(menuButton);
 		unregisterTouchArea(incomeButton);
-		unregisterTouchArea(HUDResources);
+		unregisterTouchArea(hudResources);
 	}
 
 	/**
@@ -134,7 +142,7 @@ public class InGameMainHUD extends HUD {
 		registerTouchArea(hudObjectivesButton);
 		registerTouchArea(menuButton);
 		registerTouchArea(incomeButton);
-		registerTouchArea(HUDResources);
+		registerTouchArea(hudResources);
 	}
 
 	public HUDChatButton gethudChatButton() {
@@ -150,7 +158,7 @@ public class InGameMainHUD extends HUD {
 		return incomeButton;
 	}
 
-	public MenuQuestButton getHudObjectivesButton() {
+	public MenuObjectivesButton getHudObjectivesButton() {
 	return hudObjectivesButton;
 	}
 }

@@ -24,7 +24,7 @@ public class CityIcon extends Sprite {
 	int cash = 0;
 	double chanceofAttack = 0;
 	public int monthSinceAttack = 0;
-	boolean atWar = false;
+	public boolean atWar = false;
 	private MainActivity main;
 	public CityIcon(float pX, float pY, ITextureRegion pTextureRegion,
 			VertexBufferObjectManager pVertexBufferObjectManager,int index, MainActivity main) {
@@ -197,7 +197,7 @@ public class CityIcon extends Sprite {
 						chanceofAttack += ((0.01*((relationMinus*relationMinus)/5000)) * (monthSinceAttack/10));
 					}
 					if(chanceofAttack>=1){
-						main.bribe = 20000;
+						main.bribe = 10000;
 						main.MessagePopUpChoice(this.getName() +" is planning an attack against you. They will reach your city in " +  this.getDistance() + " months.\nWould you like to bribe them off for: "+ main.bribe +" gold?" , Color.WHITE, this, "Attack Warning", main.inGameHUD);
 						atWar = true;
 						this.monthSinceAttack = Integer.parseInt(this.getDistance());
@@ -206,7 +206,7 @@ public class CityIcon extends Sprite {
 				else{
 					if(this.monthSinceAttack<=0){
 						main.messagePopUp("Your city is under attack!", Color.WHITE);
-						main.getMessageConfirmButton().calculateWinnerCityAttacked(this);
+						main.getController().calculateWinnerCityAttacked(this);
 					}
 					this.monthSinceAttack--;
 				}

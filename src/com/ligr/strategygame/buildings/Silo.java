@@ -1,10 +1,10 @@
 package com.ligr.strategygame.buildings;
 
-import org.andengine.entity.sprite.Sprite;
 import org.andengine.input.touch.TouchEvent;
 import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.color.Color;
+import org.andengine.util.debug.Debug;
 
 import com.ligr.strategygame.MainActivity;
 import com.ligr.strategygame.SpriteObject;
@@ -35,7 +35,7 @@ public class Silo extends SpriteObject {
 		if(pSceneTouchEvent.isActionUp()){
 			
 		if(main.boolplacebuilding == false && pressedDown && main.removeBuildings==false){ pressedDown = false;
-
+		Debug.e("SILO FOOD: " + this.FoodAmmount);
 		main.addBuildingDescription("Silo", "A Silo stores wheat inside of it.");
 	
 		}

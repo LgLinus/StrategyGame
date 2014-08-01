@@ -9,18 +9,23 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.color.Color;
 import org.andengine.util.debug.Debug;
 
+import com.ligr.strategygame.AnimatedSpriteObject;
 import com.ligr.strategygame.MainActivity;
 import com.ligr.strategygame.SpriteObject;
 import com.ligr.strategygame.constants.ConstantBuildings;
 
-
-public class FoodMarket extends SpriteObject {
+/**
+ * FoodMarket building responsible of distrubating the food
+ * @author LgLinuss
+ *
+ */
+public class FoodMarket extends AnimatedSpriteObject {
 
 	public int FoodAmmount = 0;
 	private boolean pressedDown = false;
-	public int MaxFoodAmmount = 1000;
+	public int MaxFoodAmmount = 2500;
 
-	public FoodMarket(float pX, float pY, ITextureRegion pTextureRegion,
+	public FoodMarket(float pX, float pY, ITiledTextureRegion pTextureRegion,
 			VertexBufferObjectManager pVertexBufferObjectManager,
 			MainActivity main, boolean load) {
 		super(pX, pY, pTextureRegion, pVertexBufferObjectManager, main);
@@ -28,9 +33,17 @@ public class FoodMarket extends SpriteObject {
 			main.getController().updateWorkers(
 					ConstantBuildings.WORKERSFOODMARKET, 0);
 		yBaseStart = 23;
+		this.stopAnimation(1);
 	}
-
-	public FoodMarket(float pX, float pY, ITextureRegion pTextureRegion,
+	@Override
+	protected void onManagedUpdate(final float pSecondsElapsed) {
+		super.onManagedUpdate(pSecondsElapsed);
+		if (this.FoodAmmount>=125)
+			this.stopAnimation(0);
+		else
+			this.stopAnimation(1);
+	}
+	public FoodMarket(float pX, float pY, ITiledTextureRegion pTextureRegion,
 			VertexBufferObjectManager pVertexBufferObjectManager,
 			MainActivity main, int number) {
 		super(pX, pY, pTextureRegion, pVertexBufferObjectManager, main);
@@ -48,6 +61,7 @@ public class FoodMarket extends SpriteObject {
 			if (main.boolplacebuilding == false && pressedDown
 					&& main.removeBuildings == false) {
 				pressedDown = false;
+				Debug.e("FOOD MARKET SAYS: " + this.FoodAmmount);
 				main.addBuildingDescription("Food Market",
 						"A food market distributes your city's food to the people.");
 			} else if (main.removeBuildings == true
@@ -61,6 +75,9 @@ public class FoodMarket extends SpriteObject {
 		return true;
 	}
 
+	/**
+	 * Removes the food market
+	 */
 	public void removeEntity() {
 		main.getFoodMarkets().remove(this);
 		main.mScene.unregisterTouchArea(this);
@@ -82,13 +99,16 @@ public class FoodMarket extends SpriteObject {
 		return "Food Market";
 	}
 
+	/**
+	 * Look for silos which contains food and grab the found from the silo
+	 */
 	public void checkForStocks() {
 		for (int i = 0; i < main.getSilos().size(); i++) {
-			double distance = main.calculateDistance(main.getSilos().get(i),
+			double distance = main.getController().calculateDistance(main.getSilos().get(i),
 					this);
 			if (distance < 512 && main.getSilos().get(i).FoodAmmount > 0) {
 				for (this.FoodAmmount = this.FoodAmmount; this.FoodAmmount < this.MaxFoodAmmount; this.FoodAmmount++) {
-					// main.Silos.get(i).FoodAmmount-=1;
+					 main.getSilos().get(i).FoodAmmount-=1;
 
 					// this.FoodAmmount +=1;
 					if (main.getSilos().get(i).FoodAmmount <= 0) {
@@ -97,6 +117,7 @@ public class FoodMarket extends SpriteObject {
 
 				}
 
+				
 			}
 		}
 	}	public float getZ(){

@@ -13,7 +13,11 @@ import com.ligr.strategygame.Buttons.BuyButton;
 import com.ligr.strategygame.buildings.House;
 import com.ligr.strategygame.constants.ConstantBuildings;
 
-
+/**
+ * Class responsible of handling the recruitment of new troops
+ * @author LgLinuss
+ *
+ */
 public class TrainingBuyButton extends BuyButton {
 
 	private static String currentbuilding;
@@ -21,7 +25,6 @@ public class TrainingBuyButton extends BuyButton {
 	public TrainingBuyButton(float pX, float pY, ITextureRegion pTextureRegion,
 			VertexBufferObjectManager pVertexBufferObjectManager,MainActivity main) {
 		super(pX, pY, pTextureRegion, pVertexBufferObjectManager, main);
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override

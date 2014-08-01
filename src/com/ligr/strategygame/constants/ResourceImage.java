@@ -7,6 +7,11 @@ import org.andengine.opengl.texture.region.TiledTextureRegion;
 
 import com.ligr.strategygame.MainActivity;
 
+/**
+ * Class containing all of the images in the game
+ * @author LgLinuss
+ *
+ */
 public class ResourceImage {
 
 	private MainActivity main;
@@ -27,8 +32,12 @@ public class ResourceImage {
 	private TextureRegion farmButtonImage;
 	private TextureRegion siloImage;
 	private TextureRegion MoreInfoImage;
-	private TextureRegion FoodMarketImage;
 	private TextureRegion mainMenuBackgroundImage;
+	private TextureRegion stockChoiceBronzeImage;
+	private TextureRegion armoryImage;
+	private TextureRegion armoryButtonImage;
+	
+
 	private TextureRegion mainMenuPlayButtonImage;
 	private TextureRegion theatreImage;
 	private TextureRegion marbleImage;
@@ -47,10 +56,13 @@ public class ResourceImage {
 	private TextureRegion woodCutterButtonImage;
 	private TextureRegion siloButtonImage;
 	private TextureRegion theatreButtonImage;
-	private TextureRegion woodResourceImage;
-	private TextureRegion marbleResourceImage;
-	private TextureRegion brickResourceImage;
-	private TextureRegion skinResourceImage;
+	private TextureRegion resourceWoodImage;
+	private TextureRegion resourceBronzeImage;
+	
+
+	private TextureRegion resourceMarbleImage;
+	private TextureRegion resourceBrickImage;
+	private TextureRegion resourceSkinImage;
 	private TextureRegion fishingHutButtonImage;
 	private TextureRegion skinnerButtonImage;
 	private TextureRegion butcherButtonImage;
@@ -110,6 +122,13 @@ public class ResourceImage {
 	private TextureRegion hudChatButtonImage;
 	private TextureRegion hudMilitaryButtonImage;
 	private TextureRegion clayButtonImage;
+	private TextureRegion ObjectivesHUDImage;
+	private TextureRegion mountainLevelDownRightBotImage, mountainLevelDownRightTopImage;
+	private TextureRegion mountainLevelDownRightLeftCornerTopImage, mountainLevelDownRightLeftCornerBotImage;
+	public TextureRegion getObjectivesHUDImage() {
+		return ObjectivesHUDImage;
+	}
+
 	private TiledTextureRegion houseImage;
 	private TiledTextureRegion stockImage;
 	private TiledTextureRegion upgradeArrowImage;
@@ -128,6 +147,10 @@ public class ResourceImage {
 	private TiledTextureRegion marbleTileImage;
 	private TiledTextureRegion clayTileImage;
 	private TiledTextureRegion mainMenuDoorImage;
+	private TiledTextureRegion FoodMarketImage;
+	private ITextureRegion bronzeMineImage;
+	private ITextureRegion bronzeMineButtonImage;
+	private TextureRegion resourceArmorImage;
 	
 	public ResourceImage(MainActivity main){
 		this.main = main;
@@ -178,8 +201,6 @@ public class ResourceImage {
 				main.getGameAtlas(), main, "gfx/silo.png");
 		MoreInfoImage = BitmapTextureAtlasTextureRegionFactory.createFromAsset(
 				main.getGameAtlas(), main, "gfx/moreinformationbutton.png");
-		FoodMarketImage = BitmapTextureAtlasTextureRegionFactory
-				.createFromAsset(main.getGameAtlas(), main, "gfx/foodmarket.png");
 		mainMenuBackgroundImage = BitmapTextureAtlasTextureRegionFactory
 				.createFromAsset(main.getGameAtlas(), main, "gfx/mainmenubackground.png");
 		mainMenuPlayButtonImage = BitmapTextureAtlasTextureRegionFactory
@@ -219,14 +240,18 @@ public class ResourceImage {
 				.createFromAsset(main.getGameAtlas(), main, "gfx/silobutton.png");
 		theatreButtonImage = BitmapTextureAtlasTextureRegionFactory
 				.createFromAsset(main.getGameAtlas(), main, "gfx/theatrebutton.png");
-		woodResourceImage = BitmapTextureAtlasTextureRegionFactory
-				.createFromAsset(main.getGameAtlas(), main, "gfx/woodresource.png");
-		marbleResourceImage = BitmapTextureAtlasTextureRegionFactory
-				.createFromAsset(main.getGameAtlas(), main, "gfx/marbleresource.png");
-		brickResourceImage = BitmapTextureAtlasTextureRegionFactory
-				.createFromAsset(main.getGameAtlas(), main, "gfx/brickresource.png");
-		skinResourceImage = BitmapTextureAtlasTextureRegionFactory
-				.createFromAsset(main.getGameAtlas(), main, "gfx/skinresource.png");
+		resourceWoodImage = BitmapTextureAtlasTextureRegionFactory
+				.createFromAsset(main.getGameAtlas(), main, "gfx/resourcewood.png");
+		resourceBronzeImage = BitmapTextureAtlasTextureRegionFactory
+				.createFromAsset(main.getGameAtlas(), main, "gfx/resourcebronze.png");
+		resourceMarbleImage = BitmapTextureAtlasTextureRegionFactory
+				.createFromAsset(main.getGameAtlas(), main, "gfx/resourcemarble.png");
+		resourceBrickImage = BitmapTextureAtlasTextureRegionFactory
+				.createFromAsset(main.getGameAtlas(), main, "gfx/resourcebrick.png");
+		resourceSkinImage = BitmapTextureAtlasTextureRegionFactory
+				.createFromAsset(main.getGameAtlas(), main, "gfx/resourceskin.png");
+		resourceArmorImage = BitmapTextureAtlasTextureRegionFactory
+				.createFromAsset(main.getGameAtlas(), main, "gfx/resourcearmor.png");
 		fishingHutButtonImage = BitmapTextureAtlasTextureRegionFactory
 				.createFromAsset(main.getGameAtlas(), main, "gfx/fishinghutbutton.png");
 		skinnerButtonImage = BitmapTextureAtlasTextureRegionFactory
@@ -335,6 +360,8 @@ public class ResourceImage {
 				.createFromAsset(main.getGameAtlas(), main, "gfx/stockclaychoice.png");
 		stockChoiceSkinImage = BitmapTextureAtlasTextureRegionFactory
 				.createFromAsset(main.getGameAtlas(), main, "gfx/stockskinchoice.png");
+		stockChoiceBronzeImage = BitmapTextureAtlasTextureRegionFactory
+				.createFromAsset(main.getGameAtlas(), main, "gfx/stockbronzechoice.png");
 		hudRemoveBuildingButtonImage = BitmapTextureAtlasTextureRegionFactory
 				.createFromAsset(main.getGameAtlas(), main, "gfx/hudremovebuildings.png");
 		hudMapButtonImage = BitmapTextureAtlasTextureRegionFactory
@@ -351,6 +378,49 @@ public class ResourceImage {
 				.createFromAsset(main.getGameAtlas(), main, "gfx/hudmilitarybutton.png");
 		clayButtonImage = BitmapTextureAtlasTextureRegionFactory
 				.createFromAsset(main.getGameAtlas(), main, "gfx/claybuildingbutton.png");
+		ObjectivesHUDImage = BitmapTextureAtlasTextureRegionFactory
+				.createFromAsset(main.getGameAtlas(), main, "gfx/questhud.png");
+		mountainLevelDownRightBotImage = BitmapTextureAtlasTextureRegionFactory
+				.createFromAsset(main.getGameAtlas(), main, "gfx/mountainleveldownrightbot.png");
+		mountainLevelDownRightTopImage = BitmapTextureAtlasTextureRegionFactory
+				.createFromAsset(main.getGameAtlas(), main, "gfx/mountainleveldownrighttop.png");
+		mountainLevelDownRightLeftCornerTopImage = BitmapTextureAtlasTextureRegionFactory
+				.createFromAsset(main.getGameAtlas(), main, "gfx/mountainleveldownrightleftcornertop.png");
+		mountainLevelDownRightLeftCornerBotImage = BitmapTextureAtlasTextureRegionFactory
+				.createFromAsset(main.getGameAtlas(), main, "gfx/mountainleveldownrightleftcornerbot.png");
+		bronzeMineImage = BitmapTextureAtlasTextureRegionFactory.createFromAsset(main.getGameAtlas(), main, "gfx/bronzemine.png");
+		bronzeMineButtonImage = BitmapTextureAtlasTextureRegionFactory.createFromAsset(main.getGameAtlas(), main, "gfx/bronzeminebutton.png");
+		armoryImage = BitmapTextureAtlasTextureRegionFactory.createFromAsset(main.getGameAtlas(), main, "gfx/armory.png");
+		armoryButtonImage = BitmapTextureAtlasTextureRegionFactory.createFromAsset(main.getGameAtlas(), main, "gfx/armorybutton.png");
+
+	}
+
+	public TextureRegion getArmoryImage() {
+		return armoryImage;
+	}
+
+	public TextureRegion getArmoryButtonImage() {
+		return armoryButtonImage;
+	}
+
+	public TextureRegion getResourceArmorImage() {
+		return resourceArmorImage;
+	}
+
+	public TextureRegion getMountainLevelDownRightLeftCornerTopImage() {
+		return mountainLevelDownRightLeftCornerTopImage;
+	}
+
+	public TextureRegion getMountainLevelDownRightLeftCornerBotImage() {
+		return mountainLevelDownRightLeftCornerBotImage;
+	}
+
+	public TextureRegion getMountainLevelDownRightBotImage() {
+		return mountainLevelDownRightBotImage;
+	}
+
+	public TextureRegion getMountainLevelDownRightTopImage() {
+		return mountainLevelDownRightTopImage;
 	}
 
 	/**
@@ -402,9 +472,11 @@ public class ResourceImage {
 		mainMenuDoorImage = BitmapTextureAtlasTextureRegionFactory
 				.createTiledFromAsset(main.getGameAtlas(), main, "gfx/mainmenudoor.png",
 						6, 1);
+		FoodMarketImage = BitmapTextureAtlasTextureRegionFactory
+				.createTiledFromAsset(main.getGameAtlas(), main, "gfx/foodmarket.png", 2, 1);
 	}
 	
-	// Get methods
+	// Get-set methods
 	public MainActivity getMain() {
 		return main;
 	}
@@ -473,7 +545,7 @@ public class ResourceImage {
 		return MoreInfoImage;
 	}
 
-	public TextureRegion getFoodMarketImage() {
+	public TiledTextureRegion getFoodMarketImage() {
 		return FoodMarketImage;
 	}
 
@@ -553,20 +625,20 @@ public class ResourceImage {
 		return theatreButtonImage;
 	}
 
-	public TextureRegion getWoodResourceImage() {
-		return woodResourceImage;
+	public TextureRegion getResourceWoodImage() {
+		return resourceWoodImage;
 	}
 
-	public TextureRegion getMarbleResourceImage() {
-		return marbleResourceImage;
+	public TextureRegion getResourceMarbleImage() {
+		return resourceMarbleImage;
 	}
 
-	public TextureRegion getBrickResourceImage() {
-		return brickResourceImage;
+	public TextureRegion getResourceBrickImage() {
+		return resourceBrickImage;
 	}
 
-	public TextureRegion getSkinResourceImage() {
-		return skinResourceImage;
+	public TextureRegion getResourceSkinImage() {
+		return resourceSkinImage;
 	}
 
 	public TextureRegion getFishingHutButtonImage() {
@@ -879,5 +951,17 @@ public class ResourceImage {
 
 	public ITextureRegion getInGameHUDImage(){
 		return inGameHUDImage;
+	}
+
+	public ITextureRegion getBronzeMineImage() {
+		return bronzeMineImage;
+	}
+
+	public ITextureRegion getBronzeMineButtonImage() {
+		return bronzeMineButtonImage;
+	}public TextureRegion getStockChoiceBronzeImage() {
+		return stockChoiceBronzeImage;
+	}public TextureRegion getResourceBronzeImage() {
+		return resourceBronzeImage;
 	}
 }

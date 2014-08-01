@@ -16,6 +16,7 @@ public class MenuSaveButton extends Sprite{
 	public MenuSaveButton(float pX, float pY, ITextureRegion pTextureRegion,
 			VertexBufferObjectManager pVertexBufferObjectManager,MainActivity main) {
 		super(pX, pY, pTextureRegion, pVertexBufferObjectManager);
+		this.main = main;
 	}
 	
 	@Override

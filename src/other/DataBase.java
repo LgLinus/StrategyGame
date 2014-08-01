@@ -132,6 +132,7 @@ public class DataBase extends SQLiteOpenHelper {
 		cv.put(string2, "-1");
 		cv.put(string3, "-1");
 		myDB.insert(Object, null, cv);
+		Debug.e("ID:" + id + "Type" + name + "ValueX " + x +" valueY " + y);
 	}
 	public void add(String name, float x, float y, int id, String stringone, String stringtwo) {
 		SQLiteDatabase myDB = this.getWritableDatabase();
@@ -171,12 +172,13 @@ public class DataBase extends SQLiteOpenHelper {
 		myCursor = myDB.rawQuery("SELECT " + type + " FROM " + Object
 				+ " WHERE " + ID + "=?", mySearch);
 		myCursor.moveToFirst();
+		if(myCursor.moveToFirst()){;
 		int index = myCursor.getColumnIndex(type);
-		String answer = "";
-		answer = myCursor.getString(index);
-		/*else
-			return "-1";*/
-		return answer;
+		
+		String type = myCursor.getString(index);
+		return type;
+		}else
+		return "-1";
 	}
 	public float readDataBaseX(int IDs) {
 		SQLiteDatabase myDB = this.getReadableDatabase();
@@ -186,12 +188,13 @@ public class DataBase extends SQLiteOpenHelper {
 		myCursor = myDB.rawQuery("SELECT " + valueX + " FROM " + Object
 				+ " WHERE " + ID + "=?", mySearch);
 		myCursor.moveToFirst();
+		if(myCursor.moveToFirst()){;
 		int index = myCursor.getColumnIndex(valueX);
 		
 		float x = myCursor.getFloat(index);
-		/*else
-			return "-1";*/
 		return x;
+		}else
+		return -1;
 	}
 	public float readDataBaseY(int IDs) {
 		SQLiteDatabase myDB = this.getReadableDatabase();
@@ -200,13 +203,13 @@ public class DataBase extends SQLiteOpenHelper {
 		Cursor myCursor;
 		myCursor = myDB.rawQuery("SELECT " + valueY + " FROM " + Object
 				+ " WHERE " + ID + "=?", mySearch);
-		myCursor.moveToFirst();
+		if(myCursor.moveToFirst()){;
 		int index = myCursor.getColumnIndex(valueY);
 		
 		float y = myCursor.getFloat(index);
-		/*else
-			return "-1";*/
 		return y;
+		}else
+		return -1;
 	}
 	public int readDataBaseInt(int IDs) {
 		SQLiteDatabase myDB = this.getReadableDatabase();
@@ -216,12 +219,13 @@ public class DataBase extends SQLiteOpenHelper {
 		myCursor = myDB.rawQuery("SELECT " + houseLevel + " FROM " + Object
 				+ " WHERE " + ID + "=?", mySearch);
 		myCursor.moveToFirst();
+		if(myCursor.moveToFirst()){;
 		int index = myCursor.getColumnIndex(houseLevel);
 		
-		int level = myCursor.getInt(index);
-		/*else
-			return "-1";*/
-		return level;
+		int string1 = myCursor.getInt(index);
+		return string1;
+		}else
+		return -1;
 	}
 	public boolean checkIfDone(int IDs){
 		SQLiteDatabase myDB = this.getReadableDatabase();
@@ -240,12 +244,13 @@ public class DataBase extends SQLiteOpenHelper {
 		myCursor = myDB.rawQuery("SELECT " + string1 + " FROM " + Object
 				+ " WHERE " + ID + "=?", mySearch);
 		myCursor.moveToFirst();
+		if(myCursor.moveToFirst()){;
 		int index = myCursor.getColumnIndex(string1);
 		
-		String string = myCursor.getString(index);
-		/*else
-			return "-1";*/
-		return string;
+		String string1 = myCursor.getString(index);
+		return string1;
+		}else
+		return "-1";
 	}	public String readDataBaseString2(int IDs) {
 		SQLiteDatabase myDB = this.getReadableDatabase();
 		if (DatabaseUtils.queryNumEntries(myDB, Object)-1
@@ -258,13 +263,13 @@ public class DataBase extends SQLiteOpenHelper {
 		myCursor = myDB.rawQuery("SELECT " + string2 + " FROM " + Object
 				+ " WHERE " + ID + "=?", mySearch);
 		myCursor.moveToFirst();
+		if(myCursor.moveToFirst()){;
 		int index = myCursor.getColumnIndex(string2);
 		
-		String string = myCursor.getString(index);
-		/*else
-			return "-1";*/
-		return string;
-	}
+		String string2 = myCursor.getString(index);
+		return string2;
+		}else
+		return "-1";	}
 	public String readDataBaseString3(int IDs) {
 		SQLiteDatabase myDB = this.getReadableDatabase();
 		if (DatabaseUtils.queryNumEntries(myDB, Object)-1
@@ -277,12 +282,13 @@ public class DataBase extends SQLiteOpenHelper {
 		myCursor = myDB.rawQuery("SELECT " + string3 + " FROM " + Object
 				+ " WHERE " + ID + "=?", mySearch);
 		myCursor.moveToFirst();
+		if(myCursor.moveToFirst()){;
 		int index = myCursor.getColumnIndex(string3);
 		
-		String string = myCursor.getString(index);
-		/*else
-			return "-1";*/
-		return string;
+		String string3 = myCursor.getString(index);
+		return string3;
+		}else
+		return "-1";
 	}
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {

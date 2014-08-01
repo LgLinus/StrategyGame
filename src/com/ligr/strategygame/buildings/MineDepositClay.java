@@ -27,7 +27,7 @@ public class MineDepositClay extends SpriteObject {
 		super(pX, pY, pTextureRegion, pVertexBufferObjectManager,main);
 		main.getController().expenses += 5;
 		if(!load)
-		main.getController().updateWorkers(ConstantBuildings.WORKERSMINEDEPOSITCLAY,0);
+		main.getController().updateWorkers(ConstantBuildings.WORKERSCLAYMINE,0);
 		yBaseStart = 24;}
 	@Override
     public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float pTouchAreaLocalX, float pTouchAreaLocalY) {
@@ -51,7 +51,7 @@ public class MineDepositClay extends SpriteObject {
 		main.getClayMines().remove(this);
 		main.mScene.unregisterTouchArea(this);
 		main.removeEntity(this);
-		main.getController().updateWorkers(-ConstantBuildings.WORKERSMINEDEPOSITCLAY, 0);
+		main.getController().updateWorkers(-ConstantBuildings.WORKERSCLAYMINE, 0);
 	}
 	@Override
 protected void onManagedUpdate(final float pSecondsElapsed){
@@ -69,12 +69,12 @@ private String name() {
 	double temprange= ConstantBuildings.RANGE+1;
 	if(target==null){
 	for(int i = 0; i < main.ClayTiles.size();i++){
-		if(main.calculateDistance(this, main.ClayTiles.get(i)) < ConstantBuildings.RANGE){
+		if(main.getController().calculateDistance(this, main.ClayTiles.get(i)) < ConstantBuildings.RANGE){
 			clayInRange = true;
 			if(!main.ClayTiles.get(i).used){
-				if(temprange > main.calculateDistance(this, main.ClayTiles.get(i))){
+				if(temprange > main.getController().calculateDistance(this, main.ClayTiles.get(i))){
 					target = main.ClayTiles.get(i);
-					temprange = main.calculateDistance(this, main.ClayTiles.get(i));}
+					temprange = main.getController().calculateDistance(this, main.ClayTiles.get(i));}
 				
 			}
 			
@@ -86,12 +86,12 @@ private String name() {
 	}
 	else if(target.used==true){
 		for(int i = 0; i < main.ClayTiles.size();i++){
-			if(main.calculateDistance(this, main.ClayTiles.get(i)) < ConstantBuildings.RANGE){
+			if(main.getController().calculateDistance(this, main.ClayTiles.get(i)) < ConstantBuildings.RANGE){
 				clayInRange = true;
 				if(!main.ClayTiles.get(i).used){
-					if(temprange > main.calculateDistance(this, main.ClayTiles.get(i))){
+					if(temprange > main.getController().calculateDistance(this, main.ClayTiles.get(i))){
 						target = main.ClayTiles.get(i);
-						temprange = main.calculateDistance(this, main.ClayTiles.get(i));}
+						temprange = main.getController().calculateDistance(this, main.ClayTiles.get(i));}
 					
 				}
 				
@@ -107,7 +107,7 @@ private String name() {
 public void checkForStocks(){
 	if(this.clayMonth<4 && clayInRange){				
 	for(int i = 0;i<main.getStocks().size();i++){
-		if(main.calculateDistance(this, main.getStocks().get(i))<ConstantBuildings.RANGE){				
+		if(main.getController().calculateDistance(this, main.getStocks().get(i))<ConstantBuildings.RANGE){				
 			if(main.getStocks().get(i).checkSpace("Clay") ==true){
 
 				main.getController().Clay +=1;

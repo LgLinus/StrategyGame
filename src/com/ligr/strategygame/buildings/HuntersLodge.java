@@ -78,7 +78,7 @@ public class HuntersLodge extends SpriteObject {
 	public void checkForStocks() {
 		if (this.providingskin == false) {
 			for (int i = 0; i < main.getButchers().size(); i++) {
-				if (main.calculateDistance(this, main.getButchers().get(i)) < ConstantBuildings.RANGE
+				if (main.getController().calculateDistance(this, main.getButchers().get(i)) < ConstantBuildings.RANGE
 						&& main.getButchers().get(i).gotprovider == false) {
 					main.getButchers().get(i).gotprovider = true;
 					System.out.println("provide");

@@ -1,0 +1,9 @@
+-Add images for the building in ResourceImage class
+-Add constants for the building, descirption cost etc in ConstantBuildings
+-Create class that extends either SpriteObject or AnimatedSpriteObject inside the package com.ligr.startegygame.buildings
+-Create arrayList for the building
+-Add the arraylist onto setExpenses in Controller class
+-Add the building to the buybutton class
+-Create button for the building
+-Add the button in setupHUD and attach it
+-Add the building to the correct menu, example in the method menuhudcollect in MainActivity class

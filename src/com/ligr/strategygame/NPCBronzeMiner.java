@@ -7,12 +7,11 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
 import com.ligr.strategygame.buildings.BronzeMine;
 import com.ligr.strategygame.buildings.FishingHut;
-import com.ligr.strategygame.buildings.MineDepositBronze;
 
 public class NPCBronzeMiner extends AnimatedSprite{
 
 	BronzeMine parent;
-	MineDepositBronze deposit;
+//	MineDepositBronze deposit;
 	private boolean fishing,idle,delivering,movinghome,moving;
 	private Entity target;
 	private int timer = 40,direction,ammount=0,speed = 3;
@@ -33,15 +32,15 @@ public class NPCBronzeMiner extends AnimatedSprite{
 				target = parent;	
 				
 			}
-			else if(!movinghome){
-				if(deposit==null){
-					deposit = main.getMineDepositBronzes().get(0);
-				}
-				target = deposit;
+//			else if(!movinghome){
+//				if(deposit==null){
+//					deposit = main.getMineDepositBronzes().get(0);
+//				}
+//				target = deposit;
 				//direction = Math.atan2((this.mX-deposit.mX), (this.mY-deposit.mY));
-			}
+//			}
 		}
-		else if(fishing){
+		if(fishing){
 			timer --;
 			if(timer<=0){
 				ammount = 4;

@@ -4,23 +4,26 @@ import java.util.ArrayList;
 
 import org.andengine.engine.handler.timer.ITimerCallback;
 import org.andengine.engine.handler.timer.TimerHandler;
+import org.andengine.entity.Entity;
 import org.andengine.entity.scene.Scene;
 import org.andengine.entity.scene.background.Background;
 import org.andengine.entity.sprite.AnimatedSprite;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.entity.text.Text;
+import org.andengine.util.color.Color;
 import org.andengine.util.debug.Debug;
 
 import com.ligr.strategygame.AnimatedSpriteObject;
-import com.ligr.strategygame.FishSpot;
 import com.ligr.strategygame.MainActivity;
 import com.ligr.strategygame.Mission;
 import com.ligr.strategygame.SpriteObject;
 import com.ligr.strategygame.Buttons.CityIcon;
 import com.ligr.strategygame.Buttons.MainMenuLoadButton;
 import com.ligr.strategygame.Buttons.MainMenuPlayButton;
+import com.ligr.strategygame.buildings.Armory;
 import com.ligr.strategygame.buildings.Barrack;
 import com.ligr.strategygame.buildings.BrickFoundry;
+import com.ligr.strategygame.buildings.BronzeMine;
 import com.ligr.strategygame.buildings.Butcher;
 import com.ligr.strategygame.buildings.Farm;
 import com.ligr.strategygame.buildings.FishingHut;
@@ -67,9 +70,9 @@ public class Controller {
 	public int workers = 0; // Total ammount of workers
 	public int militaryWorkers = 0;
 	public int buildingWorkers = 0;
-	public int HouseLevel = 1; // Keeps track on what kind of housing
+	public int houseLevel = 1; // Keeps track on what kind of housing
 	// The ammount of inhabitants
-	public static int Inhabitants[] = { 0, 0, 0, 0, 0, 0, 0 }; 
+	public static int Inhabitants[] = { 0, 0, 0, 0, 0, 0, 0 };
 	public static int InhabitantsSize = 7;
 	private int gold;
 	private ResourceImage images;
@@ -81,6 +84,7 @@ public class Controller {
 	private int militarySlinger = 0;
 	private static int militaryHopliteWar = 0;
 	private static final int militarySlingerWar = 0;
+	private boolean cheatHouse = false;
 
 	/**
 	 * Construct the controller with a given activity
@@ -141,7 +145,7 @@ public class Controller {
 									mission.checkMission(main.getMap(),
 											main.currentMission);
 									updateLevelInhabitants();
-									CheckHouseLevel();
+									checkHouseLevel();
 									// Update the main.Houses
 									for (int i = 0; i < main.main.getHouses()
 											.size(); i++) {
@@ -234,6 +238,8 @@ public class Controller {
 				* ConstantBuildings.EXPENSESBARRACK;
 		expenses += main.getBrickFoundrys().size()
 				* ConstantBuildings.EXPENSESBRICKFOUNNDRY;
+		expenses += main.getBronzeMines().size()
+				* ConstantBuildings.EXPENSESBRONZEMINE;
 		expenses += main.getButchers().size()
 				* ConstantBuildings.EXPENSESBUTCHER;
 		expenses += main.getFarms().size() * ConstantBuildings.EXPENSESFARM;
@@ -248,11 +254,12 @@ public class Controller {
 		expenses += main.getMineDepositClays().size()
 				* ConstantBuildings.EXPENSESMINEDEPOSITCLAY;
 		expenses += main.getMineDepositBronzes().size()
-				* ConstantBuildings.EXPENSESMINEDEPOSITBRONZE;
+				* ConstantBuildings.EXPENSESBRONZEMINE;
 		expenses += main.getSilos().size() * ConstantBuildings.EXPENSESSILO;
 		expenses += main.getSkinners().size()
 				* ConstantBuildings.EXPENSESSKINNER;
-		expenses += main.getStocks().size() * ConstantBuildings.EXPENSESSTOCK;
+		expenses += main.main.getStocks().size()
+				* ConstantBuildings.EXPENSESSTOCK;
 		expenses += main.getStoneCutters().size()
 				* ConstantBuildings.EXPENSESSTONECUTTER;
 		expenses += main.getTheatres().size()
@@ -260,6 +267,8 @@ public class Controller {
 		expenses += main.getWoodCutters().size()
 				* ConstantBuildings.EXPENSESWOODCUTTER;
 		expenses += militaryHoplite * ConstantBuildings.EXPENSESHOPLITE;
+		expenses += main.getArmories().size()
+				* ConstantBuildings.EXPENSESARMORY;
 		// expenses+=granarys.size()*main.EXPENSESGRANARY;
 
 	}
@@ -293,6 +302,14 @@ public class Controller {
 					setMilitaryHoplite((int) x);
 				} else if (load.contains("MilitarySlinger")) {
 					setMilitarySlinger((int) x);
+				} else if (load.contains("Armory")) {
+					Armory armory = new Armory(x, y, images.getArmoryImage(),
+							main.getVertexBufferObjectManager(), main, true);
+					main.getScene().attachChild(armory);
+					main.getArmories().add(armory);
+					// sObjects.add(barrack);
+					main.getScene().registerTouchArea(armory);
+
 				} else if (load.contains("Barrack")) {
 					Barrack barrack = new Barrack(x, y,
 							images.getBarrackImage(),
@@ -310,6 +327,15 @@ public class Controller {
 					main.getBrickFoundrys().add(brickFoundry);
 					// sObjects.add(brickFoundry);
 					main.getScene().registerTouchArea(brickFoundry);
+
+				} else if (load.contains("Bronze Mine")) {
+					BronzeMine bronzeMine = new BronzeMine(x, y,
+							images.getBronzeMineImage(),
+							main.getVertexBufferObjectManager(), main, true);
+					main.getScene().attachChild(bronzeMine);
+					main.getBronzeMines().add(bronzeMine);
+					// sObjects.add(barrack);
+					main.getScene().registerTouchArea(bronzeMine);
 
 				} else if (load.contains("Butcher")) {
 					Butcher butcher = new Butcher(x, y,
@@ -406,7 +432,7 @@ public class Controller {
 					Stock stock = new Stock(x, y, images.getStockplaceImage(),
 							main.getVertexBufferObjectManager(), main, true);
 					main.getScene().attachChild(stock);
-					main.getStocks().add(stock);
+					main.main.getStocks().add(stock);
 					// sObjects.add(stock);
 					main.getScene().registerTouchArea(stock);
 					String kind = dataBase.readDataBaseString1(i);
@@ -528,59 +554,63 @@ public class Controller {
 	 */
 	public void saveState() {
 		dataBase.deleteDataBase();
-		main.setObjectAmount(main.getObjectAmount()-1);
-		// Sort objects for y coordinates
-		for (int i = 0; i < main.getSObjects().size(); i++) {
-			Debug.e(main.getSObjects().toString());
-			for (int j = 0; j <main.getSObjects().size(); j++) {
-				// If y1 < y2, replace y1 with
-				if (main.getSObjects().get(i).getY() < main.getSObjects().get(j).getY()) {
-					SpriteObject obj = main.getSObjects().get(i);
-					main.getSObjects().set(i, main.getSObjects().get(j));
-					main.getSObjects().set(j, obj);
-				}
-
-			}
-		}
-		for (int i = 0; i < main.getSObjects().size(); i++) {
-			main.getSObjects().get(i).setID(main.getObjectAmount() + main.getStartID() + 1);
-			main.setObjectAmount(main.getObjectAmount()+1);
-			Debug.e(String.valueOf(main.getSObjects().get(i).id));
-		}
-		for (int i = 0; i < main.getAsObjects().size(); i++) {
-			for (int j = 0; j < main.getAsObjects().size(); j++) {
-				AnimatedSpriteObject obj = main.getAsObjects().get(i);
-				// If y1 < y2, replace y1 with
-				if (main.getAsObjects().get(i).getY() < main.getAsObjects().get(j).getY()) {
-					main.getAsObjects().set(i, main.getAsObjects().get(j));
-					main.getAsObjects().set(j, obj);
-					// Debug.e(main.getAsObjects()..toString());
-				}
-
-			}
-		}
-		for (int i = 0; i < main.getAsObjects().size(); i++) {
-			main.getAsObjects().get(i).setID(main.getObjectAmount() + main.getStartID() + 1);
-			main.setObjectAmount(main.getObjectAmount()+1);
-			Debug.e(String.valueOf(main.getAsObjects().get(i).id));
-		}
-		int[] array = { 2, 6, 3, 7, 9, 3, 5, 1, 0, 43, 6 };
-		for (int i = 0; i < array.length; i++) {
-			for (int j = 0; j < array.length; j++) {
-				if (array[i] < array[j]) {
-					int temp = array[i];
-					array[i] = array[j];
-					array[j] = temp;
-
-				}
-			}
-
-		}
-		String res = "";
-		for (int i = 0; i < array.length; i++) {
-			res += String.valueOf(array[i]) + " ";
-			Debug.e(res);
-		}
+		main.setObjectAmount(main.getObjectAmount() - 1);
+		// // Sort objects for y coordinates
+		// for (int i = 0; i < main.getSObjects().size(); i++) {
+		// Debug.e(main.getSObjects().toString());
+		// for (int j = 0; j < main.getSObjects().size(); j++) {
+		// // If y1 < y2, replace y1 with
+		// if (main.getSObjects().get(i).getY() < main.getSObjects()
+		// .get(j).getY()) {
+		// SpriteObject obj = main.getSObjects().get(i);
+		// main.getSObjects().set(i, main.getSObjects().get(j));
+		// main.getSObjects().set(j, obj);
+		// }
+		//
+		// }
+		// }
+		// for (int i = 0; i < main.getSObjects().size(); i++) {
+		// main.getSObjects().get(i)
+		// .setID(main.getObjectAmount() + main.getStartID() + 1);
+		// main.setObjectAmount(main.getObjectAmount() + 1);
+		// Debug.e(String.valueOf(main.getSObjects().get(i).id));
+		// }
+		// for (int i = 0; i < main.getAsObjects().size(); i++) {
+		// for (int j = 0; j < main.getAsObjects().size(); j++) {
+		// AnimatedSpriteObject obj = main.getAsObjects().get(i);
+		// // If y1 < y2, replace y1 with
+		// if (main.getAsObjects().get(i).getY() < main.getAsObjects()
+		// .get(j).getY()) {
+		// main.getAsObjects().set(i, main.getAsObjects().get(j));
+		// main.getAsObjects().set(j, obj);
+		// // Debug.e(main.getAsObjects()..toString());
+		// }
+		//
+		// }
+		// }
+		// for (int i = 0; i < main.getAsObjects().size(); i++) {
+		// main.getAsObjects().get(i)
+		// .setID(main.getObjectAmount() + main.getStartID() + 1);
+		// main.setObjectAmount(main.getObjectAmount() + 1);
+		// Debug.e(String.valueOf(main.getAsObjects().get(i).id));
+		// }
+		// int[] array = { 2, 6, 3, 7, 9, 3, 5, 1, 0, 43, 6 };
+		// for (int i = 0; i < array.length; i++) {
+		// for (int j = 0; j < array.length; j++) {
+		// if (array[i] < array[j]) {
+		// int temp = array[i];
+		// array[i] = array[j];
+		// array[j] = temp;
+		//
+		// }
+		// }
+		//
+		// }
+		// String res = "";
+		// for (int i = 0; i < array.length; i++) {
+		// res += String.valueOf(array[i]) + " ";
+		// Debug.e(res);
+		// }
 		saveInfo();
 		for (int i = 0; i < main.getSObjects().size(); i++) {
 			main.getSObjects().get(i).save();
@@ -613,7 +643,9 @@ public class Controller {
 
 	/**
 	 * Update the gold
-	 * @param gold gold to add
+	 * 
+	 * @param gold
+	 *            gold to add
 	 */
 	public void updateGold(int gold) {
 		this.gold += gold;
@@ -626,7 +658,8 @@ public class Controller {
 
 	/**
 	 * Sets our gold to a speicfic ammount
-	 * @param gold 
+	 * 
+	 * @param gold
 	 */
 	public void setGold(int gold) {
 		this.gold = gold;
@@ -635,9 +668,12 @@ public class Controller {
 	}
 
 	/**
-	 * Updates our inhabitants 
-	 * @param inhabitantss to add
-	 * @param houseLevel to add inhabitants to
+	 * Updates our inhabitants
+	 * 
+	 * @param inhabitantss
+	 *            to add
+	 * @param houseLevel
+	 *            to add inhabitants to
 	 * @param totalInhabitants
 	 */
 	public void updateInhabitants(int inhabitantss, int houseLevel,
@@ -685,16 +721,18 @@ public class Controller {
 		menu = "MainMenu";
 	}
 
-	protected void CheckHouseLevel() {
-		int j = 0;
-		for (int i = 0; i < main.main.getHouses().size(); i++) {
+	public void checkHouseLevel() {
+		if (!this.cheatHouse) {
+			int j = 0;
+			for (int i = 0; i < main.main.getHouses().size(); i++) {
 
-			if (main.getHouses().get(i).HouseLevel > j)
-				j = main.getHouses().get(i).HouseLevel;
+				if (main.getHouses().get(i).HouseLevel > j)
+					j = main.getHouses().get(i).HouseLevel;
 
-			HouseLevel = j;
-			if (main.getBuybutton() != null)
-				main.getBuybutton().HouseLevel = HouseLevel;
+				houseLevel = j;
+				if (main.getBuybutton() != null)
+					main.getBuybutton().HouseLevel = houseLevel;
+			}
 		}
 	}
 
@@ -883,8 +921,10 @@ public class Controller {
 
 	/**
 	 * Updates our workers
-	 * @param workers to add
-	 * @param maxworkers 
+	 * 
+	 * @param workers
+	 *            to add
+	 * @param maxworkers
 	 */
 	public void updateWorkers(int workers, int maxworkers) {
 		buildingWorkers += workers;
@@ -977,11 +1017,11 @@ public class Controller {
 	}
 
 	public int getHouseLevel() {
-		return HouseLevel;
+		return houseLevel;
 	}
 
 	public int getWorkers() {
-		updateWorkers(0,0);
+		updateWorkers(0, 0);
 		return this.workers;
 	}
 
@@ -1026,11 +1066,11 @@ public class Controller {
 	}
 
 	public int getMilitaryHoplite() {
-		return this.getMilitaryHoplite();
+		return this.militaryHoplite;
 	}
 
 	public int getMilitarySlinger() {
-		return this.getMilitarySlinger();
+		return this.militarySlinger;
 	}
 
 	public void setMilitaryHopliteWar(int militaryHoplite2) {
@@ -1043,60 +1083,256 @@ public class Controller {
 
 	/**
 	 * Re-attaches all of our sprites.
-	 * @param sObjects arraylist to update
-	 * @param asObjects arraylist to update
-	 * @param scene to attach sprites
+	 * 
+	 * @param sObjects
+	 *            arraylist to update
+	 * @param asObjects
+	 *            arraylist to update
+	 * @param scene
+	 *            to attach sprites
 	 */
 	public void updateScreen(ArrayList<SpriteObject> sObjects,
 			ArrayList<AnimatedSpriteObject> asObjects, Scene scene) {
-//		ArrayList<SpriteObject> sObject = new ArrayList<SpriteObject>();
-//		ArrayList<AnimatedSpriteObject> asObject = new ArrayList<AnimatedSpriteObject>();
-		for(int i = 0; i < sObjects.size();i++){
-			for(int j = 1; j < sObjects.size();j++){
-				if(sObjects.get(j).getZ() < (sObjects.get(i).getZ()) ){
+		// ArrayList<SpriteObject> sObject = new ArrayList<SpriteObject>();
+		// ArrayList<AnimatedSpriteObject> asObject = new
+		// ArrayList<AnimatedSpriteObject>();
+		for (int i = 0; i < sObjects.size(); i++) {
+			for (int j = 1; j < sObjects.size(); j++) {
+				if (sObjects.get(j).getZ() < (sObjects.get(i).getZ())) {
 					SpriteObject tempSObject = sObjects.get(i);
 					sObjects.set(i, sObjects.get(j));
 					sObjects.set(j, tempSObject);
 				}
 			}
 		}
-//		for(int i = 0; i < sObjects.size();i++){
-//			sObject.add(sObjects.get(i));
-//		}
-		
-		for(int i = 0; i < asObjects.size();i++){
-			for(int j = 1; j < asObjects.size();j++){
-				if(asObjects.get(j).getZ() < (asObjects.get(i).getZ()) ){
+		// for(int i = 0; i < sObjects.size();i++){
+		// sObject.add(sObjects.get(i));
+		// }
+
+		for (int i = 0; i < asObjects.size(); i++) {
+			for (int j = 1; j < asObjects.size(); j++) {
+				if (asObjects.get(j).getZ() < (asObjects.get(i).getZ())) {
 					AnimatedSpriteObject tempSObject = asObjects.get(i);
 					asObjects.set(i, asObjects.get(j));
 					asObjects.set(j, tempSObject);
 				}
 			}
 		}
-//		for(int i = 0; i < asObjects.size();i++){
-//			asObject.add(asObjects.get(i));
-//		}
+		// for(int i = 0; i < asObjects.size();i++){
+		// asObject.add(asObjects.get(i));
+		// }
 		int lastnumber = 0;
-		for(int i = 0; i < sObjects.size();i++){
-			for(int j = lastnumber; j < asObjects.size();j++){
-				if(sObjects.get(i).getZ() <= asObjects.get(j).getZ()){
+		for (int i = 0; i < sObjects.size(); i++) {
+			for (int j = lastnumber; j < asObjects.size(); j++) {
+				if (sObjects.get(i).getZ() <= asObjects.get(j).getZ()) {
 					Debug.e("ASObject Y: " + asObjects.get(j).getZ());
-					main.removeEntityNotFromArray(asObjects.get(j),scene);
-				}
-				else{
+					main.removeEntityNotFromArray(asObjects.get(j), scene);
+				} else {
 					lastnumber = j;
 					break;
 				}
 			}
-				main.removeEntityNotFromArray(sObjects.get(i),scene);
-				if(i == sObjects.size()-1){
-					for(int j = lastnumber; j < asObjects.size();j++){
-							Debug.e("ASObject Y: " + asObjects.get(j).getZ());
-							main.removeEntityNotFromArray(asObjects.get(j),scene);
-					}
+			main.removeEntityNotFromArray(sObjects.get(i), scene);
+			if (i == sObjects.size() - 1) {
+				for (int j = lastnumber; j < asObjects.size(); j++) {
+					Debug.e("ASObject Y: " + asObjects.get(j).getZ());
+					main.removeEntityNotFromArray(asObjects.get(j), scene);
 				}
+			}
 		}
-		
+
 	}
 
+	public void setHouseLevel(int parseInt) {
+		this.cheatHouse = true;
+		this.houseLevel = parseInt;
+	}
+
+	/**
+	 * Removes a resource from the stocks
+	 * 
+	 * @param kind
+	 * @param ammount
+	 */
+	public void removeResources(String kind, int ammount) {
+		for (int i = 0; i < main.getStocks().size(); i++) {
+			if (kind == "Marble") {
+				if (Marble >= ammount)
+					Marble -= ammount;
+				if (main.getStocks().get(i).Marble >= ammount) {
+					main.getStocks().get(i).Marble -= ammount;
+					main.getStocks().get(i).removeResource(kind, ammount);
+					break;
+				}
+			}
+			if (kind == "Wood") {
+				if (Wood >= ammount)
+					Wood -= ammount;
+				if (main.getStocks().get(i).Wood >= ammount) {
+					main.getStocks().get(i).Wood -= ammount;
+					main.getStocks().get(i).removeResource(kind, ammount);
+					break;
+				}
+			}
+			if (kind == "Brick") {
+				if (Brick >= ammount)
+					Brick -= ammount;
+				if (main.getStocks().get(i).Brick >= ammount) {
+					main.getStocks().get(i).Brick -= ammount;
+					main.getStocks().get(i).removeResource(kind, ammount);
+					break;
+				}
+			}
+			if (kind == "Bronze") {
+				if (Bronze >= ammount)
+					Bronze -= ammount;
+				if (main.getStocks().get(i).Bronze >= ammount) {
+					main.getStocks().get(i).Bronze -= ammount;
+					main.getStocks().get(i).removeResource(kind, ammount);
+					break;
+				}
+			}
+
+			if (kind == "Skin") {
+				if (Skin >= ammount)
+					Skin -= ammount;
+				if (main.getStocks().get(i).Skin >= ammount) {
+					main.getStocks().get(i).Skin -= ammount;
+					main.getStocks().get(i).removeResource(kind, ammount);
+					break;
+				}
+			}
+			if (kind == "Armor") {
+				if (Armor >= ammount)
+					Armor -= ammount;
+				if (main.getStocks().get(i).Armor >= ammount) {
+					main.getStocks().get(i).Armor -= ammount;
+					main.getStocks().get(i).removeResource(kind, ammount);
+					break;
+				}
+			}
+			if (kind == "Clay") {
+				if (Clay >= ammount)
+					Clay -= ammount;
+				if (main.getStocks().get(i).Clay >= ammount) {
+					main.getStocks().get(i).Clay -= ammount;
+					main.getStocks().get(i).removeResource(kind, ammount);
+					break;
+				}
+			}
+		}
+	}
+
+	/**
+	 * Removes a resource from the specific stock
+	 * 
+	 * @param kind
+	 * @param ammount
+	 * @param stock
+	 */
+	public void removeResources(String kind, int ammount, Stock stock) {
+		if (kind == "Marble") {
+			if (stock.Marble >= ammount) {
+				stock.Marble -= ammount;
+				stock.removeResource(kind, ammount);
+				main.getController().Marble -= ammount;
+			}
+		}
+		if (kind == "Wood") {
+			if (stock.Wood >= ammount) {
+				stock.Wood -= ammount;
+				main.getController().Wood -= ammount;
+				stock.removeResource(kind, ammount);
+			}
+		}
+		if (kind == "Brick") {
+			if (stock.Brick >= ammount) {
+				stock.Brick -= ammount;
+				stock.removeResource(kind, ammount);
+				main.getController().Brick -= ammount;
+			}
+		}
+		if (kind == "Bronze") {
+			if (stock.Bronze >= ammount) {
+				stock.Bronze -= ammount;
+				stock.removeResource(kind, ammount);
+				main.getController().Bronze -= ammount;
+			}
+		}
+
+		if (kind == "Skin") {
+			if (stock.Skin >= ammount) {
+				stock.Skin -= ammount;
+				stock.removeResource(kind, ammount);
+				main.getController().Skin -= ammount;
+			}
+		}
+		if (kind == "Armor") {
+			if (stock.Armor >= ammount) {
+				stock.Armor -= ammount;
+				stock.removeResource(kind, ammount);
+				main.getController().Armor -= ammount;
+			}
+		}
+		if (kind == "Clay") {
+			if (stock.Clay >= ammount) {
+				stock.Clay -= ammount;
+				stock.removeResource(kind, ammount);
+				main.getController().Clay -= ammount;
+			}
+		}
+	}
+
+	/**
+	 * Returns the distance between two obvjects
+	 * 
+	 * @param object1
+	 * @param object2
+	 * @return distance
+	 */
+	public double calculateDistance(Entity object1, Entity object2) {
+
+		float length;
+		float height;
+		length = object1.getX() - object2.getX();
+		height = object1.getX() - object2.getX();
+		double distance = Math.sqrt((length * length) + (height * height));
+
+		return distance;
+	}
+
+	public void calculateWinner(CityIcon target) {
+		int powerPlayer = 0, powerEnemy = 0;
+		powerPlayer = main.getController().getMilitaryOffensivePower();
+		powerEnemy = target.getMilitaryPower();
+		if (powerPlayer > powerEnemy) {
+			main.messagePopUp("You won the battle!", Color.WHITE);
+			main.CITY[target.index][11] = "0";
+			main.CITY[target.index][12] = "0";
+			main.CITY[target.index][9] = "1";
+		} else {
+			main.messagePopUp("You lost the battle..", Color.WHITE);
+		}
+	}
+
+	public void calculateWinnerCityAttacked(CityIcon target) {
+		int powerPlayer = 0, powerEnemy = 0;
+		powerPlayer = main.getController().getMilitaryOffensivePower();
+		powerEnemy = target.getMilitaryPower();
+		if (powerPlayer > powerEnemy) {
+			main.messagePopUp("You protected your city from the attack!",
+					Color.WHITE);
+			target.atWar = false;
+			target.monthSinceAttack = 0;
+		} else {
+			main.CITY[target.index][9] = "2";
+			target.atWar = false;
+			target.monthSinceAttack = 0;
+			main.messagePopUp(
+					"You lost the battle!\nYour city will know pay 15 000 coins as tribute yearly to "
+							+ target.getName()
+							+ "\nIf you decide to attack their city they will respond and try to destroy your city.",
+					Color.WHITE);
+		}
+	}
 }

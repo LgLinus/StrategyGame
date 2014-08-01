@@ -18,14 +18,13 @@ import com.ligr.strategygame.SpriteObject;
  *- Responsible of showing the quest objectives when pressed
  *
  */
-public class MenuQuestButton extends Sprite{
+public class MenuObjectivesButton extends Sprite{
 
 	MainActivity main;
-	private Text menuQuestText=null;
 	/**
 	 * Construct our button with the given image and position
 	 */
-	public MenuQuestButton(float pX, float pY, ITextureRegion pTextureRegion,
+	public MenuObjectivesButton(float pX, float pY, ITextureRegion pTextureRegion,
 			VertexBufferObjectManager pVertexBufferObjectManager, MainActivity main) {
 		super(pX, pY, pTextureRegion, pVertexBufferObjectManager);
 		this.main = main;
@@ -60,17 +59,8 @@ public class MenuQuestButton extends Sprite{
 		if(!thisMenu()){
 		int level = main.getLevel();
 	
-		main.createBuildingHUD("Empty");
-		if(level!=-1){
-			if(menuQuestText!=null)
-				detachText();
-			menuQuestText = new Text(32 + 4, 2 + 48 + 32 + 32, main.getSmallFont(), "", 100,
-					this.getVertexBufferObjectManager());
-			menuQuestText.setColor(Color.BLACK);
-			menuQuestText.setText(main.getController().getMission().createDescriptionOfMissions());
-		}
-		if(menuQuestText!=null)
-			main.getInGameHUD().attachChild(menuQuestText);
+		main.openObjectivesHUD();
+	
 		main.setCurrentMenu("objectives");}
 //		MainActivity.buildingDescriptionHUD.setAlpha(1);
 //		MainActivity.buildingDescriptionCancel.setAlpha(1);
@@ -81,24 +71,13 @@ public class MenuQuestButton extends Sprite{
 		return main.getCurrentMenu().equals("objectives");
 	}
 
-	public void detachChildren(){
-		detachText();
-	}
 	
 	public void removeObjectivesHUD(){
-		if(main.getBuildingDescriptionHUD() != null){
-			main.getBuildingDescriptionHUD().remove();
-			main.setBuildingDescriptionHUD(null);
-			
+		if(main.getObjectivesHUD()!=null){
+			main.getObjectivesHUD().remove();
 		}
 	}
-	
-	public void detachText(){
-		if(menuQuestText!=null){
-			main.removeEntity(menuQuestText);
-			menuQuestText = null;
-		}
-	}
+
 
 	
 }

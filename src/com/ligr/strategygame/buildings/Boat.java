@@ -160,7 +160,7 @@ public void movementBoat(){
 		angle = Math.PI+((Math.PI*3)/4);
 	}
 	timer = 250;}
-	if(main.calculateDistance(this, target)<48){
+	if(main.getController().calculateDistance(this, target)<48){
 		checkCollision();
 	}
 	this.setY((float) (mY-(Math.sin(angle)*speed)));
@@ -195,7 +195,7 @@ private Sprite findSpot(){
 	int pos = -1;
 	for (int i =0; i<main.fishspots.size();i++){
 		if(main.fishspots.get(i).gotSpace())
-			if(main.calculateDistance(this, main.fishspots.get(i))<distance){
+			if(main.getController().calculateDistance(this, main.fishspots.get(i))<distance){
 					pos = i;}
 		
 	}

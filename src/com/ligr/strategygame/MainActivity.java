@@ -12,11 +12,16 @@ package com.ligr.strategygame;
 
 import huds.BuildingDescriptionHUD;
 import huds.InGameMainHUD;
+import huds.IncomeHUD;
+import huds.MoveInSprite;
+import huds.ObjectivesHUD;
+import huds.ResourcesHUD;
 
 import java.util.ArrayList;
 import java.util.Random;
 
 import org.andengine.engine.Engine;
+import org.andengine.engine.LimitedFPSEngine;
 import org.andengine.engine.camera.Camera;
 import org.andengine.engine.camera.ZoomCamera;
 import org.andengine.engine.camera.hud.HUD;
@@ -53,6 +58,7 @@ import org.andengine.ui.activity.SimpleBaseGameActivity;
 import org.andengine.util.debug.Debug;
 
 import other.Controller;
+import scenery.MountainLevel;
 import shapes.RectangleModified;
 import text.HouseDescriptionText;
 import text.RemoveableText;
@@ -61,7 +67,15 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Handler;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.KeyEvent;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.FrameLayout;
+import android.widget.TableLayout;
+import android.widget.TableLayout.LayoutParams;
 import android.widget.Toast;
 
 import com.ligr.strategygame.Buttons.BuildingCancelButton;
@@ -78,15 +92,19 @@ import com.ligr.strategygame.Buttons.MainMenuPlayButton;
 import com.ligr.strategygame.Buttons.MenuBattleReturnButton;
 import com.ligr.strategygame.Buttons.MenuMapAttackButton;
 import com.ligr.strategygame.Buttons.MenuMapButton;
-import com.ligr.strategygame.Buttons.MenuQuestButton;
+import com.ligr.strategygame.Buttons.MenuObjectivesButton;
 import com.ligr.strategygame.Buttons.MenuSaveButton;
+import com.ligr.strategygame.Buttons.Message;
 import com.ligr.strategygame.Buttons.MessageCancelButton;
+import com.ligr.strategygame.Buttons.MessageChoice;
 import com.ligr.strategygame.Buttons.MessageConfirmButton;
 import com.ligr.strategygame.Buttons.MessageOkButton;
 import com.ligr.strategygame.Buttons.StockChoiceButton;
 import com.ligr.strategygame.Buttons.UpgradeButton;
+import com.ligr.strategygame.Buttons.Buildings.ArmoryButton;
 import com.ligr.strategygame.Buttons.Buildings.BarrackButton;
 import com.ligr.strategygame.Buttons.Buildings.BrickFoundryButton;
+import com.ligr.strategygame.Buttons.Buildings.BronzeMineButton;
 import com.ligr.strategygame.Buttons.Buildings.ButcherButton;
 import com.ligr.strategygame.Buttons.Buildings.ClayMineButton;
 import com.ligr.strategygame.Buttons.Buildings.FarmButton;
@@ -105,8 +123,10 @@ import com.ligr.strategygame.Buttons.Buildings.TrainingBuyButton;
 import com.ligr.strategygame.Buttons.Buildings.TrainingNextButton;
 import com.ligr.strategygame.Buttons.Buildings.TrainingPreviousButton;
 import com.ligr.strategygame.Buttons.Buildings.WoodCutterButton;
+import com.ligr.strategygame.buildings.Armory;
 import com.ligr.strategygame.buildings.Barrack;
 import com.ligr.strategygame.buildings.BrickFoundry;
+import com.ligr.strategygame.buildings.BronzeMine;
 import com.ligr.strategygame.buildings.Butcher;
 import com.ligr.strategygame.buildings.Farm;
 import com.ligr.strategygame.buildings.FishingHut;
@@ -114,7 +134,6 @@ import com.ligr.strategygame.buildings.FoodMarket;
 import com.ligr.strategygame.buildings.Fountain;
 import com.ligr.strategygame.buildings.House;
 import com.ligr.strategygame.buildings.HuntersLodge;
-import com.ligr.strategygame.buildings.MineDepositBronze;
 import com.ligr.strategygame.buildings.MineDepositClay;
 import com.ligr.strategygame.buildings.Road;
 import com.ligr.strategygame.buildings.Silo;
@@ -129,7 +148,6 @@ import com.ligr.strategygame.maptiles.ClayTile;
 import com.ligr.strategygame.maptiles.MarbleTile;
 import com.ligr.strategygame.maptiles.Tree;
 import com.ligr.strategygame.npc.Hoplite;
-
 
 public class MainActivity extends SimpleBaseGameActivity implements
 		IOnSceneTouchListener, IScrollDetectorListener,
@@ -176,7 +194,7 @@ public class MainActivity extends SimpleBaseGameActivity implements
 	private static final int MAP_WIDTH = 4000; // Defines the width of the
 												// current map
 	static final int MAP_HEIGHT = 4000; // Defines the height of the current map
-	public static int freeMonths = 24; // Amounts of month cities can't attack
+	public static int freeMonths = 50; // Amounts of month cities can't attack
 										// you
 	public static boolean PAUSE = false;
 
@@ -200,14 +218,10 @@ public class MainActivity extends SimpleBaseGameActivity implements
 	public static int tempID = 0; // Temporary ids that we store for different
 									// reasons
 
-
-
-
-
-//	public static int gold = Constant.startGold; // Total ammount of gold
+	// public static int gold = Constant.startGold; // Total ammount of gold
 
 	private Text goldText; // Text that is changed to the ammount of gold
-									// we have
+							// we have
 	public static Text InhabitantsText;
 	public static Text buildingDescriptionHouseInhabitantsText;
 	public static Text buildingDescriptionHouseWheatText;
@@ -218,10 +232,11 @@ public class MainActivity extends SimpleBaseGameActivity implements
 	public static Text HUDWorkersDescriptionText;
 	public static Text MoreInfoText;
 	private Text monthText;
-	public static Text woodResourceText;
-	public static Text marbleResourceText;
-	public static Text brickResourceText;
-	public static Text skinResourceText;
+	public static Text resourceWoodText;
+	public static Text resourceMarbleText;
+	public static Text resourceBrickText;
+	public static Text resourceSkinText;
+	public static Text resourceBronzeText;
 	public static Text moveText;
 	public static Text moveText2;
 	public static Text moveText3;
@@ -262,9 +277,9 @@ public class MainActivity extends SimpleBaseGameActivity implements
 	public static HUDInhabitantsButton HUDInhabitants;
 	public static SkinnerButton skinnerButton;
 	public static AnimatedSprite HUDWorkers;
-	public static Sprite resourcesMenu;
+	public static MoveInSprite resourcesMenu;
 	public static FountainButton fountainButton;
-	public static MenuQuestButton menuQuestButton;
+	public static MenuObjectivesButton menuObjectivesButton;
 	public static FarmButton farmButton;
 	public static Fountain fountain;
 	public static Farm farm;
@@ -289,14 +304,13 @@ public class MainActivity extends SimpleBaseGameActivity implements
 
 	private ArrayList<PlaceBuilding> placeBuildings;
 	private ArrayList<Text> stockSpaceTexts;
-	private ArrayList<MineDepositBronze> mineDepositBronzes;
+	private ArrayList<BronzeMine> bronzeMines;
 	private ArrayList<Fountain> fountains;
 	private ArrayList<Farm> farms;
 	private ArrayList<Tree> trees;
 	private ArrayList<Theatre> theatres;
 	private ArrayList<Sprite> grassTiles;
 	private ArrayList<Stock> stocks;
-	private ArrayList<AnimatedSprite> animatedSprites;
 	private ArrayList<Barrack> barracks;
 	private ArrayList<MarbleTile> marbleTiles;
 	private ArrayList<MineDepositClay> mineDepositClays;
@@ -327,7 +341,7 @@ public class MainActivity extends SimpleBaseGameActivity implements
 	public static Hoplite Hoplite;
 	public static ArrayList<AnimatedSpriteObject> asObjects;
 	public static ArrayList<SpriteObject> sObjects;
-	public static PlaceBuilding placebuilding;
+	public static PlaceBuilding placeBuilding;
 	public static BuyButton buybutton;
 	public static TrainingBuyButton trainingBuyButton;
 	public static Sprite trainingHUD;
@@ -339,10 +353,10 @@ public class MainActivity extends SimpleBaseGameActivity implements
 	public static CancelButton cancelButton;
 	private static TheatreButton theatreButton;
 
-	public static Sprite woodResource;
-	public static Sprite brickResource;
-	public static Sprite marbleResource;
-	public static Sprite skinResource;
+	public static Sprite resourceWood;
+	public static Sprite resourceBrick;
+	public static Sprite resourceMarble;
+	public static Sprite resourceSkin;
 
 	public static boolean boolplacebuilding = false;
 
@@ -372,6 +386,9 @@ public class MainActivity extends SimpleBaseGameActivity implements
 	public static boolean menuResourcesOpen = false;
 	private AnimatedSprite mainMenuDoor;
 	private ResourceImage images;
+	private ObjectivesHUD ObjectivesHUD;
+	public BronzeMine bronzeMine;
+	private BronzeMineButton bronzeMineButton;
 	public static boolean canBuild;
 	public static BarrackButton barrackButton;
 	private static MessageOkButton messageOkButton;
@@ -399,7 +416,14 @@ public class MainActivity extends SimpleBaseGameActivity implements
 	public static HUD battleHUD;
 	private static Entity battleHUDSprite;
 	public static Rectangle rectangleBlackScreen;
-
+	private TableLayout cheatLayout;
+	public Sprite resourceBronze;
+	public Sprite resourceArmor;
+	public Text resourceArmorText;
+	private Message messagePopup;
+	private ArrayList<Armory> armories;
+	public Armory armory;
+	private ArmoryButton armoryButton;
 	/**
 	 * If we press back button
 	 */
@@ -411,11 +435,25 @@ public class MainActivity extends SimpleBaseGameActivity implements
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
 			backPressed();
+			return true;}
+	else if(keyCode == KeyEvent.KEYCODE_MENU && event.getRepeatCount() == 0){
+			menuPressed();
 			return true;
-
 		}
 		return super.onKeyDown(keyCode, event);
 	}
+
+	private void menuPressed() {
+		if(cheatLayout==null){
+			cheatLayout = editText();
+	         this.addContentView(cheatLayout, new ViewGroup.LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));
+		}
+		else{
+       	cheatLayout.removeAllViews();
+       	 ((ViewGroup)cheatLayout.getParent()).removeView(cheatLayout);
+       	 cheatLayout = null;
+		}
+		}
 
 	/**
 	 * Make sure to remove touch areas before
@@ -446,7 +484,24 @@ public class MainActivity extends SimpleBaseGameActivity implements
 			});
 		}
 	}
-	
+	/**
+	 * Make sure to remove touch areas before
+	 * 
+	 * @param entity
+	 */
+	public void reattachEntity(Entity entity , final HUD hud) {
+		if (entity != null) {
+				
+			final Entity ent = entity;
+			main.runOnUpdateThread(new Runnable() {
+				public void run() {
+					ent.detachSelf();
+					hud.attachChild(ent);
+				}
+			
+			});
+		}
+	}
 	/**
 	 * Make sure to remove touch areas before
 	 * 
@@ -456,8 +511,8 @@ public class MainActivity extends SimpleBaseGameActivity implements
 		if (entity != null) {
 
 			final Entity ent = entity;
-			main.runOnUpdateThread(new Runnable()  {
-					
+			main.runOnUpdateThread(new Runnable() {
+
 				@Override
 				public void run() {
 					if (ent instanceof SpriteObject) {
@@ -476,7 +531,7 @@ public class MainActivity extends SimpleBaseGameActivity implements
 		}
 	}
 
-	public  void removeEntity(Entity entity, final HUD hud) {
+	public void removeEntity(Entity entity, final HUD hud) {
 		final Entity ent = entity;
 		main.runOnUpdateThread(new Runnable() {
 
@@ -496,7 +551,7 @@ public class MainActivity extends SimpleBaseGameActivity implements
 		});
 	}
 
-	public  void addEntityScene(Entity entity) {
+	public void addEntityScene(Entity entity) {
 		final Entity ent = entity;
 		main.runOnUpdateThread(new Runnable() {
 
@@ -512,29 +567,42 @@ public class MainActivity extends SimpleBaseGameActivity implements
 		if (gameOver) {
 			controller.goToMainMenu();
 		} else {
-
+			setCurrentMenu("");
 			removeBuildingHUD();
 			inGameHUD.gethudChatButton().closeChat();
 			if (messageCancelButton != null)
 				removeEntity(messageCancelButton);
-			
-			if (menuMapAttackButton != null) {
+
+			else if (menuMapAttackButton != null) {
 				removeEntity(menuMapAttackButton);
 				inGameHUD.unregisterTouchArea(menuMapAttackButton);
 			}
 			if (menuMap != null)
 				leaveMap();
-			if(buildingDescriptionHUD != null){
+			else if (buildingDescriptionHUD != null) {
 				buildingDescriptionHUD.remove();
 				buildingDescriptionHUD = null;
+			} else if (this.menuResourcesOpen) {
+				this.menuResourcesOpen = false;
+				this.inGameHUD.getHUDResources().cancel();
+			} else if (this.getObjectivesHUD() != null) {
+				this.getObjectivesHUD().remove();}
+				else if(this.messagePopup!=null){
+					if(!(messagePopup instanceof MessageChoice) && messagePopup.getPopUp()!=Message.POPUPNOREMOVE){
+						messagePopup.remove();
+						messagePopup = null;
+					}
+				
+			} else if(resourcesMenu!=null){
+				this.inGameHUD.getHUDResources().cancel();
 			}
-			else if (this.buildingDescriptionHUD != null) {
+				else if (this.buildingDescriptionHUD != null) {
+			
+
 				buildingDescriptionHUD.remove();
-			} 
-			else if (menuIncomeOpen) {
+			} else if (menuIncomeOpen) {
 				inGameHUD.getIncomeButton().close();
-			} else if (hudMoreInfoInhabitants.getAlpha() == 1
-					|| resourcesMenu.getAlpha() == 1) {
+			} else if (hudMoreInfoInhabitants.getAlpha() == 1) {
 				hideHudMenu();
 			} else if (buybutton != null) {
 				cancelButton.Cancel();
@@ -555,8 +623,8 @@ public class MainActivity extends SimpleBaseGameActivity implements
 	 * Hides the submenus
 	 */
 	private void hideHudMenu() {
-//		HUDResourceMenuButton.cancel();
-	
+		// HUDResourceMenuButton.cancel();
+
 		this.HUDInhabitants.Cancel();
 	}
 
@@ -566,7 +634,6 @@ public class MainActivity extends SimpleBaseGameActivity implements
 		// width/height of CAMERA_WIDTH/CAMERA_HEIGHT
 		camera = new ZoomCamera(0, 0, CAMERA_WIDTH, CAMERA_HEIGHT);
 
-
 		// Creates some options for our app, for example screenorientation and
 		// the ratio
 		// return new EngineOptions(true, ScreenOrientation.LANDSCAPE_SENSOR,
@@ -575,10 +642,17 @@ public class MainActivity extends SimpleBaseGameActivity implements
 				new RatioResolutionPolicy(CAMERA_WIDTH, CAMERA_HEIGHT), camera);
 	}
 
+	public static final int FPS_LIMIT = 30;
+
+	@Override
+	public Engine onCreateEngine(EngineOptions pEngineOptions) {
+		Engine engine = new LimitedFPSEngine(pEngineOptions, FPS_LIMIT);
+		return engine;
+	}
+
 	@Override
 	protected void onCreateResources() {
 		// TODO Auto-generated method stub
-	
 
 		Debug.e("before gameatlas");
 		GameAtlas = new BuildableBitmapTextureAtlas(this.getTextureManager(),
@@ -679,47 +753,41 @@ public class MainActivity extends SimpleBaseGameActivity implements
 	public void onScrollStarted(final ScrollDetector pScollDetector,
 			final int pPointerID, final float pDistanceX, final float pDistanceY) {
 		final float zoomFactor = camera.getZoomFactor();
-		camera.offsetCenter(-pDistanceX / zoomFactor, -pDistanceY
-				/ zoomFactor);
+		camera.offsetCenter(-pDistanceX / zoomFactor, -pDistanceY / zoomFactor);
 	}
 
 	@Override
 	public void onScroll(final ScrollDetector pScollDetector,
 			final int pPointerID, final float pDistanceX, final float pDistanceY) {
 		final float zoomFactor = camera.getZoomFactor();
-		camera.offsetCenter(-pDistanceX / zoomFactor, -pDistanceY
-				/ zoomFactor);
+		camera.offsetCenter(-pDistanceX / zoomFactor, -pDistanceY / zoomFactor);
 	}
 
 	@Override
 	public void onScrollFinished(final ScrollDetector pScollDetector,
 			final int pPointerID, final float pDistanceX, final float pDistanceY) {
 		final float zoomFactor = camera.getZoomFactor();
-		camera.offsetCenter(-pDistanceX / zoomFactor, -pDistanceY
-				/ zoomFactor);
+		camera.offsetCenter(-pDistanceX / zoomFactor, -pDistanceY / zoomFactor);
 	}
 
 	@Override
 	public void onPinchZoomStarted(final PinchZoomDetector pPinchZoomDetector,
 			final TouchEvent pTouchEvent) {
-		this.mPinchZoomStartedCameraZoomFactor = camera
-				.getZoomFactor();
+		this.mPinchZoomStartedCameraZoomFactor = camera.getZoomFactor();
 	}
 
 	@Override
 	public void onPinchZoom(final PinchZoomDetector pPinchZoomDetector,
 			final TouchEvent pTouchEvent, final float pZoomFactor) {
-		camera
-				.setZoomFactor(this.mPinchZoomStartedCameraZoomFactor
-						* pZoomFactor);
+		camera.setZoomFactor(this.mPinchZoomStartedCameraZoomFactor
+				* pZoomFactor);
 	}
 
 	@Override
 	public void onPinchZoomFinished(final PinchZoomDetector pPinchZoomDetector,
 			final TouchEvent pTouchEvent, final float pZoomFactor) {
-		camera
-				.setZoomFactor(this.mPinchZoomStartedCameraZoomFactor
-						* pZoomFactor);
+		camera.setZoomFactor(this.mPinchZoomStartedCameraZoomFactor
+				* pZoomFactor);
 	}
 
 	/**
@@ -804,43 +872,43 @@ public class MainActivity extends SimpleBaseGameActivity implements
 			}
 
 		}
-		if (boolplacebuilding) {
+		if (boolplacebuilding && placeBuilding!=null) {
 			if (PlaceBuilding.currentBuilding == "House"
 					|| PlaceBuilding.currentBuilding == "Silo"
 					|| PlaceBuilding.currentBuilding == "Food Market"
 					|| PlaceBuilding.currentBuilding == "Theatre"
 					|| PlaceBuilding.currentBuilding == "Stone Cutter"
 					|| PlaceBuilding.currentBuilding == "Stock")
-				placebuilding.setPosition(touchx
+				placeBuilding.setPosition(touchx
 						- images.getHouseButtonImage().getWidth() / 2
 						+ placeBuildingJumpX,
 						(float) (touchy
 								- images.getHouseButtonImage().getHeight()
 								/ .75 + placeBuildingJumpY));
 			if (PlaceBuilding.currentBuilding == "Road")
-				placebuilding.setPosition(touchx
+				placeBuilding.setPosition(touchx
 						- images.getRoadimage().getWidth() / 2
 						+ placeBuildingJumpX,
 						(float) (touchy - images.getRoadimage().getHeight()
 								/ .75 + placeBuildingJumpY));
-			placebuilding.setAlpha((float) 0.6);
+			placeBuilding.setAlpha((float) 0.6);
 			if (PlaceBuilding.currentBuilding == "Fountain")
-				placebuilding
+				placeBuilding
 						.setPosition(
 								touchx - images.getRoadimage().getWidth()
 										+ placeBuildingJumpX / 2,
 								(float) (touchy
 										- images.getRoadimage().getHeight() + placeBuildingJumpY / .75));
-			placebuilding.setAlpha((float) 0.6);
+			placeBuilding.setAlpha((float) 0.6);
 			if (PlaceBuilding.currentBuilding == "Farm")
-				placebuilding
+				placeBuilding
 						.setPosition(
 								touchx - images.getFarmImage().getWidth()
 										+ placeBuildingJumpX / 2,
 								(float) (touchy
 										- images.getFarmImage().getHeight() + placeBuildingJumpY / .75));
 			else {
-				placebuilding
+				placeBuilding
 						.setPosition(
 								touchx
 										- images.getHouseButtonImage()
@@ -850,7 +918,7 @@ public class MainActivity extends SimpleBaseGameActivity implements
 										- images.getHouseButtonImage()
 												.getHeight() + placeBuildingJumpY / .75));
 			}
-			placebuilding.updatePolygon();
+			placeBuilding.updatePolygon();
 		}
 		if (pSceneTouchEvent.isActionMove()) {
 			// If we are inside the game we should be able to move the view
@@ -893,21 +961,10 @@ public class MainActivity extends SimpleBaseGameActivity implements
 				camera.setCenter(getMouse().getX(), getMouse().getY());
 			}
 		}
-		return false;
+		return true;
 	}
 
-	// This method calculates a distance between 2 objects and returns the
-	// distance
-	public double calculateDistance(Entity object1, Entity object2) {
-
-		float length;
-		float height;
-		length = object1.getX() - object2.getX();
-		height = object1.getX() - object2.getX();
-		double distance = Math.sqrt((length * length) + (height * height));
-
-		return distance;
-	}
+	
 
 	public void spawnArmy() {
 		for (int i = 0; i < controller.getMilitaryHopliteWar(); i++) {
@@ -1268,8 +1325,7 @@ public class MainActivity extends SimpleBaseGameActivity implements
 
 	}
 
-	public void Message(String message,
-			org.andengine.util.color.Color color) {
+	public void Message(String message, org.andengine.util.color.Color color) {
 		MoreInfoText.setText(message);
 		MoreInfoText.setColor(color);
 	}
@@ -1277,51 +1333,25 @@ public class MainActivity extends SimpleBaseGameActivity implements
 	public void messagePopUp(String message,
 			org.andengine.util.color.Color color) {
 		removeMessage();
-		messageHUD = new Sprite(240, 180, images.getMessageHUDImage(),
-				main.getVertexBufferObjectManager());
-		messageHUD.setAlpha(0.95f);
-		messageOkButton = new MessageOkButton(messageHUD.getX() + 256,
-				messageHUD.getY() + 240, images.getMessageOkButtonImage(),
-				main.getVertexBufferObjectManager(), this);
-		messageText = new Text(300 + 8 - 64, 256 + 24, smallerFont, "", 5000,
-				main.getVertexBufferObjectManager());
-		messageText.setText(message);
-		messageText.setColor(color);
-		inGameHUD.registerTouchArea(messageOkButton);
-		inGameHUD.attachChild(messageHUD);
-		inGameHUD.attachChild(messageOkButton);
-		inGameHUD.attachChild(messageText);
+		messagePopup = new Message(240, 180+96, images.getMessageHUDImage(), this.getVertexBufferObjectManager(), this, message, Message.POPUPNORMAL);
 		this.updateMessageHistory(message);
+		inGameHUD.attachChild(messagePopup);
 		updateRecentMessages(message);
 	}
 
 	public void MessagePopUpNoRemove(String message,
 			org.andengine.util.color.Color color) {
-		// updateRecentMessages(message);
-		messageHUD = new Sprite(240, 180, images.getMessageHUDImage(),
-				main.getVertexBufferObjectManager());
-		messageHUD.setAlpha(0.9f);
-		messageOkButton = new MessageOkButton(messageHUD.getX() + 256,
-				messageHUD.getY() + 240, images.getMessageOkButtonImage(),
-				main.getVertexBufferObjectManager(), this);
-		messageText = new Text(300 + 8 - 64, 256 + 24, smallerFont, "", 5000,
-				main.getVertexBufferObjectManager());
-		messageText.setText(message);
-		messageText.setColor(color);
-		// inGameHUD.registerTouchArea(messageCancelButton);
-		// inGameHUD.registerTouchArea(messageConfirmButton);
-		inGameHUD.registerTouchArea(messageOkButton);
-		inGameHUD.attachChild(messageHUD);
-		inGameHUD.attachChild(messageOkButton);
-		inGameHUD.attachChild(messageText);
-		// Debug.e("Pop");
-	}
+		 updateRecentMessages(message);
+
+		messagePopup = new Message(240, 180+96, images.getMessageHUDImage(), this.getVertexBufferObjectManager(), this, message, Message.POPUPNOREMOVE);
+
+		inGameHUD.attachChild(messagePopup);
+		}
 
 	public void updateRecentMessages(String message) {
 		String res = "";
 		for (int i = 0; i < recentMessages.length; i++) {
-			if (recentMessages[i] == ""
-					|| recentMessages[i] == null) {
+			if (recentMessages[i] == "" || recentMessages[i] == null) {
 				recentMessages[i] = message;
 				res += recentMessages[i] + " " + "";
 				break;
@@ -1331,76 +1361,28 @@ public class MainActivity extends SimpleBaseGameActivity implements
 		Debug.e(res);
 	}
 
+	/**
+	 * Pops up a message with a choice, either confirm or cancel
+	 * @param message displayed
+	 * @param color of text
+	 * @param parent id of the entitiy
+	 * @param choice the choice the user can make
+	 * @param hud
+	 */
 	public void MessagePopUpChoice(String message,
 			org.andengine.util.color.Color color, Entity parent, String choice,
 			HUD hud) {
 		Debug.e("AD");
-		if (messageHUD != null) {
-			removeEntity(messageHUD);
-			inGameHUD.unregisterTouchArea(messageHUD);
+		if (messagePopup != null) {
+			messagePopup.remove();
 		}
-		if (messageCancelButton != null) {
-			removeEntity(messageCancelButton);
-			inGameHUD.unregisterTouchArea(messageCancelButton);
-		}
-		if (messageOkButton != null) {
-			removeEntity(messageOkButton);
-			inGameHUD.unregisterTouchArea(messageOkButton);
-		}
-		if (messageConfirmButton != null) {
-			removeEntity(messageConfirmButton);
-			inGameHUD.unregisterTouchArea(messageConfirmButton);
-		}
-
 		this.choice = choice;
 		ID = parent;
-		messageHUD = new Sprite(240, 180, images.getMessageHUDImage(),
-				main.getVertexBufferObjectManager());
-		messageConfirmButton = new MessageConfirmButton(
-				messageHUD.getX() + 409, messageHUD.getY() + 240,
-				images.getMessageConfirmButtonImage(),
-				main.getVertexBufferObjectManager(), this);
-		messageCancelButton = new MessageCancelButton(messageHUD.getX() + 48,
-				messageHUD.getY() + 240, images.getMessageCancelButtonImage(),
-				main.getVertexBufferObjectManager(),this);
-		messageText = new Text(300 + 8, 256 + 24, smallerFont, "", 5000,
-				main.getVertexBufferObjectManager());
+		
+		messagePopup = new MessageChoice(240, 180+96, images.getMessageHUDImage(), this.getVertexBufferObjectManager(), this, message, Message.POPUPNORMAL);
 
-		inGameHUD.attachChild(messageHUD);
-		inGameHUD.attachChild(messageConfirmButton);
-		inGameHUD.attachChild(messageCancelButton);
-		inGameHUD.attachChild(messageText);
-		messageHUD.setAlpha(0.9f);
-		messageConfirmButton.setAlpha(1);
-		messageCancelButton.setAlpha(1);
-		messageText.setText(message);
-		messageText.setColor(1f, 1f, 1f);
-		hud.registerTouchArea(messageCancelButton);
-		hud.registerTouchArea(messageConfirmButton);
-		// Debug.e("Pop");
-	}/*
-	 * protected void UpdateFoodMarket() { // TODO Auto-generated method stub
-	 * for(int i = 0;i<FoodMarkets.size();i++){
-	 * //FoodMarkets.get(i).UpdateFood(FoodMarkets.get(i)); } } protected void
-	 * UpdateStoneCutters() { // TODO Auto-generated method stub for(int i =
-	 * 0;i<StoneCutters.size();i++){
-	 * StoneCutters.get(i).CheckForStocks(StoneCutters.get(i)); } } protected
-	 * void UpdateHuntersLodges() { // TODO Auto-generated method stub for(int i
-	 * = 0;i<huntersLodges.size();i++){
-	 * huntersLodges.get(i).CheckForStocks(huntersLodges.get(i)); } } protected
-	 * void UpdateSkinners() { // TODO Auto-generated method stub for(int i =
-	 * 0;i<skinners.size();i++){
-	 * skinners.get(i).CheckForStocks(skinners.get(i)); } } protected void
-	 * UpdateWoodCutters() { // TODO Auto-generated method stub for(int i =
-	 * 0;i<WoodCutters.size();i++){
-	 * WoodCutters.get(i).CheckForStocks(WoodCutters.get(i)); } } protected void
-	 * UpdateButchers() { // TODO Auto-generated method stub for(int i =
-	 * 0;i<butchers.size();i++){
-	 * butchers.get(i).CheckForStocks(butchers.get(i)); } } /* protected void
-	 * UpdateStocks() { // TODO Auto-generated method stub for(int i =
-	 * 0;i<StoneCutters.size();i++){
-	 * UpdateStocks.get(i).CheckForStocks(StoneCutters.get(i)); } }
-	 */
+		inGameHUD.attachChild(messagePopup);
+	}
 
 	int getMarbleProductionYearly() {
 		return getStoneCutters().size() * 12;
@@ -1454,7 +1436,6 @@ public class MainActivity extends SimpleBaseGameActivity implements
 		}
 	}
 
-	
 	private void startGame() {
 		setMainMenuBackground(new Sprite(0, 0,
 				images.getMainMenuBackgroundImage(),
@@ -1478,7 +1459,8 @@ public class MainActivity extends SimpleBaseGameActivity implements
 		mScene.attachChild(getMainMenuLoadButton());
 		mScene.registerTouchArea(getMainMenuLoadButton());
 		mScene.attachChild(getMainMenuDoor());
-		menu = "MainMenu";	Debug.e("after start gamne");
+		menu = "MainMenu";
+		Debug.e("after start gamne");
 
 	}
 
@@ -1501,8 +1483,11 @@ public class MainActivity extends SimpleBaseGameActivity implements
 		barrackButton.setAlpha(0);
 		brickFoundryButton.setAlpha(0);
 		clayMineButton.setAlpha(0);
+		bronzeMineButton.setAlpha(0);
+		armoryButton.setAlpha(0);
 
 		inGameHUD.unregisterTouchArea(housebutton);
+		inGameHUD.unregisterTouchArea(armoryButton);
 		inGameHUD.unregisterTouchArea(barrackButton);
 		inGameHUD.unregisterTouchArea(skinnerButton);
 		inGameHUD.unregisterTouchArea(siloButton);
@@ -1520,6 +1505,7 @@ public class MainActivity extends SimpleBaseGameActivity implements
 		inGameHUD.unregisterTouchArea(butcherButton);
 		inGameHUD.unregisterTouchArea(brickFoundryButton);
 		inGameHUD.unregisterTouchArea(clayMineButton);
+		inGameHUD.unregisterTouchArea(bronzeMineButton);
 	}
 
 	// Makes our building buttons visible
@@ -1531,6 +1517,8 @@ public class MainActivity extends SimpleBaseGameActivity implements
 		inGameHUD.registerTouchArea(fishingHutButton);
 		inGameHUD.registerTouchArea(brickFoundryButton);
 		inGameHUD.registerTouchArea(clayMineButton);
+		inGameHUD.registerTouchArea(bronzeMineButton);
+		inGameHUD.registerTouchArea(armoryButton);
 		woodCutterButton.setAlpha(1);
 		stoneCutterButton.setAlpha(1);
 		farmButton.setAlpha(1);
@@ -1538,13 +1526,15 @@ public class MainActivity extends SimpleBaseGameActivity implements
 		fishingHutButton.setAlpha(1);
 		brickFoundryButton.setAlpha(1);
 		clayMineButton.setAlpha(1);
+		bronzeMineButton.setAlpha(1);
 		inGameHUD.registerTouchArea(skinnerButton);
 		skinnerButton.setAlpha(1);
 		inGameHUD.registerTouchArea(butcherButton);
 		butcherButton.setAlpha(1);
+		armoryButton.setAlpha(1);
 	}
 
-	public  void menuhudmilitary() {
+	public void menuhudmilitary() {
 		inGameHUD.registerTouchArea(barrackButton);
 		barrackButton.setAlpha(1);
 	}
@@ -1602,6 +1592,7 @@ public class MainActivity extends SimpleBaseGameActivity implements
 		setStocks(new ArrayList<Stock>());
 		setMineDepositClays(new ArrayList<MineDepositClay>());
 		setBrickFoundrys(new ArrayList<BrickFoundry>());
+		armories = new ArrayList<Armory>();
 		setStocks(new ArrayList<Stock>());
 		setStockSpaceTexts(new ArrayList<Text>());
 		setFishingHuts(new ArrayList<FishingHut>());
@@ -1610,7 +1601,7 @@ public class MainActivity extends SimpleBaseGameActivity implements
 		Hoplites = new ArrayList<Hoplite>();
 		setButchers(new ArrayList<Butcher>());
 		fishspots = new ArrayList<FishSpot>();
-		setMineDepositBronzes(new ArrayList<MineDepositBronze>());
+		setBronzeMines(new ArrayList<BronzeMine>());
 		asObjects = new ArrayList<AnimatedSpriteObject>();
 		sObjects = new ArrayList<SpriteObject>();
 		controller.resetGameInfo();
@@ -1620,7 +1611,7 @@ public class MainActivity extends SimpleBaseGameActivity implements
 		trainingTexts = new ArrayList<RemoveableText>();
 		detachableObjects = new ArrayList<DetachableObjects>();
 		grassTiles = new ArrayList<Sprite>();
-		marbleTiles=new ArrayList<MarbleTile>();
+		marbleTiles = new ArrayList<MarbleTile>();
 		ClayTiles = new ArrayList<ClayTile>();
 		setClayMines(new ArrayList<MineDepositClay>());
 		setBrickFoundrys(new ArrayList<BrickFoundry>());
@@ -1675,10 +1666,11 @@ public class MainActivity extends SimpleBaseGameActivity implements
 				this.getVertexBufferObjectManager());
 		moveTextSmall3 = new Text(0, 0, smallFont, "", 2000,
 				this.getVertexBufferObjectManager());
-		setGoldText(new Text(450, 16, gameFont, Integer.toString(this.controller.getGold()), 20,
+		setGoldText(new Text(450, 16, gameFont,
+				Integer.toString(this.controller.getGold()), 20,
 				this.getVertexBufferObjectManager()));
 		getGoldText().setColor(0f, 1f, 0f);
-		
+
 		InhabitantsText = new Text(659, 16, gameFont, "1000", 20,
 				this.getVertexBufferObjectManager());
 		InhabitantsText.setColor(1f, 1f, 1f);
@@ -1696,15 +1688,7 @@ public class MainActivity extends SimpleBaseGameActivity implements
 				this.getVertexBufferObjectManager());
 		HUDWorkers.setAlpha(0);
 		HUDWorkers.stopAnimation();
-		resourcesMenu = new Sprite(0, 69, images.getResourcesMenuImage(),
-				this.getVertexBufferObjectManager()) {
-			@Override
-			protected void preDraw(final GLState pGLState, final Camera pCamera) {
-				super.preDraw(pGLState, pCamera);
-				pGLState.enableDither();
-			}
-		};
-		resourcesMenu.setAlpha(0);
+		
 		hudMoreInfoWorkers = new HUDMoreInfoWorkers(640 - 256 - images
 				.getBuildingDescriptionHouseInhabitantsImage().getWidth(),
 				2 + 32 + 99, images.getMoreInfoImage(),
@@ -1714,34 +1698,44 @@ public class MainActivity extends SimpleBaseGameActivity implements
 				2 + 32 + 197, images.getMoreInfoImage(),
 				this.getVertexBufferObjectManager());
 
-		woodResource = new Sprite(4, 0, images.getWoodResourceImage(),
+		resourceWood = new Sprite(4, 0, images.getResourceWoodImage(),
 				this.getVertexBufferObjectManager());
-		woodResource.setAlpha(0);
-		marbleResource = new Sprite(4, 0, images.getMarbleResourceImage(),
+		resourceWood.setAlpha(0);
+		resourceMarble = new Sprite(4, 0, images.getResourceMarbleImage(),
 				this.getVertexBufferObjectManager());
-		marbleResource.setAlpha(0);
-		brickResource = new Sprite(4, 0, images.getBrickResourceImage(),
+		resourceMarble.setAlpha(0);
+		resourceBrick = new Sprite(4, 0, images.getResourceBrickImage(),
 				this.getVertexBufferObjectManager());
-		brickResource.setAlpha(0);
-		skinResource = new Sprite(4, 0, images.getSkinResourceImage(),
+		resourceBrick.setAlpha(0);
+		resourceSkin = new Sprite(4, 0, images.getResourceSkinImage(),
 				this.getVertexBufferObjectManager());
-		skinResource.setAlpha(0);
-		upgradeButton = new UpgradeButton(
-				640 - 128 - 48 - images.getBuildingDescriptionHUDImage().getWidth(),
-				80 + images.getBuildingDescriptionHUDImage().getHeight(),
+		resourceSkin.setAlpha(0);
+		resourceBronze = new Sprite(4, 0, images.getResourceBronzeImage(),
+				this.getVertexBufferObjectManager());
+		resourceBronze.setAlpha(0);
+		setResourceArmor(new Sprite(4, 0, images.getResourceArmorImage(),
+				this.getVertexBufferObjectManager()));
+		getResourceArmor().setAlpha(0);
+		upgradeButton = new UpgradeButton(640 - 128 - 48 - images
+				.getBuildingDescriptionHUDImage().getWidth(), 80 + images
+				.getBuildingDescriptionHUDImage().getHeight(),
 				images.getUpgradeButtonImage(),
 				this.getVertexBufferObjectManager(), this);
 		upgradeButton.setAlpha(0);
 
 		MoreInfoText = new Text(8, 650, smallFont, "", 500,
 				this.getVertexBufferObjectManager());
-		woodResourceText = new Text(20, 0, smallFont, "", 5,
+		resourceWoodText = new Text(20, 0, smallFont, "", 5,
 				this.getVertexBufferObjectManager());
-		marbleResourceText = new Text(30, 0, smallFont, "", 5,
+		resourceMarbleText = new Text(30, 0, smallFont, "", 5,
 				this.getVertexBufferObjectManager());
-		brickResourceText = new Text(40, 0, smallFont, "", 5,
+		resourceBrickText = new Text(40, 0, smallFont, "", 5,
 				this.getVertexBufferObjectManager());
-		skinResourceText = new Text(50, 0, smallFont, "", 5,
+		resourceSkinText = new Text(50, 0, smallFont, "", 5,
+				this.getVertexBufferObjectManager());
+		resourceBronzeText = new Text(50, 0, smallFont, "", 5,
+				this.getVertexBufferObjectManager());
+		resourceArmorText = new Text(50, 0, smallFont, "", 5,
 				this.getVertexBufferObjectManager());
 		messageText = new Text(300 + 8, 256 + 24, smallerFont, "", 5000,
 				this.getVertexBufferObjectManager());
@@ -1752,17 +1746,20 @@ public class MainActivity extends SimpleBaseGameActivity implements
 		inGameHUD.attachChild(HUDInhabitants);
 		inGameHUD.attachChild(HUDWorkers);
 		// inGameHUD.attachChild(hudMapButton);
-		inGameHUD.attachChild(resourcesMenu);
 		inGameHUD.attachChild(upgradeButton);
-		inGameHUD.attachChild(woodResource);
-		inGameHUD.attachChild(brickResource);
-		inGameHUD.attachChild(marbleResource);
-		inGameHUD.attachChild(skinResource);
+		inGameHUD.attachChild(resourceWood);
+		inGameHUD.attachChild(resourceBrick);
+		inGameHUD.attachChild(resourceMarble);
+		inGameHUD.attachChild(resourceSkin);
+		inGameHUD.attachChild(resourceBronze);
+		inGameHUD.attachChild(getResourceArmor());
 
-		inGameHUD.attachChild(marbleResourceText);
-		inGameHUD.attachChild(woodResourceText);
-		inGameHUD.attachChild(brickResourceText);
-		inGameHUD.attachChild(skinResourceText);
+		inGameHUD.attachChild(resourceMarbleText);
+		inGameHUD.attachChild(resourceWoodText);
+		inGameHUD.attachChild(resourceBrickText);
+		inGameHUD.attachChild(resourceSkinText);
+		inGameHUD.attachChild(resourceBronzeText);
+		inGameHUD.attachChild(getResourceArmorText());
 		for (int i = 0; i < 9; i++) {
 			stockspacetext = new Text(640 - 256 - images
 					.getBuildingDescriptionHUDImage().getWidth() + 128,
@@ -1821,8 +1818,17 @@ public class MainActivity extends SimpleBaseGameActivity implements
 		brickFoundryButton = new BrickFoundryButton(CAMERA_WIDTH - 97 * 2,
 				67 * 6, images.getBrickFoundryButtonImage(),
 				this.getVertexBufferObjectManager(), this);
+		bronzeMineButton = new BronzeMineButton(CAMERA_WIDTH - 97 * 1,
+				67 * 6, images.getBronzeMineButtonImage(),
+				this.getVertexBufferObjectManager(), this);
+		armoryButton = new ArmoryButton(CAMERA_WIDTH - 97 * 2,
+				67 * 7, images.getArmoryButtonImage(),
+				this.getVertexBufferObjectManager(), this);
 		skinnerButton = new SkinnerButton(CAMERA_WIDTH - 97, 67 * 4,
 				images.getSkinnerButtonImage(),
+				this.getVertexBufferObjectManager(), this);
+		butcherButton = new ButcherButton(CAMERA_WIDTH - 97 * 2, 67 * 4,
+				images.getButcherButtonImage(),
 				this.getVertexBufferObjectManager(), this);
 		butcherButton = new ButcherButton(CAMERA_WIDTH - 97 * 2, 67 * 4,
 				images.getButcherButtonImage(),
@@ -1836,11 +1842,11 @@ public class MainActivity extends SimpleBaseGameActivity implements
 				this.getVertexBufferObjectManager());
 		trainingNextButton = new TrainingNextButton(trainingHUD.getX() + 192,
 				trainingHUD.getY() + 287, images.getTrainingNextButtonImage(),
-				this.getVertexBufferObjectManager(),this);
+				this.getVertexBufferObjectManager(), this);
 		trainingPreviousButton = new TrainingPreviousButton(
 				trainingHUD.getX() + 63, trainingHUD.getY() + 287,
 				images.getTrainingPreviousButtonImage(),
-				this.getVertexBufferObjectManager(),this);
+				this.getVertexBufferObjectManager(), this);
 		trainingHopliteButton = new Sprite(trainingHUD.getX() + 63,
 				trainingHUD.getY() + 64,
 				images.getTrainingHopliteButtonImage(),
@@ -1864,8 +1870,10 @@ public class MainActivity extends SimpleBaseGameActivity implements
 		inGameHUD.attachChild(woodCutterButton);
 		inGameHUD.attachChild(huntersLodgeButton);
 		inGameHUD.attachChild(skinnerButton);
+		inGameHUD.attachChild(bronzeMineButton);
 		inGameHUD.attachChild(clayMineButton);
 		inGameHUD.attachChild(brickFoundryButton);
+		inGameHUD.attachChild(armoryButton);
 		// inGameHUD.attachChild(hudmenuproductionbutton);
 		// inGameHUD.attachChild(hudmenuculturebutton);
 		inGameHUD.attachChild(fishingHutButton);
@@ -1914,10 +1922,13 @@ public class MainActivity extends SimpleBaseGameActivity implements
 		 * for(int i = 0; i < cityIcons.size();i++){
 		 * inGameHUD.attachChild(cityIcons.get(i)); }
 		 */
+		
+		for(int i = 0; i < 40;i++){
+			new MountainLevel(512 +32*i,512 - 16*i,this.getVertexBufferObjectManager(),this,0);}	
+		new MountainLevel(512-32, 512 + 16, this.getVertexBufferObjectManager(),this,4);
+		for(int i = 0; i < 10;i++){
+				new MountainLevel(512 + 128 +32*i,512 - 64*2 - 16*i,this.getVertexBufferObjectManager(),this,0);}
 	}
-
-	
-	
 
 	/**
 	 * Remove the in game menu
@@ -1949,9 +1960,8 @@ public class MainActivity extends SimpleBaseGameActivity implements
 					images.getMenuSaveButtonImage(),
 					main.getVertexBufferObjectManager(), main);
 
-			rectangleBlackScreen = new Rectangle(0, 0,
-					CAMERA_WIDTH, CAMERA_HEIGHT,
-					main.getVertexBufferObjectManager());
+			rectangleBlackScreen = new Rectangle(0, 0, CAMERA_WIDTH,
+					CAMERA_HEIGHT, main.getVertexBufferObjectManager());
 			rectangleBlackScreen.setColor(0f, 0f, 0f);
 			rectangleBlackScreen.setAlpha(0.95f);
 			removeBuildingTouchAreas();
@@ -1959,7 +1969,7 @@ public class MainActivity extends SimpleBaseGameActivity implements
 			inGameHUD.attachChild(rectangleBlackScreen);
 			inGameHUD.attachChild(menuMainMenuButton);
 			inGameHUD.attachChild(menuSaveButton);
-			// sObjects.add(menuQuestButton);
+			// sObjects.add(menuObjectivesButton);
 			// sObjects.add(menuMainMenuButton);
 			// sObjects.add(menuMapButton);
 			inGameHUD.registerTouchArea(menuMainMenuButton);
@@ -1974,24 +1984,24 @@ public class MainActivity extends SimpleBaseGameActivity implements
 		String temp;
 
 		PAUSE = false;
-		if (messageHUD != null) {
-			removeEntity(messageHUD);
-			inGameHUD.unregisterTouchArea(messageHUD);
+		if (messagePopup != null) {
+			messagePopup.remove();
+			messagePopup = null;
 		}
-		if (messageCancelButton != null) {
-			removeEntity(messageCancelButton);
-			inGameHUD.unregisterTouchArea(messageCancelButton);
-		}
-		if (messageOkButton != null) {
-			removeEntity(messageOkButton);
-			inGameHUD.unregisterTouchArea(messageOkButton);
-		}
-		if (messageConfirmButton != null) {
-			removeEntity(messageConfirmButton);
-			inGameHUD.unregisterTouchArea(messageConfirmButton);
-		}
-		if (messageText != null)
-			removeEntity(messageText);
+//		if (messageCancelButton != null) {
+//			removeEntity(messageCancelButton);
+//			inGameHUD.unregisterTouchArea(messageCancelButton);
+//		}
+//		if (messageOkButton != null) {
+//			removeEntity(messageOkButton);
+//			inGameHUD.unregisterTouchArea(messageOkButton);
+//		}
+//		if (messageConfirmButton != null) {
+//			removeEntity(messageConfirmButton);
+//			inGameHUD.unregisterTouchArea(messageConfirmButton);
+//		}
+//		if (messageText != null)
+//			removeEntity(messageText);
 
 	}
 
@@ -2004,16 +2014,15 @@ public class MainActivity extends SimpleBaseGameActivity implements
 				recentMessages[i - 1] = recentMessages[i];
 			}
 		}
-		for (int i = 0; i < recentMessages.length; i++) {
-			if (recentMessages[i] != ""
-					&& recentMessages[i] != null) {
-				Debug.e("WHY NO LOAD");
-				MessagePopUpNoRemove(recentMessages[i],
-						org.andengine.util.color.Color.WHITE);
-				recentMessages[0] = "";
-				break;
-			}
-		}
+//		for (int i = 0; i < recentMessages.length; i++) {
+//			if (recentMessages[i] != "" && recentMessages[i] != null) {
+//				Debug.e("WHY NO LOAD");
+//				messagePopUp(recentMessages[i],
+//						org.andengine.util.color.Color.WHITE);
+//				recentMessages[0] = "";
+//				break;
+//			}
+//		}
 	}
 
 	/**
@@ -2104,7 +2113,10 @@ public class MainActivity extends SimpleBaseGameActivity implements
 		inGameHUD.unregisterTouchArea(menuMap);
 		menuMapHUD.setAlpha(0);
 		menuMap.setAlpha(0);
-		moveText.setText("");
+		if(this.menuMapAttackButton!=null){
+		this.menuMapAttackButton.setAlpha(0);
+		this.getInGameHUD().unregisterTouchArea(this.menuMapAttackButton);
+		}moveText.setText("");
 		moveTextSmall.setText("");
 		moveTextSmall2.setText("");
 		for (int i = 0; i < cityMessageSize; i++) {
@@ -2143,67 +2155,87 @@ public class MainActivity extends SimpleBaseGameActivity implements
 		placeBuildingJumpX = 0;
 		currentBuilding = string;
 		if (currentBuilding == "Barrack")
-			placebuilding = new PlaceBuilding(touchx, touchy,
+			placeBuilding = new PlaceBuilding(touchx, touchy,
 					images.getBarrackImage(),
-					main.getVertexBufferObjectManager(),this);
+					main.getVertexBufferObjectManager(), this);
 		else if (currentBuilding == "House")
-			placebuilding = new PlaceBuilding(touchx, touchy,
-					images.getHouseImage(), main.getVertexBufferObjectManager(),this);
+			placeBuilding = new PlaceBuilding(touchx, touchy,
+					images.getHouseImage(),
+					main.getVertexBufferObjectManager(), this);
 		else if (currentBuilding == "Farm")
-			placebuilding = new PlaceBuilding(touchx, touchy,
-					images.getFarmImage(), main.getVertexBufferObjectManager(),this);
+			placeBuilding = new PlaceBuilding(touchx, touchy,
+					images.getFarmImage(), main.getVertexBufferObjectManager(),
+					this);
 		else if (currentBuilding == "Food Market")
-			placebuilding = new PlaceBuilding(touchx, touchy,
+			placeBuilding = new PlaceBuilding(touchx, touchy,
 					images.getFoodMarketImage(),
-					main.getVertexBufferObjectManager(),this);
+					main.getVertexBufferObjectManager(), this);
 		else if (currentBuilding == "Fountain")
-			placebuilding = new PlaceBuilding(touchx, touchy,
+			placeBuilding = new PlaceBuilding(touchx, touchy,
 					images.getFountainImage(),
-					main.getVertexBufferObjectManager(),this);
+					main.getVertexBufferObjectManager(), this);
 		else if (currentBuilding == "Silo") {
-			placebuilding = new PlaceBuilding(touchx, touchy,
-					images.getSiloImage(), main.getVertexBufferObjectManager(),this);
+			placeBuilding = new PlaceBuilding(touchx, touchy,
+					images.getSiloImage(), main.getVertexBufferObjectManager(),
+					this);
 			placeBuildingJumpY = -11;
 		} else if (currentBuilding == "Skinner")
-			placebuilding = new PlaceBuilding(touchx, touchy,
+			placeBuilding = new PlaceBuilding(touchx, touchy,
 					images.getSkinnerImage(),
-					main.getVertexBufferObjectManager(),this);
+					main.getVertexBufferObjectManager(), this);
 		else if (currentBuilding == "Stock")
-			placebuilding = new PlaceBuilding(touchx, touchy,
+			placeBuilding = new PlaceBuilding(touchx, touchy,
 					images.getStockplaceImage(),
-					main.getVertexBufferObjectManager(),this);
+					main.getVertexBufferObjectManager(), this);
 		else if (currentBuilding == "Road")
-			placebuilding = new PlaceBuilding(touchx, touchy,
-					images.getRoadimage(), main.getVertexBufferObjectManager(),this);
+			placeBuilding = new PlaceBuilding(touchx, touchy,
+					images.getRoadimage(), main.getVertexBufferObjectManager(),
+					this);
 		else if (currentBuilding == "Butcher")
-			placebuilding = new PlaceBuilding(touchx, touchy,
+			placeBuilding = new PlaceBuilding(touchx, touchy,
 					images.getButcherImage(),
-					main.getVertexBufferObjectManager(),this);
+					main.getVertexBufferObjectManager(), this);
 		else if (currentBuilding == "Fishing Hut")
-			placebuilding = new PlaceBuilding(touchx, touchy,
+			placeBuilding = new PlaceBuilding(touchx, touchy,
 					images.getFishingHutImage(),
-					main.getVertexBufferObjectManager(),this);
+					main.getVertexBufferObjectManager(), this);
 		else if (currentBuilding == "Stone Cutter")
-			placebuilding = new PlaceBuilding(touchx, touchy,
+			placeBuilding = new PlaceBuilding(touchx, touchy,
 					images.getStoneCutterImage(),
-					main.getVertexBufferObjectManager(),this);
+					main.getVertexBufferObjectManager(), this);
 		else if (currentBuilding == "Theatre") {
-			placebuilding = new PlaceBuilding(touchx, touchy,
+			placeBuilding = new PlaceBuilding(touchx, touchy,
 					images.getTheatreImage(),
-					main.getVertexBufferObjectManager(),this);
+					main.getVertexBufferObjectManager(), this);
 			placeBuildingJumpX = 6;
 			placeBuildingJumpY = -59;
 		} else if (currentBuilding == "Hunters Lodge")
-			placebuilding = new PlaceBuilding(touchx, touchy,
+			placeBuilding = new PlaceBuilding(touchx, touchy,
 					images.getHuntersLodgeImage(),
-					main.getVertexBufferObjectManager(),this);
+					main.getVertexBufferObjectManager(), this);
+		else if (currentBuilding == "Brick Foundry")
+			placeBuilding = new PlaceBuilding(touchx, touchy,
+					images.getBrickFoundryImage(),
+					main.getVertexBufferObjectManager(), this);
+		else if (currentBuilding == "Clay Mine")
+			placeBuilding = new PlaceBuilding(touchx, touchy,
+					images.getClayMineImage(),
+					main.getVertexBufferObjectManager(), this);
+		else if (currentBuilding == "Bronze Mine")
+			placeBuilding = new PlaceBuilding(touchx, touchy,
+					images.getBronzeMineImage(),
+					main.getVertexBufferObjectManager(), this);
+		else if (currentBuilding == "Armory")
+			placeBuilding = new PlaceBuilding(touchx, touchy,
+					images.getArmoryImage(),
+					main.getVertexBufferObjectManager(), this);
 		else
-			placebuilding = new PlaceBuilding(touchx, touchy,
+			placeBuilding = new PlaceBuilding(touchx, touchy,
 					images.getWoodCutterImage(),
-					main.getVertexBufferObjectManager(),this);
+					main.getVertexBufferObjectManager(), this);
 
-		placeBuildings.add(placebuilding);
-		mScene.attachChild(placebuilding);
+		placeBuildings.add(placeBuilding);
+		mScene.attachChild(placeBuilding);
 	}
 
 	public void resetArrayLists() {
@@ -2221,6 +2253,7 @@ public class MainActivity extends SimpleBaseGameActivity implements
 		setStocks(new ArrayList<Stock>());
 		setMineDepositClays(new ArrayList<MineDepositClay>());
 		setBrickFoundrys(new ArrayList<BrickFoundry>());
+		armories = new ArrayList<Armory>();
 		setStocks(new ArrayList<Stock>());
 		setStockSpaceTexts(new ArrayList<Text>());
 		setFishingHuts(new ArrayList<FishingHut>());
@@ -2229,7 +2262,7 @@ public class MainActivity extends SimpleBaseGameActivity implements
 		Hoplites = new ArrayList<Hoplite>();
 		setButchers(new ArrayList<Butcher>());
 		fishspots = new ArrayList<FishSpot>();
-		setMineDepositBronzes(new ArrayList<MineDepositBronze>());
+		setBronzeMines(new ArrayList<BronzeMine>());
 		asObjects = new ArrayList<AnimatedSpriteObject>();
 		sObjects = new ArrayList<SpriteObject>();
 		controller.resetGameInfo();
@@ -2244,732 +2277,348 @@ public class MainActivity extends SimpleBaseGameActivity implements
 		stockChoiceButtons = new ArrayList<StockChoiceButton>();
 	}
 
+	public void openObjectivesHUD() {
+		removeBuildingHUD();
+		removeMenu();
+		ObjectivesHUD = new ObjectivesHUD(128, 132, images.getObjectivesHUDImage(), main);
+
+	}
+
+	public ObjectivesHUD getObjectivesHUD() {
+		return ObjectivesHUD;
+	}
+
+	public void setObjectivesHUD(ObjectivesHUD ObjectivesHUD) {
+		this.ObjectivesHUD = ObjectivesHUD;
+	}
+
 	public void createBuildingHUD(String building) {
 		removeBuildingHUD();
-		if(!building.equals("Empty")){
-		buildingHUDTexts = new ArrayList<Text>();
-		buildingHUD = new Sprite(0, 102, images.getBuildingHUDImage(),
-				main.getVertexBufferObjectManager());
-		buildingConfirmChoiceButton = new BuildingConfirmChoiceButton(
-				buildingHUD.getX() + 480, buildingHUD.getY() + 368,
-				images.getBuildingConfirmChoiceButtonImage(),
-				main.getVertexBufferObjectManager(), building, main);
-		buildingCancelButton = new BuildingCancelButton(
-				buildingHUD.getX() + 768, buildingHUD.getY() + 368,
-				images.getBuildingCancelButtonImage(),
-				main.getVertexBufferObjectManager(),this);
-		inGameHUD.attachChild(buildingHUD);
-		inGameHUD.attachChild(buildingCancelButton);
-		inGameHUD.attachChild(buildingConfirmChoiceButton);
-		inGameHUD.registerTouchArea(buildingConfirmChoiceButton);
-		inGameHUD.registerTouchArea(buildingCancelButton);
-		buybutton = new BuyButton(CAMERA_WIDTH - 195
-				- images.getBuybuttonimage().getWidth(), CAMERA_HEIGHT
-				- images.getBuybuttonimage().getHeight(),
-				images.getBuybuttonimage(),
-				main.getVertexBufferObjectManager(), main);
-		cancelButton = new CancelButton(CAMERA_WIDTH - 195
-				- images.getBuybuttonimage().getWidth(), CAMERA_HEIGHT
-				- (images.getBuybuttonimage().getHeight() * 2),
-				images.getCancelbuttonimage(),
-				main.getVertexBufferObjectManager(), main);
-		inGameHUD.attachChild(buybutton);
-		inGameHUD.attachChild(cancelButton);
-		inGameHUD.registerTouchArea(buildingHUD);
-		inGameHUD.registerTouchArea(buybutton);
-		inGameHUD.registerTouchArea(cancelButton);
-
-		Text tempText;
-		for (int i = 0; i < 10; i++) {
-			tempText = new Text(buildingHUD.getX() + 48, buildingHUD.getY()
-					+ 64 + i * 24, smallFont, "", 200,
+		if (!building.equals("Empty")) {
+			controller.checkHouseLevel();
+			buildingHUDTexts = new ArrayList<Text>();
+			buildingHUD = new Sprite(0, 102, images.getBuildingHUDImage(),
+					main.getVertexBufferObjectManager());
+			buildingConfirmChoiceButton = new BuildingConfirmChoiceButton(
+					buildingHUD.getX() + 480, buildingHUD.getY() + 368,
+					images.getBuildingConfirmChoiceButtonImage(),
+					main.getVertexBufferObjectManager(), building, main);
+			buildingCancelButton = new BuildingCancelButton(
+					buildingHUD.getX() + 768, buildingHUD.getY() + 368,
+					images.getBuildingCancelButtonImage(),
+					main.getVertexBufferObjectManager(), this);
+			inGameHUD.attachChild(buildingHUD);
+			inGameHUD.attachChild(buildingCancelButton);
+			inGameHUD.attachChild(buildingConfirmChoiceButton);
+			inGameHUD.registerTouchArea(buildingConfirmChoiceButton);
+			inGameHUD.registerTouchArea(buildingCancelButton);
+			buybutton = new BuyButton(CAMERA_WIDTH - 195
+					- images.getBuybuttonimage().getWidth(), CAMERA_HEIGHT
+					- images.getBuybuttonimage().getHeight(),
+					images.getBuybuttonimage(),
+					main.getVertexBufferObjectManager(), main);
+			cancelButton = new CancelButton(CAMERA_WIDTH - 195
+					- images.getBuybuttonimage().getWidth(), CAMERA_HEIGHT
+					- (images.getBuybuttonimage().getHeight() * 2),
+					images.getCancelbuttonimage(),
+					main.getVertexBufferObjectManager(), main);
+			inGameHUD.attachChild(buybutton);
+			inGameHUD.attachChild(cancelButton);
+			inGameHUD.registerTouchArea(buildingHUD);
+			inGameHUD.registerTouchArea(buybutton);
+			inGameHUD.registerTouchArea(cancelButton);
+			
+			Text tempText;
+			for (int i = 0; i < 10; i++) {
+				tempText = new Text(buildingHUD.getX() + 48, buildingHUD.getY()
+						+ 64 + i * 24, smallFont, "", 200,
+						main.getVertexBufferObjectManager());
+				buildingHUDTexts.add(tempText);
+				inGameHUD.attachChild(tempText);
+			}
+			tempText = new Text(buildingHUD.getX() + 487,
+					buildingHUD.getY() + 48, smallFont, "", 200,
 					main.getVertexBufferObjectManager());
 			buildingHUDTexts.add(tempText);
 			inGameHUD.attachChild(tempText);
-		}
-		tempText = new Text(buildingHUD.getX() + 487, buildingHUD.getY() + 48,
-				smallFont, "", 200, main.getVertexBufferObjectManager());
-		buildingHUDTexts.add(tempText);
-		inGameHUD.attachChild(tempText);
-		tempText = new Text(buildingHUD.getX() + 487, buildingHUD.getY() + 256,
-				smallFont, "", 200, main.getVertexBufferObjectManager());
-		buildingHUDTexts.add(tempText);
-		inGameHUD.attachChild(tempText);
-		tempText = new Text(buildingHUD.getX() + 487, buildingHUD.getY(),
-				gameFont, "", 200, main.getVertexBufferObjectManager());
-		buildingHUDTexts.add(tempText);
-		inGameHUD.attachChild(tempText);
-		if (building == "Barrack") {
-			canBuild = true;
-			buildingHUDTexts.get(0).setText(
-					"House Level: " + ConstantBuildings.HOUSEREQBARRACK);
-			buildingHUDTexts.get(1).setText(
-					"Workers needed: " + ConstantBuildings.WORKERSBARRACK);
-			buildingHUDTexts.get(2).setText(
-					"Cost coins: " + ConstantBuildings.COSTBARRACKCOIN);
-			buildingHUDTexts.get(3).setText(
-					"Marble coins: " + ConstantBuildings.COSTBARRACKMARBLE);
-			buildingHUDTexts.get(4).setText(
-					"Wood needed: " + ConstantBuildings.COSTBARRACKWOOD);
-			buildingHUDTexts.get(5).setText(
-					"Brick needed: " + ConstantBuildings.COSTBARRACKBRICK);
-			buildingHUDTexts.get(10).setText(
-					ConstantBuildings.DESCRIPTIONBARRACK);
-			buildingHUDTexts.get(12).setText(building);
-			if (controller.HouseLevel < ConstantBuildings.HOUSEREQBARRACK) {
-				canBuild = false;
-				buildingHUDTexts.get(0).setColor(1, 0, 0);
-			}
-			if (controller.workers + ConstantBuildings.WORKERSBARRACK > controller
-					.getMaxWorkers()) {
-				canBuild = false;
-				buildingHUDTexts.get(1).setColor(1, 0, 0);
-			}
-			if (controller.getGold() < ConstantBuildings.COSTBARRACKCOIN) {
-				canBuild = false;
-				buildingHUDTexts.get(2).setColor(1, 0, 0);
-			}
-			if (controller.Marble < ConstantBuildings.COSTBARRACKMARBLE) {
-				canBuild = false;
-				buildingHUDTexts.get(3).setColor(1, 0, 0);
-			}
-			if (controller.Wood < ConstantBuildings.COSTBARRACKWOOD) {
-				canBuild = false;
-				buildingHUDTexts.get(4).setColor(1, 0, 0);
-			}
-			if (controller.Brick < ConstantBuildings.COSTBARRACKBRICK) {
-				canBuild = false;
-				buildingHUDTexts.get(5).setColor(1, 0, 0);
-			}
-			if (!canBuild) {
-				buildingHUDTexts.get(11).setText(
-						"You do not fulfill the requirments to construct \na "
-								+ building);
-				buildingHUDTexts.get(11).setColor(1.0f, 0f, 0f);
+			tempText = new Text(buildingHUD.getX() + 487,
+					buildingHUD.getY() + 256, smallFont, "", 200,
+					main.getVertexBufferObjectManager());
+			buildingHUDTexts.add(tempText);
+			inGameHUD.attachChild(tempText);
+			tempText = new Text(buildingHUD.getX() + 487, buildingHUD.getY(),
+					gameFont, "", 200, main.getVertexBufferObjectManager());
+			buildingHUDTexts.add(tempText);
+			inGameHUD.attachChild(tempText);
+			if (building == "Barrack") {
+				canBuild = true;
+				int[] text = { ConstantBuildings.HOUSEREQBARRACK,
+						ConstantBuildings.WORKERSBARRACK,
+						ConstantBuildings.COSTBARRACKCOIN,
+						ConstantBuildings.COSTBARRACKMARBLE,
+						ConstantBuildings.COSTBARRACKWOOD,
+						ConstantBuildings.COSTBARRACKBRICK, 0, 0, 0, 0, 0, 0 };
+				setBuildingHUDText(text, building,
+						ConstantBuildings.DESCRIPTIONBARRACK);
+
+			} else if (building == "Armory") {
+				canBuild = true;
+				int[] text = { ConstantBuildings.HOUSEREQARMORY,
+						ConstantBuildings.WORKERSARMORY,
+						ConstantBuildings.COSTARMORYCOIN,
+						ConstantBuildings.COSTARMORYMARBLE,
+						ConstantBuildings.COSTARMORYWOODMONTHLY * 1000,
+						ConstantBuildings.COSTARMORYBRICK, 0, 0, 0, 0, 0, 0 };
+				setBuildingHUDText(text, building,
+						ConstantBuildings.DESCRIPTIONARMORY);
 
 			}
-		}
-		if (building == "Armory") {
-			canBuild = true;
-			buildingHUDTexts.get(0).setText(
-					"House Level: " + ConstantBuildings.HOUSEREQARMORY);
-			buildingHUDTexts.get(1).setText(
-					"Workers needed: " + ConstantBuildings.WORKERSARMORY);
-			buildingHUDTexts.get(2).setText(
-					"Cost coins: " + ConstantBuildings.COSTARMORYCOIN);
-			buildingHUDTexts.get(3).setText(
-					"Marble coins: " + ConstantBuildings.COSTARMORYMARLBE);
-			buildingHUDTexts.get(4).setText(
-					"Wood used/month "
-							+ ConstantBuildings.COSTARMORYWOODMONTHLY);
-			buildingHUDTexts.get(5).setText(
-					"Brick needed: " + ConstantBuildings.COSTARMORYBRICK);
-			buildingHUDTexts.get(10).setText(
-					ConstantBuildings.DESCRIPTIONARMORY);
-			buildingHUDTexts.get(12).setText(building);
-			if (controller.HouseLevel < ConstantBuildings.HOUSEREQARMORY) {
-				canBuild = false;
-				buildingHUDTexts.get(0).setColor(1, 0, 0);
-			}
-			if (controller.workers + ConstantBuildings.WORKERSARMORY > controller
-					.getMaxWorkers()) {
-				canBuild = false;
-				buildingHUDTexts.get(1).setColor(1, 0, 0);
-			}
-			if (controller.getGold()  < ConstantBuildings.COSTARMORYCOIN) {
-				canBuild = false;
-				buildingHUDTexts.get(2).setColor(1, 0, 0);
-			}
-			if (controller.Marble < ConstantBuildings.COSTARMORYMARLBE) {
-				canBuild = false;
-				buildingHUDTexts.get(3).setColor(1, 0, 0);
-			}
-			if (controller.Brick < ConstantBuildings.COSTARMORYBRICK) {
-				canBuild = false;
-				buildingHUDTexts.get(5).setColor(1, 0, 0);
-			}
-			if (!canBuild) {
-				buildingHUDTexts.get(11).setText(
-						"You do not fulfill the requirments to construct \na "
-								+ building);
-				buildingHUDTexts.get(11).setColor(1.0f, 0f, 0f);
+
+			else if (building == "Brick Foundry") {
+				canBuild = true;
+				int[] text = { ConstantBuildings.HOUSEREQBRICKFOUNDRY,
+						ConstantBuildings.WORKERSBRICKFOUNDRY,
+						ConstantBuildings.COSTBRICKFOUNDRYCOIN,
+						ConstantBuildings.COSTBRICKFOUNDRYMARBLE,
+						ConstantBuildings.COSTBRICKFOUNDRYWOODMONTHLY * 1000,
+						0, 0, 0, 0, 0, 0, 0 };
+				setBuildingHUDText(text, building,
+						ConstantBuildings.DESCRIPTIONBRICKFOUNDRY);
+			} else if (building == "Butcher") {
+
+				canBuild = true;
+				int[] text = { ConstantBuildings.HOUSEREQBUTCHER,
+						ConstantBuildings.WORKERSBUTCHER,
+						ConstantBuildings.COSTBUTCHERCOIN, 0,
+						ConstantBuildings.COSTBUTCHERWOOD, 0, 0, 0, 0, 0, 0, 0 };
+				setBuildingHUDText(text, building,
+						ConstantBuildings.DESCRIPTIONBRICKFOUNDRY);
+			} else if (building == "Farm") {
+				canBuild = true;
+				int[] text = { ConstantBuildings.HOUSEREQFARM,
+						ConstantBuildings.WORKERSFARM,
+						ConstantBuildings.COSTFARMCOIN, 0, 0, 0, 0, 0, 0, 0, 0,
+						0 };
+				setBuildingHUDText(text, building,
+						ConstantBuildings.DESCRIPTIONFARM);
+			} else if (building == "Fishing Hut") {
+				canBuild = true;
+				int[] text = { ConstantBuildings.HOUSEREQFISHINGHUT,
+						ConstantBuildings.WORKERSFISHINGHUT,
+						ConstantBuildings.COSTFISHINGHUTCOIN, 0,
+						ConstantBuildings.COSTFISHINGHUTWOOD, 0, 0, 0, 0, 0, 0,
+						0 };
+				setBuildingHUDText(text, building,
+						ConstantBuildings.DESCRIPTIONFISHINGHUT);
+			} else if (building == "Food Market") {
+				canBuild = true;
+				int[] text = { ConstantBuildings.HOUSEREQFOODMARKET,
+						ConstantBuildings.WORKERSFOODMARKET,
+						ConstantBuildings.COSTFOODMARKETCOIN, 0, 0, 0, 0, 0, 0,
+						0, 0, 0 };
+				setBuildingHUDText(text, building,
+						ConstantBuildings.DESCRIPTIONFOODMARKET);
+			} else if (building == "Fountain") {
+				canBuild = true;
+				int[] text = { ConstantBuildings.HOUSEREQFOUNTAIN,
+						ConstantBuildings.WORKERSFOUNTAIN,
+						ConstantBuildings.COSTFOUNTAINCOIN, 0, 0, 0, 0, 0, 0,
+						0, 0, 0 };
+				setBuildingHUDText(text, building,
+						ConstantBuildings.DESCRIPTIONFOUNTAIN);
+			} else if (building == "House") {
+				canBuild = true;
+				int[] text = { 0, 0, ConstantBuildings.COSTHOUSECOIN, 0, 0, 0,
+						0, 0, 0, 0, 0, 0 };
+				setBuildingHUDText(text, building,
+						ConstantBuildings.DESCRIPTIONHOUSE);
+
+			} else if (building == "Hunters Lodge") {
+				canBuild = true;
+				int[] text = { ConstantBuildings.HOUSEREQHUNTERSLODGE,
+						ConstantBuildings.WORKERSHUNTERSLODGE,
+						ConstantBuildings.COSTHUNTERSLODGECOIN, 0,
+						ConstantBuildings.COSTHUNTERSLODGEWOOD, 0, 0, 0, 0, 0,
+						0, 0 };
+				setBuildingHUDText(text, building,
+						ConstantBuildings.DESCRIPTIONHUNTERSLODGE);
+
+			} else if (building == "Clay Mine") {
+				canBuild = true;
+				int[] text = { ConstantBuildings.HOUSEREQCLAYMINE,
+						ConstantBuildings.WORKERSCLAYMINE,
+						ConstantBuildings.COSTCLAYMINECOIN,
+						ConstantBuildings.COSTCLAYMINEMARBLE, 0, 0, 0, 0, 0, 0,
+						0, 0 };
+				setBuildingHUDText(text, building,
+						ConstantBuildings.DESCRIPTIONCLAYMINE);
 
 			}
-		}
 
-		if (building == "Brick Foundry") {
-			canBuild = true;
-			buildingHUDTexts.get(0).setText(
-					"House Level: " + ConstantBuildings.HOUSEREQBRICKFOUNDRY);
-			buildingHUDTexts.get(1).setText(
-					"Workers needed: " + ConstantBuildings.WORKERSBRICKFOUNDRY);
-			buildingHUDTexts.get(2).setText(
-					"Cost coins: " + ConstantBuildings.COSTBRICKFOUNDRYCOIN);
-			buildingHUDTexts.get(3).setText(
-					"Cost marble: " + ConstantBuildings.COSTBRICKFOUNDRYMARBLE);
-			buildingHUDTexts.get(4).setText(
-					"Cost wood " + ConstantBuildings.COSTBRICKFOUNDRYWOOD);
-			buildingHUDTexts.get(10).setText(
-					ConstantBuildings.DESCRIPTIONBRICKFOUNDRY);
-			buildingHUDTexts.get(12).setText(building);
-			if (controller.HouseLevel < ConstantBuildings.HOUSEREQBRICKFOUNDRY) {
-				canBuild = false;
-				buildingHUDTexts.get(0).setColor(1, 0, 0);
-			}
-			if (controller.getGold()  < ConstantBuildings.COSTBRICKFOUNDRYCOIN) {
-				canBuild = false;
-				buildingHUDTexts.get(2).setColor(1, 0, 0);
-			}
-			if (controller.workers + ConstantBuildings.WORKERSBRICKFOUNDRY > controller
-					.getMaxWorkers()) {
-				canBuild = false;
-				buildingHUDTexts.get(1).setColor(1, 0, 0);
-			}
-			if (controller.Marble < ConstantBuildings.COSTBRICKFOUNDRYMARBLE) {
-				canBuild = false;
-				buildingHUDTexts.get(3).setColor(1, 0, 0);
-			}
-			if (!canBuild) {
-				buildingHUDTexts.get(11).setText(
-						"You do not fulfill the requirments to construct \na "
-								+ building);
-				buildingHUDTexts.get(11).setColor(1.0f, 0f, 0f);
+			else if (building == "Bronze Mine") {
+				canBuild = true;
+				int[] text = { ConstantBuildings.HOUSEREQBRONZEMINE,
+						ConstantBuildings.WORKERSBRONZEMINE,
+						ConstantBuildings.COSTBRONZEMINECOIN,
+						ConstantBuildings.COSTBRONZEMINEMARBLE, 0,
+						ConstantBuildings.COSTBRONZEMINEBRICK, 0, 0, 0, 0, 0, 0 };
+				setBuildingHUDText(text, building,
+						ConstantBuildings.DESCRIPTIONBRONZEMINE);
+			} else if (building == "Road") {
+				canBuild = true;
+				int[] text = { 1, 0, ConstantBuildings.COSTROADCOIN, 0, 0, 0,
+						0, 0, 0, 0, 0, 0 };
+				setBuildingHUDText(text, building,
+						ConstantBuildings.DESCRIPTIONROAD);
 
 			}
-		}
-		if (building == "Butcher") {
-			canBuild = true;
-			buildingHUDTexts.get(0).setText(
-					"House Level: " + ConstantBuildings.HOUSEREQBUTCHER);
-			buildingHUDTexts.get(1).setText(
-					"Workers needed: " + ConstantBuildings.WORKERSBUTCHER);
-			buildingHUDTexts.get(2).setText(
-					"Cost coins: " + ConstantBuildings.COSTBUTCHERCOIN);
-			buildingHUDTexts.get(3).setText(
-					"Cost wood: " + ConstantBuildings.COSTBUTCHERWOOD);
-			buildingHUDTexts.get(10).setText(
-					ConstantBuildings.DESCRIPTIONBUTCHER);
-			buildingHUDTexts.get(12).setText(building);
-			if (controller.HouseLevel < ConstantBuildings.HOUSEREQBUTCHER) {
-				canBuild = false;
-				buildingHUDTexts.get(0).setColor(1, 0, 0);
-			}
-			if (controller.workers + ConstantBuildings.WORKERSBUTCHER > controller
-					.getMaxWorkers()) {
-				canBuild = false;
-				buildingHUDTexts.get(1).setColor(1, 0, 0);
-			}
-			if (controller.getGold()  < ConstantBuildings.COSTBUTCHERCOIN) {
-				canBuild = false;
-				buildingHUDTexts.get(2).setColor(1, 0, 0);
-			}
-			if (controller.Wood < ConstantBuildings.COSTBUTCHERWOOD) {
-				canBuild = false;
-				buildingHUDTexts.get(3).setColor(1, 0, 0);
-			}
-			if (!canBuild) {
-				buildingHUDTexts.get(11).setText(
-						"You do not fulfill the requirments to construct \na "
-								+ building);
-				buildingHUDTexts.get(11).setColor(1.0f, 0f, 0f);
 
-			}
-		}
-		if (building == "Farm") {
-			canBuild = true;
-			buildingHUDTexts.get(0).setText(
-					"House Level: " + ConstantBuildings.HOUSEREQFARM);
-			buildingHUDTexts.get(1).setText(
-					"Workers needed: " + ConstantBuildings.WORKERSFARM);
-			buildingHUDTexts.get(10).setText(ConstantBuildings.DESCRIPTIONFARM);
-			buildingHUDTexts.get(12).setText(building);
-			if (controller.HouseLevel < ConstantBuildings.HOUSEREQFARM) {
-				canBuild = false;
-				buildingHUDTexts.get(0).setColor(1, 0, 0);
-			}
-			if (controller.workers + ConstantBuildings.WORKERSFARM > controller
-					.getMaxWorkers()) {
-				canBuild = false;
-				buildingHUDTexts.get(1).setColor(1, 0, 0);
-			}
-			if (!canBuild) {
-				buildingHUDTexts.get(11).setText(
-						"You do not fulfill the requirments to construct \na "
-								+ building);
-				buildingHUDTexts.get(11).setColor(1.0f, 0f, 0f);
+			else if (building == "Silo") {
+				canBuild = true;
+				int[] text = { ConstantBuildings.HOUSEREQSILO,
+						ConstantBuildings.WORKERSSILO,
+						ConstantBuildings.COSTSILOCOIN, 0, 0, 0, 0, 0, 0, 0, 0,
+						0 };
+				setBuildingHUDText(text, building,
+						ConstantBuildings.DESCRIPTIONSILO);
 
+			} else if (building == "Skinner") {
+				canBuild = true;
+				int[] text = { ConstantBuildings.HOUSEREQSKINNER,
+						ConstantBuildings.WORKERSSKINNER,
+						ConstantBuildings.COSTSKINNERCOIN, 0,
+						ConstantBuildings.COSTSKINNERWOOD, 0, 0, 0, 0, 0, 0, 0 };
+				setBuildingHUDText(text, building,
+						ConstantBuildings.DESCRIPTIONSKINNER);
+			} else if (building == "Stock") {
+				canBuild = true;
+				int[] text = { ConstantBuildings.HOUSEREQSTOCK,
+						ConstantBuildings.WORKERSSTOCK,
+						ConstantBuildings.COSTSTOCKCOIN, 0, 0, 0, 0, 0, 0, 0,
+						0, 0 };
+				setBuildingHUDText(text, building,
+						ConstantBuildings.DESCRIPTIONSTOCK);
+			} else if (building == "Stone Cutter") {
+				canBuild = true;
+				int[] text = { ConstantBuildings.HOUSEREQSTONECUTTER,
+						ConstantBuildings.WORKERSSTONECUTTER,
+						ConstantBuildings.COSTSTONECUTTERCOIN, 0, 0, 0, 0, 0,
+						0, 0, 0, 0 };
+				setBuildingHUDText(text, building,
+						ConstantBuildings.DESCRIPTIONSTONECUTTER);
+			} else if (building == "Theatre") {
+				canBuild = true;
+				int[] text = { ConstantBuildings.HOUSEREQTHEATRE,
+						ConstantBuildings.WORKERSTHEATRE,
+						ConstantBuildings.COSTTHEATRECOIN,
+						ConstantBuildings.COSTTHEATREMARBLE, 0, 0, 0, 0, 0, 0,
+						0, 0 };
+				setBuildingHUDText(text, building,
+						ConstantBuildings.DESCRIPTIONTHEATRE);
+			} else if (building == "Wood Cutter") {
+				canBuild = true;
+				int[] text = { ConstantBuildings.HOUSEREQWOODCUTTER,
+						ConstantBuildings.WORKERSWOODCUTTER,
+						ConstantBuildings.COSTWOODCUTTERCOIN, 0, 0, 0, 0, 0, 0,
+						0, 0, 0 };
+				setBuildingHUDText(text, building,
+						ConstantBuildings.DESCRIPTIONWOODCUTTER);
 			}
-		}
-		if (building == "Fishing Hut") {
-			canBuild = true;
-			buildingHUDTexts.get(0).setText(
-					"House Level: " + ConstantBuildings.HOUSEREQFISHINGHUT);
-			buildingHUDTexts.get(1).setText(
-					"Workers needed: " + ConstantBuildings.WORKERSFISHINGHUT);
-			buildingHUDTexts.get(2).setText(
-					"Cost coins: " + ConstantBuildings.COSTFISHINGHUTCOIN);
-			buildingHUDTexts.get(3).setText(
-					"Cost wood " + ConstantBuildings.COSTFISHINGHUTWOOD);
-			buildingHUDTexts.get(10).setText(
-					ConstantBuildings.DESCRIPTIONFISHINGHUT);
-			buildingHUDTexts.get(12).setText(building);
-			if (controller.HouseLevel < ConstantBuildings.HOUSEREQFISHINGHUT) {
-				canBuild = false;
-				buildingHUDTexts.get(0).setColor(1, 0, 0);
-			}
-			if (controller.workers + ConstantBuildings.WORKERSFISHINGHUT > controller
-					.getMaxWorkers()) {
-				canBuild = false;
-				buildingHUDTexts.get(1).setColor(1, 0, 0);
-			}
-			if (controller.getGold()  < ConstantBuildings.COSTFISHINGHUTCOIN) {
-				canBuild = false;
-				buildingHUDTexts.get(2).setColor(1, 0, 0);
-			}
-			if (controller.Wood < ConstantBuildings.COSTFISHINGHUTWOOD) {
-				canBuild = false;
-				buildingHUDTexts.get(3).setColor(1, 0, 0);
-			}
-			if (!canBuild) {
-				buildingHUDTexts.get(11).setText(
-						"You do not fulfill the requirments to construct \na "
-								+ building);
-				buildingHUDTexts.get(11).setColor(1.0f, 0f, 0f);
-
-			}
-		}
-		if (building == "Food Market") {
-			canBuild = true;
-			buildingHUDTexts.get(0).setText(
-					"House Level: " + ConstantBuildings.HOUSEREQFOODMARKET);
-			buildingHUDTexts.get(1).setText(
-					"Workers needed: " + ConstantBuildings.WORKERSFOODMARKET);
-			buildingHUDTexts.get(2).setText(
-					"Cost coins: " + ConstantBuildings.COSTFOODMARKETCOIN);
-			buildingHUDTexts.get(10).setText(
-					ConstantBuildings.DESCRIPTIONFOODMARKET);
-			buildingHUDTexts.get(12).setText(building);
-			if (controller.HouseLevel < ConstantBuildings.HOUSEREQFOODMARKET) {
-				canBuild = false;
-				buildingHUDTexts.get(0).setColor(1, 0, 0);
-			}
-			if (controller.workers + ConstantBuildings.WORKERSFOODMARKET > controller
-					.getMaxWorkers()) {
-				canBuild = false;
-				buildingHUDTexts.get(1).setColor(1, 0, 0);
-			}
-			if (controller.getGold()  < ConstantBuildings.COSTFOODMARKETCOIN) {
-				canBuild = false;
-				buildingHUDTexts.get(2).setColor(1, 0, 0);
-			}
-			if (!canBuild) {
-				buildingHUDTexts.get(11).setText(
-						"You do not fulfill the requirments to construct \na "
-								+ building);
-				buildingHUDTexts.get(11).setColor(1.0f, 0f, 0f);
-
-			}
-		}
-		if (building == "Fountain") {
-			canBuild = true;
-			buildingHUDTexts.get(0).setText(
-					"House Level: " + ConstantBuildings.HOUSEREQFOUNTAIN);
-			buildingHUDTexts.get(1).setText(
-					"Workers needed: " + ConstantBuildings.WORKERSFOUNTAIN);
-			buildingHUDTexts.get(2).setText(
-					"Cost coins: " + ConstantBuildings.COSTFOUNTAINCOIN);
-			buildingHUDTexts.get(10).setText(
-					ConstantBuildings.DESCRIPTIONFOUNTAIN);
-			buildingHUDTexts.get(12).setText(building);
-			if (controller.HouseLevel < ConstantBuildings.HOUSEREQFOUNTAIN) {
-				canBuild = false;
-				buildingHUDTexts.get(0).setColor(1, 0, 0);
-			}
-			if (controller.getGold() < ConstantBuildings.COSTFOUNTAINCOIN) {
-				canBuild = false;
-				buildingHUDTexts.get(2).setColor(1, 0, 0);
-			}
-			if (controller.workers + ConstantBuildings.WORKERSFOUNTAIN > controller
-					.getMaxWorkers()) {
-				canBuild = false;
-				buildingHUDTexts.get(1).setColor(1, 0, 0);
-			}
-			if (!canBuild) {
-				buildingHUDTexts.get(11).setText(
-						"You do not fulfill the requirments to construct \na "
-								+ building);
-				buildingHUDTexts.get(11).setColor(1.0f, 0f, 0f);
-
-			}
-		}
-		if (building == "House") {
-			canBuild = true;
-			buildingHUDTexts.get(1).setText(
-					"Cost coins: " + ConstantBuildings.COSTHOUSE);
-			buildingHUDTexts.get(10)
-					.setText(ConstantBuildings.DESCRIPTIONHOUSE);
-			buildingHUDTexts.get(12).setText(building);
-			if (controller.getGold()  < ConstantBuildings.COSTHOUSE)
-				buildingHUDTexts.get(1).setColor(1, 0, 0);
-			if (controller.Inhabitants[0] > controller.workers + 400) {
-				buildingHUDTexts.get(11).setText(
-						"You do not fulfill the requirments to construct \na "
-								+ building);
-				buildingHUDTexts.get(11).setColor(1.0f, 0f, 0f);
-
-			}
-		}
-		if (building == "Hunters Lodge") {
-			canBuild = true;
-			buildingHUDTexts.get(0).setText(
-					"House Level: " + ConstantBuildings.HOUSEREQHUNTERSLODGE);
-			buildingHUDTexts.get(1).setText(
-					"Workers needed: " + ConstantBuildings.WORKERSHUNTERSLODGE);
-			buildingHUDTexts.get(2).setText(
-					"Cost coins: " + ConstantBuildings.COSTHUNTERSLODGECOIN);
-			buildingHUDTexts.get(3).setText(
-					"Cost wood " + ConstantBuildings.COSTHUNTERSLODGEWOOD);
-			buildingHUDTexts.get(10).setText(
-					ConstantBuildings.DESCRIPTIONHUNTERSLODGE);
-			buildingHUDTexts.get(12).setText(building);
-			if (controller.HouseLevel < ConstantBuildings.HOUSEREQHUNTERSLODGE) {
-				canBuild = false;
-				buildingHUDTexts.get(0).setColor(1, 0, 0);
-			}
-			if (controller.getGold()  < ConstantBuildings.COSTHUNTERSLODGECOIN) {
-				canBuild = false;
-				buildingHUDTexts.get(2).setColor(1, 0, 0);
-			}
-			if (controller.workers + ConstantBuildings.WORKERSHUNTERSLODGE > controller
-					.getMaxWorkers()) {
-				canBuild = false;
-				buildingHUDTexts.get(1).setColor(1, 0, 0);
-			}
-			if (controller.Wood < ConstantBuildings.COSTHUNTERSLODGEWOOD) {
-				canBuild = false;
-				buildingHUDTexts.get(3).setColor(1, 0, 0);
-			}
-			if (!canBuild) {
-				buildingHUDTexts.get(11).setText(
-						"You do not fulfill the requirments to construct \na "
-								+ building);
-				buildingHUDTexts.get(11).setColor(1.0f, 0f, 0f);
-
-			}
-		}
-		if (building == "Clay Mine") {
-			canBuild = true;
-			buildingHUDTexts
-					.get(0)
-					.setText(
-							"House Level: "
-									+ ConstantBuildings.HOUSEREQMINEDEPOSITCLAY);
-			buildingHUDTexts.get(1).setText(
-					"Workers needed: "
-							+ ConstantBuildings.WORKERSMINEDEPOSITCLAY);
-			buildingHUDTexts.get(2).setText(
-					"Cost coins: " + ConstantBuildings.COSTCLAYMINECOIN);
-			buildingHUDTexts.get(3).setText(
-					"Cost marble " + ConstantBuildings.COSTCLAYMINEMARBLE);
-			buildingHUDTexts.get(4).setText(
-					"Cost wood " + ConstantBuildings.COSTCLAYMINEWOOD);
-			buildingHUDTexts.get(10).setText(
-					ConstantBuildings.DESCRIPTIONMINEDEPOSITCLAY);
-			buildingHUDTexts.get(12).setText(building);
-			if (controller.HouseLevel < ConstantBuildings.HOUSEREQMINEDEPOSITCLAY) {
-				canBuild = false;
-				buildingHUDTexts.get(0).setColor(1, 0, 0);
-			}
-			if (controller.workers + ConstantBuildings.WORKERSMINEDEPOSITCLAY > controller
-					.getMaxWorkers()) {
-				canBuild = false;
-				buildingHUDTexts.get(1).setColor(1, 0, 0);
-			}
-			if (controller.getGold()  < ConstantBuildings.COSTCLAYMINECOIN) {
-				canBuild = false;
-				buildingHUDTexts.get(2).setColor(1, 0, 0);
-			}
-			if (controller.Marble < ConstantBuildings.COSTCLAYMINEMARBLE) {
-				canBuild = false;
-				buildingHUDTexts.get(3).setColor(1, 0, 0);
-			}
-			if (controller.Wood < ConstantBuildings.COSTCLAYMINEWOOD) {
-				canBuild = false;
-				buildingHUDTexts.get(4).setColor(1, 0, 0);
-			}
-			if (!canBuild) {
-				buildingHUDTexts.get(11).setText(
-						"You do not fulfill the requirments to construct \na "
-								+ building);
-				buildingHUDTexts.get(11).setColor(1.0f, 0f, 0f);
-
-			}
-		}
-
-		if (building == "Bronze Mine") {
-			canBuild = true;
-			buildingHUDTexts.get(0).setText(
-					"House Level: "
-							+ ConstantBuildings.HOUSEREQMINEDEPOSITBRONZE);
-			buildingHUDTexts.get(1).setText(
-					"Workers needed: "
-							+ ConstantBuildings.WORKERSMINEDEPOSITBRONZE);
-			buildingHUDTexts.get(2).setText(
-					"Cost coins: " + ConstantBuildings.COSTBRONZEMINECOIN);
-			buildingHUDTexts.get(10).setText(
-					ConstantBuildings.DESCRIPTIONMINEDEPOSITBRONZE);
-			buildingHUDTexts.get(12).setText(building);
-			if (controller.HouseLevel < ConstantBuildings.HOUSEREQMINEDEPOSITBRONZE) {
-				canBuild = false;
-				buildingHUDTexts.get(0).setColor(1, 0, 0);
-			}
-			if (controller.workers + ConstantBuildings.WORKERSMINEDEPOSITBRONZE > controller
-					.getMaxWorkers()) {
-				canBuild = false;
-				buildingHUDTexts.get(1).setColor(1, 0, 0);
-			}
-			if (controller.getGold()  < ConstantBuildings.COSTBRONZEMINECOIN) {
-				canBuild = false;
-				buildingHUDTexts.get(2).setColor(1, 0, 0);
-			}
-			if (controller.Marble < ConstantBuildings.COSTBRONZEMINEMARBLE) {
-				canBuild = false;
-				buildingHUDTexts.get(3).setColor(1, 0, 0);
-			}
-			if (controller.Brick < ConstantBuildings.COSTBRONZEMINEBRICK) {
-				canBuild = false;
-				buildingHUDTexts.get(4).setColor(1, 0, 0);
-			}
-			if (!canBuild) {
-				buildingHUDTexts.get(11).setText(
-						"You do not fulfill the requirments to construct \na "
-								+ building);
-				buildingHUDTexts.get(11).setColor(1.0f, 0f, 0f);
-
-			}
-		}
-		if (building == "Road") {
-			canBuild = true;
-			buildingHUDTexts.get(0).setText(
-					"Cost coins: " + ConstantBuildings.COSTROADCOIN);
-			buildingHUDTexts.get(12).setText(building);
-			buildingHUDTexts.get(10).setText(ConstantBuildings.DESCRIPTIONROAD);
-			if (controller.getGold() < ConstantBuildings.COSTROADCOIN)
-				buildingHUDTexts.get(0).setColor(1, 0, 0);
-			if (controller.getGold() < ConstantBuildings.COSTROADCOIN) {
-				canBuild = false;
-				buildingHUDTexts.get(11).setText(
-						"You do not fulfill the requirments to construct \na "
-								+ building);
-				buildingHUDTexts.get(11).setColor(1.0f, 0f, 0f);
-
-			}
-		}
-
-		if (building == "Silo") {
-			canBuild = true;
-			buildingHUDTexts.get(0).setText(
-					"House Level: " + ConstantBuildings.HOUSEREQSILO);
-			buildingHUDTexts.get(1).setText(
-					"Workers needed:  " + ConstantBuildings.WORKERSSILO);
-			buildingHUDTexts.get(10).setText(ConstantBuildings.DESCRIPTIONSILO);
-			buildingHUDTexts.get(12).setText(building);
-			if (controller.HouseLevel < ConstantBuildings.HOUSEREQSILO) {
-				canBuild = false;
-				buildingHUDTexts.get(0).setColor(1, 0, 0);
-			}
-			if (controller.workers + ConstantBuildings.WORKERSSILO > controller
-					.getMaxWorkers()) {
-				canBuild = false;
-				buildingHUDTexts.get(1).setColor(1, 0, 0);
-			}
-			if (controller.getGold()  < ConstantBuildings.COSTSILO) {
-				canBuild = false;
-				buildingHUDTexts.get(2).setColor(1, 0, 0);
-			}
-			if (!canBuild) {
-				buildingHUDTexts.get(11).setText(
-						"You do not fulfill the requirments to construct \na "
-								+ building);
-				buildingHUDTexts.get(11).setColor(1.0f, 0f, 0f);
-
-			}
-		}
-		if (building == "Skinner") {
-			canBuild = true;
-			buildingHUDTexts.get(0).setText(
-					"House Level: " + ConstantBuildings.HOUSEREQSKINNER);
-			buildingHUDTexts.get(1).setText(
-					"Workers needed: " + ConstantBuildings.WORKERSSKINNER);
-			buildingHUDTexts.get(2).setText(
-					"Cost coins: " + ConstantBuildings.COSTSKINNERCOIN);
-			buildingHUDTexts.get(3).setText(
-					"Cost wood " + ConstantBuildings.COSTSKINNERWOOD);
-			buildingHUDTexts.get(10).setText(
-					ConstantBuildings.DESCRIPTIONSKINNER);
-			buildingHUDTexts.get(12).setText(building);
-			if (controller.HouseLevel < ConstantBuildings.HOUSEREQSKINNER) {
-				buildingHUDTexts.get(0).setColor(1, 0, 0);
-				canBuild = false;
-			}
-			if (controller.workers + ConstantBuildings.WORKERSSKINNER > controller
-					.getMaxWorkers()) {
-				canBuild = false;
-				buildingHUDTexts.get(1).setColor(1, 0, 0);
-			}
-			if (controller.getGold() < ConstantBuildings.COSTSKINNERCOIN) {
-				canBuild = false;
-				buildingHUDTexts.get(2).setColor(1, 0, 0);
-			}
-			if (controller.Wood < ConstantBuildings.COSTSKINNERWOOD) {
-				canBuild = false;
-				buildingHUDTexts.get(3).setColor(1, 0, 0);
-			}
-			if (!canBuild) {
-				buildingHUDTexts.get(11).setText(
-						"You do not fulfill the requirments to construct \na "
-								+ building);
-				buildingHUDTexts.get(11).setColor(1.0f, 0f, 0f);
-
-			}
-		}
-		if (building == "Stock") {
-			canBuild = true;
-			buildingHUDTexts.get(0).setText(
-					"House Level: " + ConstantBuildings.HOUSEREQSTOCK);
-			buildingHUDTexts.get(1).setText(
-					"Workers needed: " + ConstantBuildings.WORKERSSTOCK);
-			buildingHUDTexts.get(2).setText(
-					"Cost coins: " + ConstantBuildings.COSTSTOCKCOIN);
-			buildingHUDTexts.get(10)
-					.setText(ConstantBuildings.DESCRIPTIONSTOCK);
-			buildingHUDTexts.get(12).setText(building);
-			if (controller.HouseLevel < ConstantBuildings.HOUSEREQSTOCK) {
-				canBuild = false;
-				buildingHUDTexts.get(0).setColor(1, 0, 0);
-			}
-			if (controller.workers + ConstantBuildings.WORKERSSTOCK > controller
-					.getMaxWorkers()) {
-				canBuild = false;
-				buildingHUDTexts.get(1).setColor(1, 0, 0);
-			}
-			if (controller.getGold()  < ConstantBuildings.COSTSTOCKCOIN) {
-				canBuild = false;
-				buildingHUDTexts.get(2).setColor(1, 0, 0);
-			}
-			if (!canBuild) {
-				buildingHUDTexts.get(11).setText(
-						"You do not fulfill the requirments to construct \na "
-								+ building);
-				buildingHUDTexts.get(11).setColor(1.0f, 0f, 0f);
-
-			}
-		}
-		if (building == "Stone Cutter") {
-			canBuild = true;
-			buildingHUDTexts.get(0).setText(
-					"House Level: " + ConstantBuildings.HOUSEREQSTONECUTTER);
-			buildingHUDTexts.get(1).setText(
-					"Workers needed: " + ConstantBuildings.WORKERSSTONECUTTER);
-			buildingHUDTexts.get(2).setText(
-					"Cost coins: " + ConstantBuildings.COSTSTONECUTTERCOIN);
-			buildingHUDTexts.get(10).setText(
-					ConstantBuildings.DESCRIPTIONSTONECUTTER);
-			buildingHUDTexts.get(12).setText(building);
-			if (controller.HouseLevel < ConstantBuildings.HOUSEREQSTONECUTTER) {
-				canBuild = false;
-				buildingHUDTexts.get(0).setColor(1, 0, 0);
-			}
-			if (controller.workers + ConstantBuildings.WORKERSSTONECUTTER > controller
-					.getMaxWorkers()) {
-				canBuild = false;
-				buildingHUDTexts.get(1).setColor(1, 0, 0);
-			}
-			if (controller.getGold()  < ConstantBuildings.COSTSTONECUTTERCOIN) {
-				canBuild = false;
-				buildingHUDTexts.get(2).setColor(1, 0, 0);
-			}
-			if (!canBuild) {
-				buildingHUDTexts.get(11).setText(
-						"You do not fulfill the requirments to construct \na "
-								+ building);
-				buildingHUDTexts.get(11).setColor(1.0f, 0f, 0f);
-
-			}
-		}
-		if (building == "Theatre") {
-			canBuild = true;
-			buildingHUDTexts.get(0).setText(
-					"House Level: " + ConstantBuildings.HOUSEREQTHEATRE);
-			buildingHUDTexts.get(1).setText(
-					"Workers needed: " + ConstantBuildings.WORKERSTHEATRE);
-			buildingHUDTexts.get(2).setText(
-					"Cost coins: " + ConstantBuildings.COSTTHEATRECOIN);
-			buildingHUDTexts.get(3).setText(
-					"Cost marble " + ConstantBuildings.COSTTHEATREMARBLE);
-			buildingHUDTexts.get(10).setText(
-					ConstantBuildings.DESCRIPTIONTHEATRE);
-			buildingHUDTexts.get(12).setText(building);
-			if (controller.HouseLevel < ConstantBuildings.HOUSEREQTHEATRE) {
-				canBuild = false;
-				buildingHUDTexts.get(0).setColor(1, 0, 0);
-			}
-			if (controller.workers + ConstantBuildings.WORKERSTHEATRE > controller
-					.getMaxWorkers())
-				buildingHUDTexts.get(1).setColor(1, 0, 0);
-			if (controller.getGold()  < ConstantBuildings.COSTTHEATRECOIN) {
-				canBuild = false;
-				buildingHUDTexts.get(2).setColor(1, 0, 0);
-			}
-			if (controller.Marble < ConstantBuildings.COSTTHEATREMARBLE) {
-				canBuild = false;
-				buildingHUDTexts.get(3).setColor(1, 0, 0);
-			}
-			if (!canBuild) {
-				buildingHUDTexts.get(11).setText(
-						"You do not fulfill the requirments to construct \na "
-								+ building);
-				buildingHUDTexts.get(11).setColor(1.0f, 0f, 0f);
-
-			}
-		}
-		if (building == "Wood Cutter") {
-			canBuild = true;
-			buildingHUDTexts.get(0).setText(
-					"House Level: " + ConstantBuildings.HOUSEREQWOODCUTTER);
-			buildingHUDTexts.get(1).setText(
-					"Workers needed: " + ConstantBuildings.WORKERSWOODCUTTER);
-			buildingHUDTexts.get(2).setText(
-					"Cost coins: " + ConstantBuildings.COSTWOODCUTTERCOIN);
-			buildingHUDTexts.get(10).setText(
-					ConstantBuildings.DESCRIPTIONWOODCUTTER);
-			buildingHUDTexts.get(12).setText(building);
-			if (controller.HouseLevel < ConstantBuildings.HOUSEREQWOODCUTTER) {
-				canBuild = false;
-				buildingHUDTexts.get(0).setColor(1, 0, 0);
-			}
-			if (controller.workers + ConstantBuildings.WORKERSWOODCUTTER > controller
-					.getMaxWorkers()) {
-				canBuild = false;
-				buildingHUDTexts.get(1).setColor(1, 0, 0);
-			}
-			if (controller.getGold()  < ConstantBuildings.COSTWOODCUTTERCOIN) {
-				canBuild = false;
-				buildingHUDTexts.get(2).setColor(1, 0, 0);
-			}
-			if (!canBuild) {
-				buildingHUDTexts.get(11).setText(
-						"You do not fulfill the requirments to construct \na "
-								+ building);
-				buildingHUDTexts.get(11).setColor(1.0f, 0f, 0f);
-
-			}
-		}
-		}
-		else{
+		} else {
 			buildingDescriptionHUD = new BuildingDescriptionHUD(0, 69,
 					images.getBuildingDescriptionHUDImage(),
-					this.getVertexBufferObjectManager(), this, "Empty","Quest");
+					this.getVertexBufferObjectManager(), this, "Empty", "Objectives");
+		}
+	}
+
+	// Create the building description
+	private void setBuildingHUDText(int[] text, String building,
+			String description) {
+		resetBuildingText();
+		for (int i = 0; i < text.length; i++)
+			if (text[0] != 0)
+				buildingHUDTexts.get(0).setText("House Level: " + text[0]);
+		if (text[1] != 0)
+			buildingHUDTexts.get(1).setText("Workers needed: " + text[1]);
+		if (text[2] != 0)
+			buildingHUDTexts.get(2).setText("Cost coins: " + text[2]);
+		if (text[3] != 0)
+			buildingHUDTexts.get(3).setText("Marble coins: " + text[3]);
+		if (text[4] != 0) {
+			if (text[4] >= 1000) {
+				buildingHUDTexts.get(4).setText(
+						"Wood cost monthly: " + (text[4] / 1000));
+
+			} else {
+				buildingHUDTexts.get(4).setText("Wood needed: " + text[4]);
+			}
+		}
+		if (text[5] != 0)
+			buildingHUDTexts.get(5).setText("Brick needed: " + text[5]);
+		buildingHUDTexts.get(10).setText(description);
+		buildingHUDTexts.get(12).setText(building);
+		if (controller.houseLevel < text[0]) {
+			canBuild = false;
+			buildingHUDTexts.get(0).setColor(1, 0, 0);
+		}
+		if (controller.workers + text[1] > controller.getMaxWorkers()) {
+			canBuild = false;
+			buildingHUDTexts.get(1).setColor(1, 0, 0);
+		}
+		if (controller.getGold() < text[2]) {
+			canBuild = false;
+			buildingHUDTexts.get(2).setColor(1, 0, 0);
+		}
+		if (text[3] >= 1000) {
+			if (controller.Marble < (text[3]) / 1000) {
+				canBuild = false;
+				buildingHUDTexts.get(3).setColor(1, 0, 0);
+			}
+		} else if (controller.Marble < text[3]) {
+			canBuild = false;
+			buildingHUDTexts.get(3).setColor(1, 0, 0);
+		}
+		if (text[4] >= 1000) {
+			Debug.e("WOOD COST MONTHLY: " + (text[4] / 1000));
+			if (controller.Wood < (text[4]) / 1000) {
+				canBuild = false;
+				buildingHUDTexts.get(4).setColor(1, 0, 0);
+			}
+		} else if (controller.Wood < text[4]) {
+			canBuild = false;
+			Debug.e("WOOD COST: " + text[4]);
+			buildingHUDTexts.get(4).setColor(1, 0, 0);
+		}
+		if (text[5] >= 1000) {
+			if (controller.Brick < (text[5]) / 1000) {
+				canBuild = false;
+				buildingHUDTexts.get(5).setColor(1, 0, 0);
+			}
+		} else if (controller.Brick < text[5]) {
+			canBuild = false;
+			buildingHUDTexts.get(5).setColor(1, 0, 0);
+		}
+
+		if (!canBuild) {
+			buildingHUDTexts.get(11).setText(
+					"You do not fulfill the requirments to construct \na "
+							+ building);
+			buildingHUDTexts.get(11).setColor(1.0f, 0f, 0f);
+
+		}
+		for (int i = 1; i < text.length; i++) {
+			if (buildingHUDTexts.get(i - 1).getText().equals("")) {
+				Debug.e("MOVE TEXT");
+				buildingHUDTexts.get(i)
+						.setY(buildingHUDTexts.get(i - 1).getY());
+			}
+		}
+	}
+
+	private void resetBuildingText() {
+		for (int i = 0; i < 10; i++) {
+			buildingHUDTexts.get(i).setY(buildingHUD.getY() + 64 + i * 24);
+			buildingHUDTexts.get(i).setText("");
 		}
 	}
 
@@ -2977,7 +2626,7 @@ public class MainActivity extends SimpleBaseGameActivity implements
 		if (cancelButton != null) {
 			cancelButton.Cancel();
 		}
-		
+
 		for (int i = 0; i < stockChoiceButtons.size(); i++) {
 			if (stockChoiceButtons.get(i) != null) {
 				removeEntity(stockChoiceButtons.get(i));
@@ -3053,8 +2702,7 @@ public class MainActivity extends SimpleBaseGameActivity implements
 	public static boolean menuIncomeOpen = false;
 
 	public void addStockchoices() {
-		StockChoiceButton temp = new StockChoiceButton(
-				buildingHUD.getX() + 32,
+		StockChoiceButton temp = new StockChoiceButton(buildingHUD.getX() + 32,
 				buildingHUD.getY() + 431
 						- images.getStockChoiceWoodImage().getHeight() * 2,
 				images.getStockChoiceMarbleImage(),
@@ -3115,6 +2763,15 @@ public class MainActivity extends SimpleBaseGameActivity implements
 		stockChoiceButtons.add(temp);
 		inGameHUD.attachChild(temp);
 		inGameHUD.registerTouchArea(temp);
+		temp = new StockChoiceButton(buildingHUD.getX() + 32
+				+ images.getStockChoiceBronzeImage().getWidth()*2,
+				buildingHUD.getY() + 431
+						- images.getStockChoiceBronzeImage().getHeight() * 2,
+				images.getStockChoiceBronzeImage(),
+				main.getVertexBufferObjectManager(), "Bronze");
+		stockChoiceButtons.add(temp);
+		inGameHUD.attachChild(temp);
+		inGameHUD.registerTouchArea(temp);
 	}
 
 	public void removeSpriteObject() {
@@ -3147,13 +2804,16 @@ public class MainActivity extends SimpleBaseGameActivity implements
 		cancelButton.Cancel();
 	}
 
-	
-
 	public void closeMenus() {
 		if (menuIncomeOpen)
 			inGameHUD.getIncomeButton().close();
-//		if (menuResourcesOpen)
-//			HUDResourceMenuButton.Cancel();
+		if (this.buildingDescriptionHUD != null)
+			this.buildingDescriptionHUD.remove();
+		if (this.inGameHUD.getHUDResources() != null
+				&& this.resourcesMenu!=null)
+			this.inGameHUD.getHUDResources().cancel();
+		// if (menuResourcesOpen)
+		// HUDResourceMenuButton.Cancel();
 	}
 
 	public void removeHudTouchAreas() {
@@ -3173,7 +2833,7 @@ public class MainActivity extends SimpleBaseGameActivity implements
 		}
 	}
 
-	public  void finishBuy() {
+	public void finishBuy() {
 		if (cancelButton != null) {
 			inGameHUD.unregisterTouchArea(cancelButton);
 			removeEntity(cancelButton);
@@ -3187,128 +2847,18 @@ public class MainActivity extends SimpleBaseGameActivity implements
 	}
 
 	public void RemoveResources(String kind, int ammount) {
-		for (int i = 0; i < getStocks().size(); i++) {
-			if (kind == "Marble") {
-				if (getStocks().get(i).Marble >= ammount) {
-					getStocks().get(i).Marble -= ammount;
-					getStocks().get(i).removeResource(kind, ammount);
-					controller.Marble -= ammount;
-					break;
-				}
-			}
-			if (kind == "Wood") {
-				if (getStocks().get(i).Wood >= ammount) {
-					getStocks().get(i).Wood -= ammount;
-					Debug.e("GOGOGO");
-					controller.Wood -= ammount;
-					getStocks().get(i).removeResource(kind, ammount);
-					break;
-				}
-			}
-			if (kind == "Brick") {
-				if (getStocks().get(i).Brick >= ammount) {
-					getStocks().get(i).Brick -= ammount;
-					getStocks().get(i).removeResource(kind, ammount);
-					controller.Brick -= ammount;
-					break;
-				}
-			}
-			if (kind == "Bronze") {
-				if (getStocks().get(i).Bronze >= ammount) {
-					getStocks().get(i).Bronze -= ammount;
-					getStocks().get(i).removeResource(kind, ammount);
-					controller.Bronze -= ammount;
-					break;
-				}
-			}
-
-			if (kind == "Skin") {
-				if (getStocks().get(i).Skin >= ammount) {
-					getStocks().get(i).Skin -= ammount;
-					getStocks().get(i).removeResource(kind, ammount);
-					controller.Skin -= ammount;
-					break;
-				}
-			}
-			if (kind == "Armor") {
-				if (getStocks().get(i).Armor >= ammount) {
-					getStocks().get(i).Armor -= ammount;
-					getStocks().get(i).removeResource(kind, ammount);
-					controller.Armor -= ammount;
-					break;
-				}
-			}
-			if (kind == "Clay") {
-				if (getStocks().get(i).Clay >= ammount) {
-					getStocks().get(i).Clay -= ammount;
-					getStocks().get(i).removeResource(kind, ammount);
-					controller.Clay -= ammount;
-					break;
-				}
-			}
-
-		}
+		controller.removeResources(kind, ammount);
+//		
 	}
 
 	/**
 	 * Rearrange all sprites
 	 */
-	public void updateScreen(){
-		controller.updateScreen(sObjects,asObjects,this.getScene());
+	public void updateScreen() {
+		controller.updateScreen(sObjects, asObjects, this.getScene());
 	}
-	
-	public void RemoveResources(String kind, int ammount, Stock stock) {
-		if (kind == "Marble") {
-			if (stock.Marble >= ammount) {
-				stock.Marble -= ammount;
-				stock.removeResource(kind, ammount);
-				controller.Marble -= ammount;
-			}
-		}
-		if (kind == "Wood") {
-			if (stock.Wood >= ammount) {
-				stock.Wood -= ammount;
-				controller.Wood -= ammount;
-				stock.removeResource(kind, ammount);
-			}
-		}
-		if (kind == "Brick") {
-			if (stock.Brick >= ammount) {
-				stock.Brick -= ammount;
-				stock.removeResource(kind, ammount);
-				controller.Brick -= ammount;
-			}
-		}
-		if (kind == "Bronze") {
-			if (stock.Bronze >= ammount) {
-				stock.Bronze -= ammount;
-				stock.removeResource(kind, ammount);
-				controller.Bronze -= ammount;
-			}
-		}
 
-		if (kind == "Skin") {
-			if (stock.Skin >= ammount) {
-				stock.Skin -= ammount;
-				stock.removeResource(kind, ammount);
-				controller.Skin -= ammount;
-			}
-		}
-		if (kind == "Armor") {
-			if (stock.Armor >= ammount) {
-				stock.Armor -= ammount;
-				stock.removeResource(kind, ammount);
-				controller.Armor -= ammount;
-			}
-		}
-		if (kind == "Clay") {
-			if (stock.Clay >= ammount) {
-				stock.Clay -= ammount;
-				stock.removeResource(kind, ammount);
-				controller.Clay -= ammount;
-			}
-		}
-	}
+
 
 	/**
 	 * Create the HUD for our building description
@@ -3363,12 +2913,11 @@ public class MainActivity extends SimpleBaseGameActivity implements
 		return mainMenuPlayButton;
 	}
 
-	public void setMainMenuPlayButton(
-			MainMenuPlayButton mainMenuPlayButton) {
+	public void setMainMenuPlayButton(MainMenuPlayButton mainMenuPlayButton) {
 		this.mainMenuPlayButton = mainMenuPlayButton;
 	}
 
-	public  MainMenuLoadButton getMainMenuLoadButton() {
+	public MainMenuLoadButton getMainMenuLoadButton() {
 		return mainMenuLoadButton;
 	}
 
@@ -3508,17 +3057,20 @@ public class MainActivity extends SimpleBaseGameActivity implements
 		this.mineDepositClays = mineDepositClays;
 	}
 
-	public ArrayList<MineDepositBronze> getMineDepositBronzes() {
-		return mineDepositBronzes;
+	public ArrayList<BronzeMine> getMineDepositBronzes() {
+		return bronzeMines;
 	}
 
-	public void setMineDepositBronzes(
-			ArrayList<MineDepositBronze> mineDepositBronzes) {
-		this.mineDepositBronzes = mineDepositBronzes;
+	public void setBronzeMines(
+			ArrayList<BronzeMine> mineDepositBronzes) {
+		this.bronzeMines = mineDepositBronzes;
 	}
 
 	public ArrayList<BrickFoundry> getBrickFoundrys() {
 		return brickFoundrys;
+	}
+	public ArrayList<Armory> getArmories() {
+		return armories;
 	}
 
 	public void setBrickFoundrys(ArrayList<BrickFoundry> brickFoundrys) {
@@ -3689,7 +3241,7 @@ public class MainActivity extends SimpleBaseGameActivity implements
 		return this.HUDWorkers;
 	}
 
-	public MenuQuestButton getMenuQuestButton() {
+	public MenuObjectivesButton getMenuObjectivesButton() {
 		return inGameHUD.getHudObjectivesButton();
 	}
 
@@ -3725,5 +3277,105 @@ public class MainActivity extends SimpleBaseGameActivity implements
 		this.currentMenu = currentMenu;
 	}
 
-	
+	public ArrayList<BronzeMine> getBronzeMines() {
+		return bronzeMines;
+	}
+	 private TableLayout editText() {
+         
+         final EditText editText = new EditText(this);
+         editText.setSingleLine(true);
+         editText.setId(1);
+         editText.setHint(" ");
+         
+       
+         final TableLayout tableLayout = new TableLayout(this);
+         final Button btnCheat = new Button(this);
+         btnCheat.setText("Ok");
+         btnCheat.setOnClickListener(new View.OnClickListener() {
+             public void onClick(View v) {
+            	 Debug.e((String) btnCheat.getText());
+            	 checkCheat(editText.getText().toString());
+            	 tableLayout.removeAllViews();
+            	 ((ViewGroup)tableLayout.getParent()).removeView(tableLayout);
+            	 main.cheatLayout = null;
+             }
+         });
+         tableLayout.setVerticalGravity(Gravity.BOTTOM);
+         tableLayout.setLayoutParams(new FrameLayout.LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));
+         tableLayout.setHorizontalGravity(Gravity.CENTER_HORIZONTAL);
+         tableLayout.setPadding(100, 0, 100, 130);
+         tableLayout.addView(editText);
+         tableLayout.addView(btnCheat);
+         tableLayout.setBackgroundColor(Color.WHITE);
+
+         return tableLayout;
+     }
+
+	protected void checkCheat(String text) {
+		text = text.toLowerCase();
+		String split[] = text.split(",");
+		if(split[0].equals("gold")){
+			main.getController().setGold(Integer.parseInt(split[1]));
+		}
+		else if (split[0].equals("house")){
+			main.getController().setHouseLevel(Integer.parseInt(split[1]));
+		}
+		else if (split[0].equals("freestuff")){
+			main.getController().Armor = 1000;
+			main.getController().Brick = 1000;
+			main.getController().Bronze = 1000;
+			main.getController().Clay = 1000;
+			main.getController().Fish = 1000;
+			main.getController().Marble = 1000;
+			main.getController().Meat = 1000;
+			main.getController().Wood= 1000;
+			main.getController().Skin = 1000;
+			main.getController().Inhabitants[0] = 1000;
+			main.getController().workers = 1000;
+			main.getController().setHouseLevel(10);
+		}
+	}
+
+	public Sprite getResourceArmor() {
+		return resourceArmor;
+	}
+
+	public void setResourceArmor(Sprite resourceArmor) {
+		this.resourceArmor = resourceArmor;
+	}
+
+	public Text getResourceArmorText() {
+		return resourceArmorText;
+	}
+
+	public void createResourcesMenu() {
+		resourcesMenu = new ResourcesHUD(0, 69-images.getResourcesMenuImage().getHeight(), images.getResourcesMenuImage(),
+				this.getVertexBufferObjectManager(),this,0,69,false,false,false,Message.POPUPNORMAL) {
+			@Override
+			protected void preDraw(final GLState pGLState, final Camera pCamera) {
+				super.preDraw(pGLState, pCamera);
+				pGLState.enableDither();
+			}
+		};
+	}
+
+	public void removeResourcesMenu() {
+		if(main.resourcesMenu!=null){
+			resourcesMenu.remove();
+			resourcesMenu = null;
+		}
+	}
+
+	public void openIncomeMenu() {
+		if(resourcesMenu!=null){
+			resourcesMenu.remove();
+		}
+		resourcesMenu = new IncomeHUD(0, 69-images.getResourcesMenuImage().getHeight(), images.getIncomeHUDImage(),
+				this.getVertexBufferObjectManager(),this,0,69,false,false,false,Message.POPUPNORMAL) {
+			@Override
+			protected void preDraw(final GLState pGLState, final Camera pCamera) {
+				super.preDraw(pGLState, pCamera);
+				pGLState.enableDither();
+			}
+		};}
 }

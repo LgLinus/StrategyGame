@@ -65,7 +65,7 @@ public boolean gotprovider = false;
 	public void checkForStocks(){
 		if(this.gotprovider == true){
 		for(int i = 0;i<main.getStocks().size();i++){
-			if(main.calculateDistance(this, main.getStocks().get(i))<512){
+			if(main.getController().calculateDistance(this, main.getStocks().get(i))<512){
 
 				if(main.getStocks().get(i).checkSpace("Skin") ==true){
 					System.out.println("Got skin!!");
