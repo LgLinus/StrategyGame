@@ -9,6 +9,7 @@ import org.andengine.util.color.Color;
 import com.ligr.strategygame.MainActivity;
 import com.ligr.strategygame.PlaceBuilding;
 import com.ligr.strategygame.buildings.House;
+import com.ligr.strategygame.constants.ConstantBuildings;
 
 public class ArmoryButton extends Sprite {
 
@@ -33,7 +34,7 @@ public class ArmoryButton extends Sprite {
 		if(pSceneTouchEvent.isActionUp() && this.getAlpha()!=0){
 			
 			main.boolplacebuilding = true;
-			main.createBuildingHUD("Armory");
+			main.createBuildingHUD(ConstantBuildings.TITLEARMORY);
 			main.removeBuildingTouchAreas();
 			//main.MoreInfoText.setText("You can train soldiers in the barracks");
 			main.MoreInfoText.setColor(Color.BLACK);

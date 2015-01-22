@@ -9,6 +9,7 @@ import org.andengine.util.color.Color;
 import com.ligr.strategygame.MainActivity;
 import com.ligr.strategygame.PlaceBuilding;
 import com.ligr.strategygame.buildings.House;
+import com.ligr.strategygame.constants.ConstantBuildings;
 
 public class WoodCutterButton extends Sprite {
 
@@ -32,7 +33,7 @@ public class WoodCutterButton extends Sprite {
 		if(pSceneTouchEvent.isActionUp() && this.getAlpha()!=0){
 				
 			main.boolplacebuilding = true;
-			main.createBuildingHUD("Wood Cutter");
+			main.createBuildingHUD(ConstantBuildings.TITLEWOODCUTTER);
 			main.removeBuildingTouchAreas();
 			//main.MoreInfoText.setText("The wood cutter cuts wood for your city.\nmake sure you place it near trees and that it is connected to a Stock.");
 			main.MoreInfoText.setColor(Color.BLACK);

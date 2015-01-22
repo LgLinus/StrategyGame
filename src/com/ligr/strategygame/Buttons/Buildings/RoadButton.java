@@ -9,6 +9,7 @@ import org.andengine.util.color.Color;
 import com.ligr.strategygame.MainActivity;
 import com.ligr.strategygame.PlaceBuilding;
 import com.ligr.strategygame.buildings.House;
+import com.ligr.strategygame.constants.ConstantBuildings;
 
 public class RoadButton extends Sprite {
 
@@ -33,7 +34,7 @@ public class RoadButton extends Sprite {
 		if(pSceneTouchEvent.isActionUp() && this.getAlpha()!=0){
 			
 			main.boolplacebuilding = true;
-			main.createBuildingHUD("Road");
+			main.createBuildingHUD(ConstantBuildings.TITLEROAD);
 			main.removeBuildingTouchAreas();
 			//	main.MoreInfoText.setText("A road connects your city.");
 			main.MoreInfoText.setColor(Color.BLACK);

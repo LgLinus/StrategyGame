@@ -9,6 +9,8 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.color.Color;
 import org.andengine.util.debug.Debug;
 
+import other.GameMath;
+
 import com.ligr.strategygame.MainActivity;
 import com.ligr.strategygame.SpriteObject;
 import com.ligr.strategygame.constants.ConstantBuildings;
@@ -70,7 +72,7 @@ private boolean produced = false;
 	}
 	public void CheckForStocks(Armory brickFoundry){
 		for(int i = 0;i<main.getStocks().size();i++){
-			if(main.getController().calculateDistance(this, main.getStocks().get(i))<512){
+			if(GameMath.calculateRange(this, main.getStocks().get(i))<512){
 
 				if(main.getStocks().get(i).checkSpace("Armor") ==true){
 					main.getController().Armor +=1;
@@ -94,7 +96,7 @@ private boolean produced = false;
 		if (wood>0) {
 			if (!produced ) {
 				for (int i = 0; i < main.getStocks().size(); i++) {
-					if (main.getController().calculateDistance(this, main.getStocks().get(i)) < 512) {
+					if (GameMath.calculateRange(this, main.getStocks().get(i)) < 512) {
 
 						if (main.getStocks().get(i).Bronze >= 2) {
 							main.getController().removeResources("Bronze", 2, main.getStocks().get(i));
@@ -106,7 +108,7 @@ private boolean produced = false;
 				}
 			} else if (produced) {
 				for (int i = 0; i < main.getStocks().size(); i++) {
-					if (main.getController().calculateDistance(this, main.getStocks().get(i)) < 512) {
+					if (GameMath.calculateRange(this, main.getStocks().get(i)) < 512) {
 
 						if (main.getStocks().get(i).checkSpace("Armor") == true) {
 							main.getController().Armor += 1;

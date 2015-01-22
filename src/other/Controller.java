@@ -10,6 +10,7 @@ import org.andengine.entity.scene.background.Background;
 import org.andengine.entity.sprite.AnimatedSprite;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.entity.text.Text;
+import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.color.Color;
 import org.andengine.util.debug.Debug;
 
@@ -28,7 +29,7 @@ import com.ligr.strategygame.buildings.Butcher;
 import com.ligr.strategygame.buildings.Farm;
 import com.ligr.strategygame.buildings.FishingHut;
 import com.ligr.strategygame.buildings.FoodMarket;
-import com.ligr.strategygame.buildings.Fountain;
+import com.ligr.strategygame.buildings.Well;
 import com.ligr.strategygame.buildings.House;
 import com.ligr.strategygame.buildings.HuntersLodge;
 import com.ligr.strategygame.buildings.MineDepositClay;
@@ -50,9 +51,18 @@ import com.ligr.strategygame.constants.ResourceImage;
  * 
  */
 public class Controller {
+	private int state = 0; 
+	private enum eventsTutorial{
+		FIRST,
+		SECOND,
+		THIRD
+	}
 	MainActivity main;
 	String menu = null;
 	private ArrayList<CityIcon> cityIcons;
+	private ArrayList<EllipseCustom> ellipseCustoms;
+	
+	
 	TimerHandler TimerHandlerMonthly; // The timer that updates each month
 	private TimerHandler TimerHandlerPause;
 	private boolean pause = false;
@@ -98,6 +108,7 @@ public class Controller {
 		// Create our mission controll
 		mission = new Mission(this);
 		dataBase = new DataBase(main);
+		this.initializeArrayLists();
 	}
 
 	private void timerHandlerPause() {
@@ -248,7 +259,7 @@ public class Controller {
 		expenses += main.getFoodMarkets().size()
 				* ConstantBuildings.EXPENSESFOODMARKET;
 		expenses += main.getFountains().size()
-				* ConstantBuildings.EXPENSESFOUNTAIN;
+				* ConstantBuildings.EXPENSESWELL;
 		expenses += main.huntersLodges.size()
 				* ConstantBuildings.EXPENSESHUNTERSLODGE;
 		expenses += main.getMineDepositClays().size()
@@ -372,7 +383,7 @@ public class Controller {
 					main.getScene().registerTouchArea(foodmarket);
 
 				} else if (load.contains("Fountain")) {
-					Fountain fountain = new Fountain(x, y,
+					Well fountain = new Well(x, y,
 							images.getFountainImage(),
 							main.getVertexBufferObjectManager(), main, true);
 					main.getScene().attachChild(fountain);
@@ -755,6 +766,8 @@ public class Controller {
 		main.initializeArrayLists();
 	}
 
+
+	
 	/**
 	 * Leave the game
 	 */
@@ -1289,7 +1302,7 @@ public class Controller {
 	 * @param object1
 	 * @param object2
 	 * @return distance
-	 */
+	 *
 	public double calculateDistance(Entity object1, Entity object2) {
 
 		float length;
@@ -1299,7 +1312,7 @@ public class Controller {
 		double distance = Math.sqrt((length * length) + (height * height));
 
 		return distance;
-	}
+	}*/
 
 	public void calculateWinner(CityIcon target) {
 		int powerPlayer = 0, powerEnemy = 0;
@@ -1334,5 +1347,43 @@ public class Controller {
 							+ "\nIf you decide to attack their city they will respond and try to destroy your city.",
 					Color.WHITE);
 		}
+	}	
+	
+	private void initializeArrayLists(){
+		ellipseCustoms = new ArrayList<EllipseCustom>();
+	}
+
+	/**
+	 * Create and attach an ellipse
+	 * @param x
+	 * @param y
+	 * @param width
+	 * @param height
+	 * @param vertexBufferObjectManager
+	 * @param type
+	 */
+	public void addEllipseCustom(float x, float y, int width, int height,
+			VertexBufferObjectManager vertexBufferObjectManager, int type) {
+		EllipseCustom newEllipse = new EllipseCustom(x,y,width,height,vertexBufferObjectManager,type); 
+		ellipseCustoms.add(newEllipse);
+		//main.getScene().attachChild(newEllipse);
+		main.addEntityScene(newEllipse);
+		newEllipse.setColor(Color.BLACK);
+		Debug.e("WOWPOAWPEOAWPOEO");
+	}
+
+	/**
+	 * Remove all ellipses with the given type
+	 * @param type
+	 */
+	public void removeEllipseCustoms(int type) {
+		
+		for(int i = ellipseCustoms.size()-1;i>=0;i--){
+			if(ellipseCustoms.get(i).getID() == EllipseCustom.REMOVEBACK){
+				main.removeEntity(ellipseCustoms.get(i));
+				ellipseCustoms.remove(i);
+			}
+		}
+		
 	}
 }

@@ -1,6 +1,7 @@
 package com.ligr.strategygame;
 
 import org.andengine.entity.primitive.Polygon;
+import org.andengine.entity.shape.IShape;
 import org.andengine.entity.sprite.AnimatedSprite;
 import org.andengine.opengl.texture.region.ITiledTextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
@@ -29,10 +30,13 @@ public abstract  class AnimatedSpriteObject extends AnimatedSprite{
 		MainActivity.objectAmount++;	
 		z = this.getY();
 		main.updateScreen();
-		float[] vertice = {1,0};
-		polygon = new Polygon(this.mX, this.mY, vertice, vertice, this.getVertexBufferObjectManager());
+		float[] xVertice = {0,47,96,47};
+		float[] yVertice = {23,0,23,47};
+		polygon = new Polygon(this.mX, this.mY, xVertice, yVertice, this.getVertexBufferObjectManager());
+		polygon.setColor(0.5f, 1f, 0.3f);
+		MainActivity.mScene.attachChild(polygon);
+		}
 
-	}
 	/**
 	 * Detach the sprite and remove it from the animated sprite object arraylist
 	 */
@@ -76,7 +80,7 @@ public abstract  class AnimatedSpriteObject extends AnimatedSprite{
 	public void setID(int i) {
 		this.id = i;	
 	}
-	public Polygon getPolygon(){
+	public Polygon getBounds(){
 		return polygon;
 	}
 }

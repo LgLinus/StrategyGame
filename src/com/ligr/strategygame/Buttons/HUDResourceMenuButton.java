@@ -12,7 +12,7 @@ import org.andengine.util.debug.Debug;
 
 import com.ligr.strategygame.MainActivity;
 import com.ligr.strategygame.buildings.Farm;
-import com.ligr.strategygame.buildings.Fountain;
+import com.ligr.strategygame.buildings.Well;
 import com.ligr.strategygame.buildings.House;
 import com.ligr.strategygame.buildings.Road;
 import com.ligr.strategygame.buildings.Silo;

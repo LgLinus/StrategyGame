@@ -14,6 +14,7 @@ import com.ligr.strategygame.SpriteObject;
 import com.ligr.strategygame.constants.ConstantBuildings;
 
 import other.Cloud;
+import other.GameMath;
 
 /**
  * Brickfoundry is a building that can produce the resource bricks from clay
@@ -119,7 +120,7 @@ public class BrickFoundry extends SpriteObject {
 		if (gotWood) {
 			if (!produced) {
 				for (int i = 0; i < main.getStocks().size(); i++) {
-					if (main.getController().calculateDistance(this, main.getStocks().get(i)) < 512) {
+					if (GameMath.calculateRange(this, main.getStocks().get(i)) < 512) {
 
 						if (main.getStocks().get(i).Clay >= 2) {
 							main.getController().removeResources("Clay", 2, main.getStocks().get(i));
@@ -131,7 +132,7 @@ public class BrickFoundry extends SpriteObject {
 				}
 			} else if (produced) {
 				for (int i = 0; i < main.getStocks().size(); i++) {
-					if (main.getController().calculateDistance(this, main.getStocks().get(i)) < 512) {
+					if (GameMath.calculateRange(this, main.getStocks().get(i)) < 512) {
 
 						if (main.getStocks().get(i).checkSpace("Brick") == true) {
 							main.getController().Brick += 1;

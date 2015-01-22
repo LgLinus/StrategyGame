@@ -9,6 +9,7 @@ import org.andengine.util.color.Color;
 import com.ligr.strategygame.MainActivity;
 import com.ligr.strategygame.PlaceBuilding;
 import com.ligr.strategygame.buildings.House;
+import com.ligr.strategygame.constants.ConstantBuildings;
 
 public class FarmButton extends Sprite {
 
@@ -32,7 +33,7 @@ public class FarmButton extends Sprite {
 		
 		if(pSceneTouchEvent.isActionUp()){
 			main.boolplacebuilding = true;
-			main.createBuildingHUD("Farm");
+			main.createBuildingHUD(ConstantBuildings.TITLEFARM);
 			main.removeBuildingTouchAreas();
 			//main.MoreInfoText.setText("The farm provides your city with food");
 			main.MoreInfoText.setColor(Color.BLACK);

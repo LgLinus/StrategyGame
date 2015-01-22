@@ -9,6 +9,7 @@ import org.andengine.util.color.Color;
 import com.ligr.strategygame.MainActivity;
 import com.ligr.strategygame.PlaceBuilding;
 import com.ligr.strategygame.buildings.House;
+import com.ligr.strategygame.constants.ConstantBuildings;
 
 public class FoodMarketButton extends Sprite {
 
@@ -33,7 +34,7 @@ public class FoodMarketButton extends Sprite {
 		if(pSceneTouchEvent.isActionUp()){
 			
 			main.boolplacebuilding = true;
-			main.createBuildingHUD("Food Market");
+			main.createBuildingHUD(ConstantBuildings.TITLEFOODMARKET);
 			main.removeBuildingTouchAreas();
 			//main.MoreInfoText.setText("A Food Market provides food to nearby inhabitants,\nif there is a nearby food source(Silo)");
 			main.MoreInfoText.setColor(Color.BLACK);

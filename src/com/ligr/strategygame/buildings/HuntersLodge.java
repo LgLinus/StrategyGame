@@ -9,6 +9,8 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.color.Color;
 import org.andengine.util.debug.Debug;
 
+import other.GameMath;
+
 import com.ligr.strategygame.MainActivity;
 import com.ligr.strategygame.SpriteObject;
 import com.ligr.strategygame.constants.ConstantBuildings;
@@ -78,7 +80,7 @@ public class HuntersLodge extends SpriteObject {
 	public void checkForStocks() {
 		if (this.providingskin == false) {
 			for (int i = 0; i < main.getButchers().size(); i++) {
-				if (main.getController().calculateDistance(this, main.getButchers().get(i)) < ConstantBuildings.RANGE
+				if (GameMath.calculateRange(this, main.getButchers().get(i),1,2) < ConstantBuildings.RANGE
 						&& main.getButchers().get(i).gotprovider == false) {
 					main.getButchers().get(i).gotprovider = true;
 					System.out.println("provide");

@@ -7,6 +7,8 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.color.Color;
 import org.andengine.util.debug.Debug;
 
+import other.GameMath;
+
 import com.ligr.strategygame.MainActivity;
 import com.ligr.strategygame.SpriteObject;
 import com.ligr.strategygame.constants.ConstantBuildings;
@@ -69,12 +71,12 @@ private String name() {
 	double temprange= ConstantBuildings.RANGE+1;
 	if(target==null){
 	for(int i = 0; i < main.ClayTiles.size();i++){
-		if(main.getController().calculateDistance(this, main.ClayTiles.get(i)) < ConstantBuildings.RANGE){
+		if(GameMath.calculateRange(this, main.ClayTiles.get(i)) < ConstantBuildings.RANGE){
 			clayInRange = true;
 			if(!main.ClayTiles.get(i).used){
-				if(temprange > main.getController().calculateDistance(this, main.ClayTiles.get(i))){
+				if(temprange > GameMath.calculateRange(this, main.ClayTiles.get(i))){
 					target = main.ClayTiles.get(i);
-					temprange = main.getController().calculateDistance(this, main.ClayTiles.get(i));}
+					temprange = GameMath.calculateRange(this, main.ClayTiles.get(i));}
 				
 			}
 			
@@ -86,12 +88,12 @@ private String name() {
 	}
 	else if(target.used==true){
 		for(int i = 0; i < main.ClayTiles.size();i++){
-			if(main.getController().calculateDistance(this, main.ClayTiles.get(i)) < ConstantBuildings.RANGE){
+			if(GameMath.calculateRange(this, main.ClayTiles.get(i)) < ConstantBuildings.RANGE){
 				clayInRange = true;
 				if(!main.ClayTiles.get(i).used){
-					if(temprange > main.getController().calculateDistance(this, main.ClayTiles.get(i))){
+					if(temprange > GameMath.calculateRange(this, main.ClayTiles.get(i))){
 						target = main.ClayTiles.get(i);
-						temprange = main.getController().calculateDistance(this, main.ClayTiles.get(i));}
+						temprange = GameMath.calculateRange(this, main.ClayTiles.get(i));}
 					
 				}
 				
@@ -107,7 +109,7 @@ private String name() {
 public void checkForStocks(){
 	if(this.clayMonth<4 && clayInRange){				
 	for(int i = 0;i<main.getStocks().size();i++){
-		if(main.getController().calculateDistance(this, main.getStocks().get(i))<ConstantBuildings.RANGE){				
+		if(GameMath.calculateRange(this, main.getStocks().get(i))<ConstantBuildings.RANGE){				
 			if(main.getStocks().get(i).checkSpace("Clay") ==true){
 
 				main.getController().Clay +=1;

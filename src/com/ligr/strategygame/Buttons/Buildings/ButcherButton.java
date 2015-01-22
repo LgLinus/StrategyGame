@@ -9,6 +9,7 @@ import org.andengine.util.color.Color;
 import com.ligr.strategygame.MainActivity;
 import com.ligr.strategygame.PlaceBuilding;
 import com.ligr.strategygame.buildings.House;
+import com.ligr.strategygame.constants.ConstantBuildings;
 
 public class ButcherButton extends Sprite {
 
@@ -32,7 +33,7 @@ public class ButcherButton extends Sprite {
 		if(pSceneTouchEvent.isActionUp() && this.getAlpha()!=0){
 				
 			main.boolplacebuilding = true;
-			main.createBuildingHUD("Butcher");
+			main.createBuildingHUD(ConstantBuildings.TITLEBUTCHER);
 			main.removeBuildingTouchAreas();
 			//main.MoreInfoText.setText("A butcher requires animals, in order to make meat. The butcher also transports hide to the skinner");
 			main.MoreInfoText.setColor(Color.BLACK);

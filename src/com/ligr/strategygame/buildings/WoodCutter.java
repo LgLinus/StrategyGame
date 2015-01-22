@@ -9,6 +9,8 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.color.Color;
 import org.andengine.util.debug.Debug;
 
+import other.GameMath;
+
 import com.ligr.strategygame.MainActivity;
 import com.ligr.strategygame.SpriteObject;
 import com.ligr.strategygame.constants.ConstantBuildings;
@@ -77,17 +79,17 @@ public class WoodCutter extends SpriteObject {
 		Debug.e("SAVE: " + name());
 	}
 
-	public boolean getNewMarble() {
-		double temprange = ConstantBuildings.RANGE + 1;
+	public boolean getNewWood() {
+		double temprange = ConstantBuildings.RANGEWOODCUTTER + 1;
 		if (target == null) {
 			for (int i = 0; i < main.getTrees().size(); i++) {
-				if (main.getController().calculateDistance(this, main.getTrees().get(i)) < ConstantBuildings.RANGE) {
+				if (GameMath.calculateRange(this, main.getTrees().get(i)) < ConstantBuildings.RANGEWOODCUTTER) {
 					woodInRange = true;
 					if (!main.getTrees().get(i).used) {
-						if (temprange > main.getController().calculateDistance(this, main
+						if (temprange > GameMath.calculateRange(this, main
 								.getTrees().get(i))) {
 							target = main.getTrees().get(i);
-							temprange = main.getController().calculateDistance(this, main
+							temprange = GameMath.calculateRange(this, main
 									.getTrees().get(i));
 						}
 
@@ -100,13 +102,13 @@ public class WoodCutter extends SpriteObject {
 			return true;
 		} else if (target.used == true) {
 			for (int i = 0; i < main.getTrees().size(); i++) {
-				if (main.getController().calculateDistance(this, main.getTrees().get(i)) < ConstantBuildings.RANGE) {
+				if (GameMath.calculateRange(this, main.getTrees().get(i)) < ConstantBuildings.RANGEWOODCUTTER) {
 					woodInRange = true;
 					if (!main.getTrees().get(i).used) {
-						if (temprange > main.getController().calculateDistance(this, main
+						if (temprange > GameMath.calculateRange(this, main
 								.getTrees().get(i))) {
 							target = main.getTrees().get(i);
-							temprange = main.getController().calculateDistance(this, main
+							temprange = GameMath.calculateRange(this, main
 									.getTrees().get(i));
 						}
 
@@ -128,7 +130,7 @@ public class WoodCutter extends SpriteObject {
 	public void checkForStocks() {
 		if (this.woodMonth < 4 && woodInRange) {
 			for (int i = 0; i < main.getStocks().size(); i++) {
-				if (main.getController().calculateDistance(this, main.getStocks().get(i)) < ConstantBuildings.RANGE) {
+				if (GameMath.calculateRange(this, main.getStocks().get(i)) < ConstantBuildings.RANGEWOODCUTTER) {
 					if (main.getStocks().get(i).checkSpace("Wood") == true) {
 
 						main.getController().Wood += 1;
@@ -139,7 +141,7 @@ public class WoodCutter extends SpriteObject {
 			}
 
 		} else {
-			getNewMarble();
+			getNewWood();
 			this.woodMonth = 0;
 		}
 	}	public float getZ(){

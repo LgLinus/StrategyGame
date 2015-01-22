@@ -9,6 +9,7 @@ import org.andengine.util.color.Color;
 import com.ligr.strategygame.MainActivity;
 import com.ligr.strategygame.PlaceBuilding;
 import com.ligr.strategygame.buildings.House;
+import com.ligr.strategygame.constants.ConstantBuildings;
 
 public class HuntersLodgeButton extends Sprite {
 
@@ -33,7 +34,7 @@ public class HuntersLodgeButton extends Sprite {
 		if(pSceneTouchEvent.isActionUp() && this.getAlpha()!=0){
 				
 			main.boolplacebuilding = true;
-			main.createBuildingHUD("Hunters Lodge");
+			main.createBuildingHUD(ConstantBuildings.TITLEHUNTERSLODGE);
 			main.removeBuildingTouchAreas();
 			//	main.MoreInfoText.setText("A hunters lodge collect animals, delivering them to either the butcher. ");
 			main.MoreInfoText.setColor(Color.BLACK);

@@ -7,6 +7,8 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.color.Color;
 import org.andengine.util.debug.Debug;
 
+import other.GameMath;
+
 import com.ligr.strategygame.MainActivity;
 import com.ligr.strategygame.SpriteObject;
 import com.ligr.strategygame.constants.ConstantBuildings;
@@ -64,7 +66,7 @@ public boolean gotprovider = false;
 	public void checkForStocks(){
 		if(this.gotprovider == true){
 		for(int i = 0;i<main.getStocks().size();i++){
-			if(main.getController().calculateDistance(this, main.getStocks().get(i))<ConstantBuildings.RANGE){
+			if(GameMath.calculateRange(this, main.getStocks().get(i))<ConstantBuildings.RANGE){
 
 				if(main.getStocks().get(i).checkSpace("Meat") ==true){
 					main.getController().Meat+=1;
@@ -72,7 +74,7 @@ public boolean gotprovider = false;
 				}
 			}
 				for(int j = 0;j<main.getSkinners().size();j++){
-					if(main.getController().calculateDistance(this, main.getSkinners().get(j))<512 && main.getSkinners().get(j).gotprovider == false){
+					if(GameMath.calculateRange(this, main.getSkinners().get(j))<512 && main.getSkinners().get(j).gotprovider == false){
 						main.getSkinners().get(j).gotprovider = true;
 						Debug.e("Provide");
 							break;

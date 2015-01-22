@@ -9,6 +9,7 @@ import org.andengine.util.color.Color;
 import com.ligr.strategygame.MainActivity;
 import com.ligr.strategygame.PlaceBuilding;
 import com.ligr.strategygame.buildings.House;
+import com.ligr.strategygame.constants.ConstantBuildings;
 
 public class SiloButton extends Sprite {
 
@@ -34,7 +35,7 @@ public class SiloButton extends Sprite {
 				
 			main.boolplacebuilding = true;
 			main.removeBuildings = false;
-			main.createBuildingHUD("Silo");
+			main.createBuildingHUD(ConstantBuildings.TITLESILO);
 			main.removeBuildingTouchAreas();
 			//	main.MoreInfoText.setText("The silo stores the wheat from your farms");
 			//main.MoreInfoText.setColor(Color.BLACK);

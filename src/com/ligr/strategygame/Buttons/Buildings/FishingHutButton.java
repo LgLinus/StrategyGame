@@ -9,6 +9,7 @@ import org.andengine.util.color.Color;
 import com.ligr.strategygame.MainActivity;
 import com.ligr.strategygame.PlaceBuilding;
 import com.ligr.strategygame.buildings.House;
+import com.ligr.strategygame.constants.ConstantBuildings;
 
 public class FishingHutButton extends Sprite {
 
@@ -33,7 +34,7 @@ public class FishingHutButton extends Sprite {
 		if(pSceneTouchEvent.isActionUp()){
 			
 			main.boolplacebuilding = true;
-			main.createBuildingHUD("Fishing Hut");
+			main.createBuildingHUD(ConstantBuildings.TITLEFISHINGHUT);
 			main.removeBuildingTouchAreas();
 			//	main.MoreInfoText.setText("The fishing hut provides your city with another source of food");
 			main.MoreInfoText.setColor(Color.BLACK);

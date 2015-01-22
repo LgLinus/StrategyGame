@@ -7,6 +7,8 @@ import org.andengine.opengl.texture.region.ITiledTextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.debug.Debug;
 
+import other.GameMath;
+
 import com.ligr.strategygame.FishSpot;
 import com.ligr.strategygame.MainActivity;
 
@@ -160,7 +162,7 @@ public void movementBoat(){
 		angle = Math.PI+((Math.PI*3)/4);
 	}
 	timer = 250;}
-	if(main.getController().calculateDistance(this, target)<48){
+	if(GameMath.calculateRange(this, target)<48){
 		checkCollision();
 	}
 	this.setY((float) (mY-(Math.sin(angle)*speed)));
@@ -195,7 +197,7 @@ private Sprite findSpot(){
 	int pos = -1;
 	for (int i =0; i<main.fishspots.size();i++){
 		if(main.fishspots.get(i).gotSpace())
-			if(main.getController().calculateDistance(this, main.fishspots.get(i))<distance){
+			if(GameMath.calculateRange(this, main.fishspots.get(i))<distance){
 					pos = i;}
 		
 	}

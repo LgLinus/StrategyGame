@@ -9,6 +9,7 @@ import org.andengine.util.color.Color;
 import com.ligr.strategygame.MainActivity;
 import com.ligr.strategygame.PlaceBuilding;
 import com.ligr.strategygame.buildings.House;
+import com.ligr.strategygame.constants.ConstantBuildings;
 
 public class StoneCutterButton extends Sprite {
 
@@ -33,7 +34,7 @@ public class StoneCutterButton extends Sprite {
 		if(pSceneTouchEvent.isActionUp() && this.getAlpha()!=0){
 				
 			main.boolplacebuilding = true;
-			main.createBuildingHUD("Stone Cutter");
+			main.createBuildingHUD(ConstantBuildings.TITLESTONECUTTER);
 			main.removeBuildingTouchAreas();
 			//	main.MoreInfoText.setText("A Stone Cutter delivers marble to a nearby Stock, \nif there is a marble deposit nearby. ");
 			main.MoreInfoText.setColor(Color.BLACK);

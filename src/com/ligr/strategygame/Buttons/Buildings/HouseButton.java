@@ -9,6 +9,7 @@ import org.andengine.util.color.Color;
 import com.ligr.strategygame.MainActivity;
 import com.ligr.strategygame.PlaceBuilding;
 import com.ligr.strategygame.buildings.House;
+import com.ligr.strategygame.constants.ConstantBuildings;
 
 public class HouseButton extends Sprite {
 
@@ -35,7 +36,7 @@ public class HouseButton extends Sprite {
 			main.boolplacebuilding = true;
 			main.removeBuildingTouchAreas();
 			//	main.MoreInfoText.setText("The houses are where your inhabitants live\nthey can be upgraded if certain conditions are met.");
-			main.createBuildingHUD("House");
+			main.createBuildingHUD(ConstantBuildings.TITLEHOUSE);
 			main.MoreInfoText.setColor(Color.BLACK);
 		}
 		return true;

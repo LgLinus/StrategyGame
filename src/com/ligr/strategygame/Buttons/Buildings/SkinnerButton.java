@@ -9,6 +9,7 @@ import org.andengine.util.color.Color;
 import com.ligr.strategygame.MainActivity;
 import com.ligr.strategygame.PlaceBuilding;
 import com.ligr.strategygame.buildings.House;
+import com.ligr.strategygame.constants.ConstantBuildings;
 
 public class SkinnerButton extends Sprite {
 
@@ -33,7 +34,7 @@ public class SkinnerButton extends Sprite {
 		if(pSceneTouchEvent.isActionUp() && this.getAlpha()!=0){
 				
 			main.boolplacebuilding = true;
-			main.createBuildingHUD("Skinner");
+			main.createBuildingHUD(ConstantBuildings.TITLESKINNER);
 			main.removeBuildingTouchAreas();
 			//	main.MoreInfoText.setText("The skinner skins the hide from animals");
 			main.MoreInfoText.setColor(Color.BLACK);

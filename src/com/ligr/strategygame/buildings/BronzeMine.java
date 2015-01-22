@@ -9,6 +9,8 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.color.Color;
 import org.andengine.util.debug.Debug;
 
+import other.GameMath;
+
 import com.ligr.strategygame.MainActivity;
 import com.ligr.strategygame.SpriteObject;
 import com.ligr.strategygame.constants.ConstantBuildings;
@@ -63,7 +65,7 @@ public int ammount=0,maxammount = 4;
 	}
 	public void checkForStocks(){
 		for(int i = 0;i<main.getStocks().size();i++){
-			if(main.getController().calculateDistance(this, main.getStocks().get(i))<512){
+			if(GameMath.calculateRange(this, main.getStocks().get(i))<512){
 
 				if(main.getStocks().get(i).checkSpace("Bronze") ==true){
 					main.getController().Bronze +=1;

@@ -9,6 +9,7 @@ import org.andengine.util.color.Color;
 import com.ligr.strategygame.MainActivity;
 import com.ligr.strategygame.PlaceBuilding;
 import com.ligr.strategygame.buildings.House;
+import com.ligr.strategygame.constants.ConstantBuildings;
 
 public class BrickFoundryButton extends Sprite {
 
@@ -32,7 +33,7 @@ public class BrickFoundryButton extends Sprite {
 		if(pSceneTouchEvent.isActionUp() && this.getAlpha()!=0){
 				
 			main.boolplacebuilding = true;
-			main.createBuildingHUD("Brick Foundry");
+			main.createBuildingHUD(ConstantBuildings.TITLEBRICKFOUNDRY);
 			main.removeBuildingTouchAreas();
 			//main.MoreInfoText.setText("A brick foundry building produces bricks out of clay");
 			main.MoreInfoText.setColor(Color.BLACK);

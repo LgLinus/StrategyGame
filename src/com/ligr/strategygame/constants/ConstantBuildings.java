@@ -11,7 +11,7 @@ public class ConstantBuildings {
 	public static final int WORKERSFARM = 11;
 	public static final int WORKERSFISHINGHUT = 12;
 	public static final int WORKERSFOODMARKET = 5;
-	public static final int WORKERSFOUNTAIN = 4;
+	public static final int WORKERSWELL = 4;
 	public static final int WORKERSHUNTERSLODGE = 12;
 	public static final int WORKERSBRONZEMINE = 0;
 	public static final int WORKERSCLAYMINE = 12;
@@ -27,7 +27,8 @@ public class ConstantBuildings {
 	 * Range for certain buildings
 	 */
 	
-	public static final int RANGESTONECUTTER = 256;
+	public static final int RANGESTONECUTTER = 384;
+	public static final int RANGEWOODCUTTER = 384;
 	/*
 	 * Expenses for each building
 	 */
@@ -39,7 +40,7 @@ public class ConstantBuildings {
 	public static final int EXPENSESFARM = 150;
 	public static final int EXPENSESFISHINGHUT= 350;
 	public static final int EXPENSESFOODMARKET = 100;
-	public static final int EXPENSESFOUNTAIN = 60;
+	public static final int EXPENSESWELL = 60;
 	public static final int EXPENSESHOUSE = 0;
 	public static final int EXPENSESHUNTERSLODGE = 250;
 	public static final int EXPENSESBRONZEMINE = 400;
@@ -63,7 +64,6 @@ public class ConstantBuildings {
 	public static final String DESCRIPTIONFARM = "The farm provides your city with food";
 	public static final String DESCRIPTIONFISHINGHUT = "The fishing hut provides your city with food";
 	public static final String DESCRIPTIONFOODMARKET = "The food market distibutes the city food";
-	public static final String DESCRIPTIONFOUNTAIN = "The fountain provides nearby houses with water";
 	public static final String DESCRIPTIONHOUSE = "People live in the houses. By meeting certain \nconditions you can upgrade the houses\nthis will increase your gold income and population";
 	public static final String DESCRIPTIONHUNTERSLODGE = "The hunters lodge hunts animals";
 	public static final String DESCRIPTIONBRONZEMINE = "The bronz emine collects bronze, which is used in armor and sculptures.";
@@ -74,7 +74,32 @@ public class ConstantBuildings {
 	public static final String DESCRIPTIONSTONECUTTER= "The stone cutter produces marble, \nbuild it close to a marble deposit";
 	public static final String DESCRIPTIONSTOCK= "The stock stores various resources like marble,\n wood and clay";
 	public static final String DESCRIPTIONTHEATRE= "The theatre spreads amusement in your city. Build \nit close to your houses to fill\ntheir cultural needs";
+	public static final String DESCRIPTIONWELL = "The well provides nearby houses with water";
 	public static final String DESCRIPTIONWOODCUTTER= "The wood cutter harvest trees,\n build it close to trees for maximum efficency";
+	
+	/* 
+	 * Title for the buildings
+	 */
+
+	public static final String TITLEARMORY = "Armory";
+	public static final String TITLEBARRACK = "Barrack";
+	public static final String TITLEBRICKFOUNDRY = "Brick Foundry";
+	public static final String TITLEBRONZEMINE = "Bronze Mine";
+	public static final String TITLEBUTCHER = "Butcher";
+	public static final String TITLEFARM = "Farm";
+	public static final String TITLEFISHINGHUT = "Fishing Hut";
+	public static final String TITLEFOODMARKET= "Food Market";
+	public static final String TITLEHOUSE = "House";
+	public static final String TITLEHUNTERSLODGE = "Hunters Lodge";
+	public static final String TITLEMINEDEPOSITCLAY = "Mine Deposit Clay";
+	public static final String TITLEROAD = "Road";
+	public static final String TITLESILO = "Silo";
+	public static final String TITLESKINNER = "Skinner";
+	public static final String TITLESTOCK = "Stock";
+	public static final String TITLESTONECUTTER= "Stone Cutter";
+	public static final String TITLETHEATRE = "Theatre";
+	public static final String TITLEWELL = "Well";
+	public static final String TITLEWOODCUTTER = "Wood Cutter";
 	
 	/*
 	 * Levels needed for various buildings
@@ -86,7 +111,7 @@ public class ConstantBuildings {
 	public static final int HOUSEREQFARM = 1;
 	public static final int HOUSEREQFISHINGHUT = 3;
 	public static final int HOUSEREQFOODMARKET = 1;
-	public static final int HOUSEREQFOUNTAIN = 1;
+	public static final int HOUSEREQWELL = 1;
 	public static final int HOUSEREQHUNTERSLODGE = 3;
 	public static final int HOUSEREQBRONZEMINE = 4;
 	public static final int HOUSEREQCLAYMINE = 4;
@@ -118,7 +143,7 @@ public class ConstantBuildings {
 	
 	public static final int COSTSTONECUTTERCOIN = 500;
 	
-	public static final int COSTFOUNTAINCOIN = 150;
+	public static final int COSTWELLCOIN = 150;
 	
 	public static final int COSTWOODCUTTERCOIN = 750;
 	

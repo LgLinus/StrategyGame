@@ -58,6 +58,7 @@ import org.andengine.ui.activity.SimpleBaseGameActivity;
 import org.andengine.util.debug.Debug;
 
 import other.Controller;
+import other.EllipseCustom;
 import scenery.MountainLevel;
 import shapes.RectangleModified;
 import text.HouseDescriptionText;
@@ -110,7 +111,7 @@ import com.ligr.strategygame.Buttons.Buildings.ClayMineButton;
 import com.ligr.strategygame.Buttons.Buildings.FarmButton;
 import com.ligr.strategygame.Buttons.Buildings.FishingHutButton;
 import com.ligr.strategygame.Buttons.Buildings.FoodMarketButton;
-import com.ligr.strategygame.Buttons.Buildings.FountainButton;
+import com.ligr.strategygame.Buttons.Buildings.WellButton;
 import com.ligr.strategygame.Buttons.Buildings.HouseButton;
 import com.ligr.strategygame.Buttons.Buildings.HuntersLodgeButton;
 import com.ligr.strategygame.Buttons.Buildings.RoadButton;
@@ -131,7 +132,7 @@ import com.ligr.strategygame.buildings.Butcher;
 import com.ligr.strategygame.buildings.Farm;
 import com.ligr.strategygame.buildings.FishingHut;
 import com.ligr.strategygame.buildings.FoodMarket;
-import com.ligr.strategygame.buildings.Fountain;
+import com.ligr.strategygame.buildings.Well;
 import com.ligr.strategygame.buildings.House;
 import com.ligr.strategygame.buildings.HuntersLodge;
 import com.ligr.strategygame.buildings.MineDepositClay;
@@ -278,10 +279,10 @@ public class MainActivity extends SimpleBaseGameActivity implements
 	public static SkinnerButton skinnerButton;
 	public static AnimatedSprite HUDWorkers;
 	public static MoveInSprite resourcesMenu;
-	public static FountainButton fountainButton;
+	public static WellButton fountainButton;
 	public static MenuObjectivesButton menuObjectivesButton;
 	public static FarmButton farmButton;
-	public static Fountain fountain;
+	public static Well fountain;
 	public static Farm farm;
 	public static SiloButton siloButton;
 	public static StoneCutterButton stoneCutterButton;
@@ -305,7 +306,7 @@ public class MainActivity extends SimpleBaseGameActivity implements
 	private ArrayList<PlaceBuilding> placeBuildings;
 	private ArrayList<Text> stockSpaceTexts;
 	private ArrayList<BronzeMine> bronzeMines;
-	private ArrayList<Fountain> fountains;
+	private ArrayList<Well> fountains;
 	private ArrayList<Farm> farms;
 	private ArrayList<Tree> trees;
 	private ArrayList<Theatre> theatres;
@@ -569,6 +570,9 @@ public class MainActivity extends SimpleBaseGameActivity implements
 		} else {
 			setCurrentMenu("");
 			removeBuildingHUD();
+			
+			getController().removeEllipseCustoms(EllipseCustom.REMOVEBACK);
+			
 			inGameHUD.gethudChatButton().closeChat();
 			if (messageCancelButton != null)
 				removeEntity(messageCancelButton);
@@ -814,11 +818,11 @@ public class MainActivity extends SimpleBaseGameActivity implements
 			mouseprevy = pSceneTouchEvent.getY();
 
 		}
-		// IF we are draggin the screen
+		// IF we are dragging the screen
 		if (pSceneTouchEvent.isActionMove()) {
-			if (PlaceBuilding.currentBuilding == "House"
-					|| PlaceBuilding.currentBuilding == "Silo"
-					|| PlaceBuilding.currentBuilding == "Stone Cutter") {
+			if (PlaceBuilding.currentBuilding == ConstantBuildings.TITLEHOUSE
+					|| PlaceBuilding.currentBuilding == ConstantBuildings.TITLESILO
+					|| PlaceBuilding.currentBuilding == ConstantBuildings.TITLESTONECUTTER) {
 				touchx = pSceneTouchEvent.getX() / GRIDSIZE;
 				touchx = Math.round(touchx);
 				touchx = touchx * GRIDSIZE;
@@ -835,7 +839,7 @@ public class MainActivity extends SimpleBaseGameActivity implements
 					else
 						touchx -= GRIDSIZE / 2;
 				}
-			} else if (PlaceBuilding.currentBuilding == "Road") {
+			} else if (PlaceBuilding.currentBuilding == ConstantBuildings.TITLEROAD) {
 				touchx = pSceneTouchEvent.getX() / GRIDSIZE * 2;
 				touchx = Math.round(touchx);
 				touchx = touchx * GRIDSIZE / 2;
@@ -873,26 +877,26 @@ public class MainActivity extends SimpleBaseGameActivity implements
 
 		}
 		if (boolplacebuilding && placeBuilding!=null) {
-			if (PlaceBuilding.currentBuilding == "House"
-					|| PlaceBuilding.currentBuilding == "Silo"
-					|| PlaceBuilding.currentBuilding == "Food Market"
-					|| PlaceBuilding.currentBuilding == "Theatre"
-					|| PlaceBuilding.currentBuilding == "Stone Cutter"
-					|| PlaceBuilding.currentBuilding == "Stock")
+			if (PlaceBuilding.currentBuilding == ConstantBuildings.TITLEHOUSE
+					|| PlaceBuilding.currentBuilding == ConstantBuildings.TITLESILO
+					|| PlaceBuilding.currentBuilding == ConstantBuildings.TITLEFOODMARKET
+					|| PlaceBuilding.currentBuilding == ConstantBuildings.TITLETHEATRE
+					|| PlaceBuilding.currentBuilding == ConstantBuildings.TITLESTONECUTTER
+					|| PlaceBuilding.currentBuilding == ConstantBuildings.TITLESTOCK)
 				placeBuilding.setPosition(touchx
 						- images.getHouseButtonImage().getWidth() / 2
 						+ placeBuildingJumpX,
 						(float) (touchy
 								- images.getHouseButtonImage().getHeight()
 								/ .75 + placeBuildingJumpY));
-			if (PlaceBuilding.currentBuilding == "Road")
+			if (PlaceBuilding.currentBuilding == ConstantBuildings.TITLEROAD)
 				placeBuilding.setPosition(touchx
 						- images.getRoadimage().getWidth() / 2
 						+ placeBuildingJumpX,
 						(float) (touchy - images.getRoadimage().getHeight()
 								/ .75 + placeBuildingJumpY));
 			placeBuilding.setAlpha((float) 0.6);
-			if (PlaceBuilding.currentBuilding == "Fountain")
+			if (PlaceBuilding.currentBuilding == ConstantBuildings.TITLEWELL)
 				placeBuilding
 						.setPosition(
 								touchx - images.getRoadimage().getWidth()
@@ -900,7 +904,7 @@ public class MainActivity extends SimpleBaseGameActivity implements
 								(float) (touchy
 										- images.getRoadimage().getHeight() + placeBuildingJumpY / .75));
 			placeBuilding.setAlpha((float) 0.6);
-			if (PlaceBuilding.currentBuilding == "Farm")
+			if (PlaceBuilding.currentBuilding == ConstantBuildings.TITLEFARM)
 				placeBuilding
 						.setPosition(
 								touchx - images.getFarmImage().getWidth()
@@ -918,7 +922,6 @@ public class MainActivity extends SimpleBaseGameActivity implements
 										- images.getHouseButtonImage()
 												.getHeight() + placeBuildingJumpY / .75));
 			}
-			placeBuilding.updatePolygon();
 		}
 		if (pSceneTouchEvent.isActionMove()) {
 			// If we are inside the game we should be able to move the view
@@ -961,6 +964,8 @@ public class MainActivity extends SimpleBaseGameActivity implements
 				camera.setCenter(getMouse().getX(), getMouse().getY());
 			}
 		}
+		if(placeBuilding!=null)
+		placeBuilding.updatePolygon();
 		return true;
 	}
 
@@ -1581,7 +1586,7 @@ public class MainActivity extends SimpleBaseGameActivity implements
 		placeBuildings = new ArrayList<PlaceBuilding>();
 		setHouses(new ArrayList<House>());
 		setRoads(new ArrayList<Road>());
-		setFountains(new ArrayList<Fountain>());
+		setFountains(new ArrayList<Well>());
 		setFarms(new ArrayList<Farm>());
 		setSilos(new ArrayList<Silo>());
 		setTrees(new ArrayList<Tree>());
@@ -1616,7 +1621,10 @@ public class MainActivity extends SimpleBaseGameActivity implements
 		setClayMines(new ArrayList<MineDepositClay>());
 		setBrickFoundrys(new ArrayList<BrickFoundry>());
 		stockChoiceButtons = new ArrayList<StockChoiceButton>();
+		
+		
 		chatHistoryTexts = new ArrayList<Text>();
+		
 		for (int i = 0; i < messageHistory.length; i++)
 			messageHistory[i] = "";
 	}
@@ -1781,7 +1789,7 @@ public class MainActivity extends SimpleBaseGameActivity implements
 		roadbutton = new RoadButton(CAMERA_WIDTH - 97 * 2, 67 * 4,
 				images.getRoadButtonImage(),
 				this.getVertexBufferObjectManager(), this);
-		fountainButton = new FountainButton(CAMERA_WIDTH - 97, 67 * 2,
+		fountainButton = new WellButton(CAMERA_WIDTH - 97, 67 * 2,
 				images.getFountainButtonImage(),
 				this.getVertexBufferObjectManager(), this);
 
@@ -2154,78 +2162,78 @@ public class MainActivity extends SimpleBaseGameActivity implements
 		placeBuildingJumpY = 0;
 		placeBuildingJumpX = 0;
 		currentBuilding = string;
-		if (currentBuilding == "Barrack")
+		if (currentBuilding == ConstantBuildings.TITLEBARRACK)
 			placeBuilding = new PlaceBuilding(touchx, touchy,
 					images.getBarrackImage(),
 					main.getVertexBufferObjectManager(), this);
-		else if (currentBuilding == "House")
+		else if (currentBuilding == ConstantBuildings.TITLEHOUSE)
 			placeBuilding = new PlaceBuilding(touchx, touchy,
 					images.getHouseImage(),
 					main.getVertexBufferObjectManager(), this);
-		else if (currentBuilding == "Farm")
+		else if (currentBuilding == ConstantBuildings.TITLEFARM)
 			placeBuilding = new PlaceBuilding(touchx, touchy,
 					images.getFarmImage(), main.getVertexBufferObjectManager(),
 					this);
-		else if (currentBuilding == "Food Market")
+		else if (currentBuilding == ConstantBuildings.TITLEFOODMARKET)
 			placeBuilding = new PlaceBuilding(touchx, touchy,
 					images.getFoodMarketImage(),
 					main.getVertexBufferObjectManager(), this);
-		else if (currentBuilding == "Fountain")
+		else if (currentBuilding == ConstantBuildings.TITLEWELL)
 			placeBuilding = new PlaceBuilding(touchx, touchy,
 					images.getFountainImage(),
 					main.getVertexBufferObjectManager(), this);
-		else if (currentBuilding == "Silo") {
+		else if (currentBuilding == ConstantBuildings.TITLESILO) {
 			placeBuilding = new PlaceBuilding(touchx, touchy,
 					images.getSiloImage(), main.getVertexBufferObjectManager(),
 					this);
 			placeBuildingJumpY = -11;
-		} else if (currentBuilding == "Skinner")
+		} else if (currentBuilding == ConstantBuildings.TITLESKINNER)
 			placeBuilding = new PlaceBuilding(touchx, touchy,
 					images.getSkinnerImage(),
 					main.getVertexBufferObjectManager(), this);
-		else if (currentBuilding == "Stock")
+		else if (currentBuilding == ConstantBuildings.TITLESTOCK)
 			placeBuilding = new PlaceBuilding(touchx, touchy,
 					images.getStockplaceImage(),
 					main.getVertexBufferObjectManager(), this);
-		else if (currentBuilding == "Road")
+		else if (currentBuilding == ConstantBuildings.TITLEROAD)
 			placeBuilding = new PlaceBuilding(touchx, touchy,
 					images.getRoadimage(), main.getVertexBufferObjectManager(),
 					this);
-		else if (currentBuilding == "Butcher")
+		else if (currentBuilding == ConstantBuildings.TITLEBUTCHER)
 			placeBuilding = new PlaceBuilding(touchx, touchy,
 					images.getButcherImage(),
 					main.getVertexBufferObjectManager(), this);
-		else if (currentBuilding == "Fishing Hut")
+		else if (currentBuilding == ConstantBuildings.TITLEFISHINGHUT)
 			placeBuilding = new PlaceBuilding(touchx, touchy,
 					images.getFishingHutImage(),
 					main.getVertexBufferObjectManager(), this);
-		else if (currentBuilding == "Stone Cutter")
+		else if (currentBuilding == ConstantBuildings.TITLESTONECUTTER)
 			placeBuilding = new PlaceBuilding(touchx, touchy,
 					images.getStoneCutterImage(),
 					main.getVertexBufferObjectManager(), this);
-		else if (currentBuilding == "Theatre") {
+		else if (currentBuilding == ConstantBuildings.TITLETHEATRE) {
 			placeBuilding = new PlaceBuilding(touchx, touchy,
 					images.getTheatreImage(),
 					main.getVertexBufferObjectManager(), this);
 			placeBuildingJumpX = 6;
 			placeBuildingJumpY = -59;
-		} else if (currentBuilding == "Hunters Lodge")
+		} else if (currentBuilding == ConstantBuildings.TITLEHUNTERSLODGE)
 			placeBuilding = new PlaceBuilding(touchx, touchy,
 					images.getHuntersLodgeImage(),
 					main.getVertexBufferObjectManager(), this);
-		else if (currentBuilding == "Brick Foundry")
+		else if (currentBuilding == ConstantBuildings.TITLEBRICKFOUNDRY)
 			placeBuilding = new PlaceBuilding(touchx, touchy,
 					images.getBrickFoundryImage(),
 					main.getVertexBufferObjectManager(), this);
-		else if (currentBuilding == "Clay Mine")
+		else if (currentBuilding == ConstantBuildings.TITLEMINEDEPOSITCLAY)
 			placeBuilding = new PlaceBuilding(touchx, touchy,
 					images.getClayMineImage(),
 					main.getVertexBufferObjectManager(), this);
-		else if (currentBuilding == "Bronze Mine")
+		else if (currentBuilding == ConstantBuildings.TITLEBRONZEMINE)
 			placeBuilding = new PlaceBuilding(touchx, touchy,
 					images.getBronzeMineImage(),
 					main.getVertexBufferObjectManager(), this);
-		else if (currentBuilding == "Armory")
+		else if (currentBuilding == ConstantBuildings.TITLEARMORY)
 			placeBuilding = new PlaceBuilding(touchx, touchy,
 					images.getArmoryImage(),
 					main.getVertexBufferObjectManager(), this);
@@ -2242,7 +2250,7 @@ public class MainActivity extends SimpleBaseGameActivity implements
 		placeBuildings = new ArrayList<PlaceBuilding>();
 		setHouses(new ArrayList<House>());
 		setRoads(new ArrayList<Road>());
-		setFountains(new ArrayList<Fountain>());
+		setFountains(new ArrayList<Well>());
 		setFarms(new ArrayList<Farm>());
 		setSilos(new ArrayList<Silo>());
 		setTrees(new ArrayList<Tree>());
@@ -2350,7 +2358,7 @@ public class MainActivity extends SimpleBaseGameActivity implements
 					gameFont, "", 200, main.getVertexBufferObjectManager());
 			buildingHUDTexts.add(tempText);
 			inGameHUD.attachChild(tempText);
-			if (building == "Barrack") {
+			if (building == ConstantBuildings.TITLEBARRACK) {
 				canBuild = true;
 				int[] text = { ConstantBuildings.HOUSEREQBARRACK,
 						ConstantBuildings.WORKERSBARRACK,
@@ -2361,7 +2369,7 @@ public class MainActivity extends SimpleBaseGameActivity implements
 				setBuildingHUDText(text, building,
 						ConstantBuildings.DESCRIPTIONBARRACK);
 
-			} else if (building == "Armory") {
+			} else if (building == ConstantBuildings.TITLEARMORY) {
 				canBuild = true;
 				int[] text = { ConstantBuildings.HOUSEREQARMORY,
 						ConstantBuildings.WORKERSARMORY,
@@ -2374,7 +2382,7 @@ public class MainActivity extends SimpleBaseGameActivity implements
 
 			}
 
-			else if (building == "Brick Foundry") {
+			else if (building == ConstantBuildings.TITLEBRICKFOUNDRY) {
 				canBuild = true;
 				int[] text = { ConstantBuildings.HOUSEREQBRICKFOUNDRY,
 						ConstantBuildings.WORKERSBRICKFOUNDRY,
@@ -2384,7 +2392,7 @@ public class MainActivity extends SimpleBaseGameActivity implements
 						0, 0, 0, 0, 0, 0, 0 };
 				setBuildingHUDText(text, building,
 						ConstantBuildings.DESCRIPTIONBRICKFOUNDRY);
-			} else if (building == "Butcher") {
+			} else if (building == ConstantBuildings.TITLEBUTCHER) {
 
 				canBuild = true;
 				int[] text = { ConstantBuildings.HOUSEREQBUTCHER,
@@ -2393,7 +2401,7 @@ public class MainActivity extends SimpleBaseGameActivity implements
 						ConstantBuildings.COSTBUTCHERWOOD, 0, 0, 0, 0, 0, 0, 0 };
 				setBuildingHUDText(text, building,
 						ConstantBuildings.DESCRIPTIONBRICKFOUNDRY);
-			} else if (building == "Farm") {
+			} else if (building == ConstantBuildings.TITLEFARM) {
 				canBuild = true;
 				int[] text = { ConstantBuildings.HOUSEREQFARM,
 						ConstantBuildings.WORKERSFARM,
@@ -2401,7 +2409,7 @@ public class MainActivity extends SimpleBaseGameActivity implements
 						0 };
 				setBuildingHUDText(text, building,
 						ConstantBuildings.DESCRIPTIONFARM);
-			} else if (building == "Fishing Hut") {
+			} else if (building == ConstantBuildings.TITLEFISHINGHUT) {
 				canBuild = true;
 				int[] text = { ConstantBuildings.HOUSEREQFISHINGHUT,
 						ConstantBuildings.WORKERSFISHINGHUT,
@@ -2410,7 +2418,7 @@ public class MainActivity extends SimpleBaseGameActivity implements
 						0 };
 				setBuildingHUDText(text, building,
 						ConstantBuildings.DESCRIPTIONFISHINGHUT);
-			} else if (building == "Food Market") {
+			} else if (building == ConstantBuildings.TITLEFOODMARKET) {
 				canBuild = true;
 				int[] text = { ConstantBuildings.HOUSEREQFOODMARKET,
 						ConstantBuildings.WORKERSFOODMARKET,
@@ -2418,22 +2426,22 @@ public class MainActivity extends SimpleBaseGameActivity implements
 						0, 0, 0 };
 				setBuildingHUDText(text, building,
 						ConstantBuildings.DESCRIPTIONFOODMARKET);
-			} else if (building == "Fountain") {
+			} else if (building == ConstantBuildings.TITLEWELL) {
 				canBuild = true;
-				int[] text = { ConstantBuildings.HOUSEREQFOUNTAIN,
-						ConstantBuildings.WORKERSFOUNTAIN,
-						ConstantBuildings.COSTFOUNTAINCOIN, 0, 0, 0, 0, 0, 0,
+				int[] text = { ConstantBuildings.HOUSEREQWELL,
+						ConstantBuildings.WORKERSWELL,
+						ConstantBuildings.COSTWELLCOIN, 0, 0, 0, 0, 0, 0,
 						0, 0, 0 };
 				setBuildingHUDText(text, building,
-						ConstantBuildings.DESCRIPTIONFOUNTAIN);
-			} else if (building == "House") {
+						ConstantBuildings.DESCRIPTIONWELL);
+			} else if (building == ConstantBuildings.TITLEHOUSE) {
 				canBuild = true;
 				int[] text = { 0, 0, ConstantBuildings.COSTHOUSECOIN, 0, 0, 0,
 						0, 0, 0, 0, 0, 0 };
 				setBuildingHUDText(text, building,
 						ConstantBuildings.DESCRIPTIONHOUSE);
 
-			} else if (building == "Hunters Lodge") {
+			} else if (building == ConstantBuildings.TITLEHUNTERSLODGE) {
 				canBuild = true;
 				int[] text = { ConstantBuildings.HOUSEREQHUNTERSLODGE,
 						ConstantBuildings.WORKERSHUNTERSLODGE,
@@ -2443,7 +2451,7 @@ public class MainActivity extends SimpleBaseGameActivity implements
 				setBuildingHUDText(text, building,
 						ConstantBuildings.DESCRIPTIONHUNTERSLODGE);
 
-			} else if (building == "Clay Mine") {
+			} else if (building == ConstantBuildings.TITLEMINEDEPOSITCLAY) {
 				canBuild = true;
 				int[] text = { ConstantBuildings.HOUSEREQCLAYMINE,
 						ConstantBuildings.WORKERSCLAYMINE,
@@ -2455,7 +2463,7 @@ public class MainActivity extends SimpleBaseGameActivity implements
 
 			}
 
-			else if (building == "Bronze Mine") {
+			else if (building == ConstantBuildings.TITLEBRONZEMINE) {
 				canBuild = true;
 				int[] text = { ConstantBuildings.HOUSEREQBRONZEMINE,
 						ConstantBuildings.WORKERSBRONZEMINE,
@@ -2464,7 +2472,7 @@ public class MainActivity extends SimpleBaseGameActivity implements
 						ConstantBuildings.COSTBRONZEMINEBRICK, 0, 0, 0, 0, 0, 0 };
 				setBuildingHUDText(text, building,
 						ConstantBuildings.DESCRIPTIONBRONZEMINE);
-			} else if (building == "Road") {
+			} else if (building == ConstantBuildings.TITLEROAD) {
 				canBuild = true;
 				int[] text = { 1, 0, ConstantBuildings.COSTROADCOIN, 0, 0, 0,
 						0, 0, 0, 0, 0, 0 };
@@ -2473,7 +2481,7 @@ public class MainActivity extends SimpleBaseGameActivity implements
 
 			}
 
-			else if (building == "Silo") {
+			else if (building == ConstantBuildings.TITLESILO) {
 				canBuild = true;
 				int[] text = { ConstantBuildings.HOUSEREQSILO,
 						ConstantBuildings.WORKERSSILO,
@@ -2482,7 +2490,7 @@ public class MainActivity extends SimpleBaseGameActivity implements
 				setBuildingHUDText(text, building,
 						ConstantBuildings.DESCRIPTIONSILO);
 
-			} else if (building == "Skinner") {
+			} else if (building == ConstantBuildings.TITLESKINNER) {
 				canBuild = true;
 				int[] text = { ConstantBuildings.HOUSEREQSKINNER,
 						ConstantBuildings.WORKERSSKINNER,
@@ -2490,7 +2498,7 @@ public class MainActivity extends SimpleBaseGameActivity implements
 						ConstantBuildings.COSTSKINNERWOOD, 0, 0, 0, 0, 0, 0, 0 };
 				setBuildingHUDText(text, building,
 						ConstantBuildings.DESCRIPTIONSKINNER);
-			} else if (building == "Stock") {
+			} else if (building == ConstantBuildings.TITLESTOCK) {
 				canBuild = true;
 				int[] text = { ConstantBuildings.HOUSEREQSTOCK,
 						ConstantBuildings.WORKERSSTOCK,
@@ -2498,7 +2506,7 @@ public class MainActivity extends SimpleBaseGameActivity implements
 						0, 0 };
 				setBuildingHUDText(text, building,
 						ConstantBuildings.DESCRIPTIONSTOCK);
-			} else if (building == "Stone Cutter") {
+			} else if (building == ConstantBuildings.TITLESTONECUTTER) {
 				canBuild = true;
 				int[] text = { ConstantBuildings.HOUSEREQSTONECUTTER,
 						ConstantBuildings.WORKERSSTONECUTTER,
@@ -2506,7 +2514,7 @@ public class MainActivity extends SimpleBaseGameActivity implements
 						0, 0, 0, 0 };
 				setBuildingHUDText(text, building,
 						ConstantBuildings.DESCRIPTIONSTONECUTTER);
-			} else if (building == "Theatre") {
+			} else if (building == ConstantBuildings.TITLETHEATRE) {
 				canBuild = true;
 				int[] text = { ConstantBuildings.HOUSEREQTHEATRE,
 						ConstantBuildings.WORKERSTHEATRE,
@@ -2515,7 +2523,7 @@ public class MainActivity extends SimpleBaseGameActivity implements
 						0, 0 };
 				setBuildingHUDText(text, building,
 						ConstantBuildings.DESCRIPTIONTHEATRE);
-			} else if (building == "Wood Cutter") {
+			} else if (building == ConstantBuildings.TITLEWOODCUTTER) {
 				canBuild = true;
 				int[] text = { ConstantBuildings.HOUSEREQWOODCUTTER,
 						ConstantBuildings.WORKERSWOODCUTTER,
@@ -2870,6 +2878,7 @@ public class MainActivity extends SimpleBaseGameActivity implements
 		buildingDescriptionHUD = new BuildingDescriptionHUD(0, 69,
 				images.getBuildingDescriptionHUDImage(),
 				this.getVertexBufferObjectManager(), this, title, detail);
+		buildingDescriptionHUD.setAlpha(0.75f);
 
 	}
 
@@ -3041,11 +3050,11 @@ public class MainActivity extends SimpleBaseGameActivity implements
 		this.theatres = theatres;
 	}
 
-	public ArrayList<Fountain> getFountains() {
+	public ArrayList<Well> getFountains() {
 		return fountains;
 	}
 
-	public void setFountains(ArrayList<Fountain> fountains) {
+	public void setFountains(ArrayList<Well> fountains) {
 		this.fountains = fountains;
 	}
 

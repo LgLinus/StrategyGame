@@ -1,5 +1,6 @@
 package com.ligr.strategygame.buildings;
 
+import org.andengine.entity.primitive.Ellipse;
 import org.andengine.entity.sprite.AnimatedSprite;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.input.touch.TouchEvent;
@@ -8,6 +9,9 @@ import org.andengine.opengl.texture.region.ITiledTextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.color.Color;
 import org.andengine.util.debug.Debug;
+
+import other.EllipseCustom;
+import other.GameMath;
 
 import com.ligr.strategygame.AnimatedSpriteObject;
 import com.ligr.strategygame.MainActivity;
@@ -30,9 +34,10 @@ public class StoneCutter extends AnimatedSpriteObject {
 			VertexBufferObjectManager pVertexBufferObjectManager,MainActivity main, boolean load) {
 		super(pX, pY, pTiledTextureRegion, pVertexBufferObjectManager,main);
 		this.main = main;
-		// TODO Auto-generated constructor stub
+		
 		if(!load)
 		main.getController().updateWorkers(ConstantBuildings.WORKERSSTONECUTTER,0);
+		
 		yBaseStart = 24;
 	}
 	public void createNpc(){
@@ -54,9 +59,9 @@ public class StoneCutter extends AnimatedSpriteObject {
 		}
 		if(pSceneTouchEvent.isActionUp()){
 			
-		if(main.boolplacebuilding == false && pressedDown){ pressedDown = false;
+		if(main.boolplacebuilding == false && pressedDown && main.removeBuildings == false){ pressedDown = false;
 		main.addBuildingDescription("Stone Cutter", "The stone cutter provides the city with Marble, which can be used for Tempels and Houses.");
-	
+		main.getController().addEllipseCustom(this.mX+(this.getWidth()),this.mY+this.getHeight(),ConstantBuildings.RANGESTONECUTTER,ConstantBuildings.RANGESTONECUTTER/2, this.getVertexBufferObjectManager(),EllipseCustom.REMOVEBACK);
 		}
 		else if(main.removeBuildings==true && main.boolplacebuilding == false && pressedDown){
 			main.MessagePopUpChoice("Are you sure you want to remove the building?", Color.WHITE, this, "Remove", main.inGameHUD);
@@ -79,15 +84,15 @@ public class StoneCutter extends AnimatedSpriteObject {
 		
 	}
 	public boolean getNewMarble(){
-		double temprange= ConstantBuildings.RANGE+1;
+		double temprange= ConstantBuildings.RANGESTONECUTTER+1;
 		if(target==null){
 		for(int i = 0; i < main.getMarbleTiles().size();i++){
-			if(main.getController().calculateDistance(this, main.getMarbleTiles().get(i)) < ConstantBuildings.RANGE){
+			if(GameMath.calculateRange(this, main.getMarbleTiles().get(i),1,2) < ConstantBuildings.RANGESTONECUTTER){
 				marbleInRange = true;
 				if(!main.getMarbleTiles().get(i).used){
-					if(temprange > main.getController().calculateDistance(this, main.getMarbleTiles().get(i))){
+					if(temprange > GameMath.calculateRange(this, main.getMarbleTiles().get(i),1,2)){
 						target = main.getMarbleTiles().get(i);
-						temprange = main.getController().calculateDistance(this, main.getMarbleTiles().get(i));}
+						temprange = GameMath.calculateRange(this, main.getMarbleTiles().get(i),1,2);}
 					
 				}
 				
@@ -99,12 +104,12 @@ public class StoneCutter extends AnimatedSpriteObject {
 		}
 		else if(target.used==true){
 			for(int i = 0; i < main.getMarbleTiles().size();i++){
-				if(main.getController().calculateDistance(this, main.getMarbleTiles().get(i)) < ConstantBuildings.RANGE){
+				if(GameMath.calculateRange(this, main.getMarbleTiles().get(i),1,2) < ConstantBuildings.RANGESTONECUTTER){
 					marbleInRange = true;
 					if(!main.getMarbleTiles().get(i).used){
-						if(temprange > main.getController().calculateDistance(this, main.getMarbleTiles().get(i))){
+						if(temprange > GameMath.calculateRange(this, main.getMarbleTiles().get(i),1,2)){
 							target = main.getMarbleTiles().get(i);
-							temprange = main.getController().calculateDistance(this, main.getMarbleTiles().get(i));}
+							temprange = GameMath.calculateRange(this, main.getMarbleTiles().get(i),1,2);}
 						
 					}
 					
@@ -120,7 +125,7 @@ public class StoneCutter extends AnimatedSpriteObject {
 	public void checkForStocks(){
 		if(this.marbleMonth<4 && marbleInRange){				
 		for(int i = 0;i<main.getStocks().size();i++){
-			if(main.getController().calculateDistance(this, main.getStocks().get(i))<ConstantBuildings.RANGE){				
+			if(GameMath.calculateRange(this, main.getStocks().get(i),1,2)<ConstantBuildings.RANGESTONECUTTER){				
 				if(main.getStocks().get(i).checkSpace("Marble") ==true){
 
 					main.getController().Marble +=1;

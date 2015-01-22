@@ -9,6 +9,7 @@ import org.andengine.util.color.Color;
 import com.ligr.strategygame.MainActivity;
 import com.ligr.strategygame.PlaceBuilding;
 import com.ligr.strategygame.buildings.House;
+import com.ligr.strategygame.constants.ConstantBuildings;
 
 public class TheatreButton extends Sprite {
 
@@ -32,7 +33,7 @@ public class TheatreButton extends Sprite {
 		if(pSceneTouchEvent.isActionUp() && this.getAlpha()!=0){
 				
 			main.boolplacebuilding = true;
-			main.createBuildingHUD("Theatre");
+			main.createBuildingHUD(ConstantBuildings.TITLETHEATRE);
 			main.removeBuildingTouchAreas();
 			//	main.MoreInfoText.setText("An amphittheathre provides nearby inhabitants with amusement.");
 			main.MoreInfoText.setColor(Color.BLACK);

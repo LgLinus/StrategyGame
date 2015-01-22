@@ -8,6 +8,13 @@ TODO[] - Tutorial
 
 --------------------------------------------------------------
 
+Fixade så att man kan se stonecutters räckhåll i efterhand
+
+Fixade så att man kan ta bort stone cutters - 15:13 2015-01-20
+
+Ändrade namn från fountain till well - 15:13 2015-01-20
+
+Fixade ellips range för stone cutter - 17:37 2015-01-19
 
 Fixade bugg som skedde när man tryckte på skärmen efter att ha tagit upp en hus meny - 14:18 2014-08-01
 

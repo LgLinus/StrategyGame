@@ -1,6 +1,7 @@
 package com.ligr.strategygame;
 
 import org.andengine.entity.primitive.Polygon;
+import org.andengine.entity.shape.IShape;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
@@ -29,9 +30,11 @@ public class SpriteObject extends Sprite{
 		main.objectAmount++;
 		z = this.getY();
 		main.updateScreen();
-		float[] vertice = {1,0};
-		polygon = new Polygon(this.mX, this.mY, vertice, vertice, this.getVertexBufferObjectManager());
-
+		float[] xVertice = {0,47,96,47};
+		float[] yVertice = {23,0,23,47};
+		polygon = new Polygon(this.mX, this.mY, xVertice, yVertice, this.getVertexBufferObjectManager());
+		polygon.setColor(0.5f, 1f, 0.3f);
+		MainActivity.mScene.attachChild(polygon);
 		}
 	/**
 	 * Detach our spriteobject
@@ -77,7 +80,8 @@ public class SpriteObject extends Sprite{
 	public void setID(int i) {
 		this.id = i;
 	}
-	public Polygon getPolygon(){
+	public Polygon getBounds(){
 		return polygon;
 	}
+
 }

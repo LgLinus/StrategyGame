@@ -1,14 +1,13 @@
 package com.ligr.strategygame;
 
+import java.util.ArrayList;
+
 import org.andengine.engine.handler.IUpdateHandler;
 import org.andengine.engine.handler.physics.PhysicsHandler;
 import org.andengine.entity.primitive.Ellipse;
 import org.andengine.entity.primitive.Polygon;
-import org.andengine.entity.shape.Shape;
-import org.andengine.entity.sprite.AnimatedSprite;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.opengl.texture.region.ITextureRegion;
-import org.andengine.opengl.texture.region.ITiledTextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.color.Color;
 import org.andengine.util.debug.Debug;
@@ -34,13 +33,20 @@ public class PlaceBuilding extends Sprite {
 		super(pX, pY, pITextureRegion, pVertexBufferObjectManager);
 		RANGE = 0;
 		this.main = main;
-		if(MainActivity.currentBuilding == "Stone Cutter")
-			RANGE = ConstantBuildings.RANGESTONECUTTER;
-		range = new Ellipse(this.mX+(this.getWidth()),this.mY+this.getHeight(),RANGE,RANGE, this.getVertexBufferObjectManager());
-		range.setColor(Color.BLACK);
-		MainActivity.mScene.attachChild(range);
+		createEllipseRange();
+		
 		building = main.getCurrentBuilding();
 		createPolygon();
+	}
+
+	private void createEllipseRange() {
+		if(MainActivity.currentBuilding == ConstantBuildings.TITLESTONECUTTER)
+			RANGE = ConstantBuildings.RANGESTONECUTTER;
+		else if(MainActivity.currentBuilding == "Wood Cutter")
+			RANGE = ConstantBuildings.RANGEWOODCUTTER;
+		range = new Ellipse(this.mX+(this.getWidth()),this.mY+this.getHeight(),RANGE,RANGE/2, this.getVertexBufferObjectManager());
+		range.setColor(Color.BLACK);
+		MainActivity.mScene.attachChild(range);
 	}
 
 	public void updatePolygon(){
@@ -61,7 +67,7 @@ public class PlaceBuilding extends Sprite {
 	protected void onManagedUpdate(final float pSecondsElapsed){
 	super.onManagedUpdate(pSecondsElapsed);
 		currentBuilding = MainActivity.currentBuilding;
-		//if(currentBuilding == "Stone Cutter")
+		//if(currentBuilding == ConstantBuildings.TITLESTONECUTTER)
 			//range.setAlpha(1);
 		range.setX(this.mX+this.getWidth()/2);
 		range.setY(this.mY+this.getHeight()/2);
@@ -77,14 +83,14 @@ public class PlaceBuilding extends Sprite {
 			@Override
 			public void onUpdate(final float pSecondsElapsed) {
 				for(int i = 0; i < MainActivity.asObjects.size();i++){
-					if(getBounds().collidesWith(MainActivity.asObjects.get(i).getPolygon())){
+					if(getBounds().collidesWith(MainActivity.asObjects.get(i).getBounds())){
 						Debug.e("Colliede");
 						ret =false;
 						break;
 					}
 				}
 				for(int i = 0; i < MainActivity.sObjects.size();i++){
-					if(getBounds().collidesWith(MainActivity.sObjects.get(i).getPolygon())){
+					if(getBounds().collidesWith(MainActivity.sObjects.get(i).getBounds())){
 						ret= false;
 						break;
 					}
@@ -107,5 +113,25 @@ public class PlaceBuilding extends Sprite {
 	 */
 	public Polygon getBounds(){
 		return this.polygon;
+	}
+
+	public boolean collides() {
+		
+		boolean collide = false;
+		ArrayList<AnimatedSpriteObject> asSprites = main.getAsObjects();
+		ArrayList<SpriteObject> sSprites = main.getSObjects();
+		for(int i = 0; i < asSprites.size();i++){
+			if(polygon.collidesWith(asSprites.get(i).getBounds())){
+				Debug.e("collision2");
+				collide = true;
+				break;}
+		}
+		for(int i = 0; i < sSprites.size();i++){
+			if(polygon.collidesWith(sSprites.get(i).getBounds())){
+				Debug.e("collision2");
+				collide = true;
+				break;}
+		}
+		return collide;
 	}
 }

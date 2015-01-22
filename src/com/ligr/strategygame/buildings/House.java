@@ -8,6 +8,8 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.color.Color;
 import org.andengine.util.debug.Debug;
 
+import other.GameMath;
+
 import com.ligr.strategygame.AnimatedSpriteObject;
 import com.ligr.strategygame.MainActivity;
 import com.ligr.strategygame.UpgradeArrowHouse;
@@ -244,7 +246,7 @@ public class House extends AnimatedSpriteObject {
 		// 12*totalinhabitants/4
 		for (int i = 0; (i < main.getFoodMarkets().size()&&!(this.WheatAmmount>=this.maxWheatAmmount)); i++) {
 
-			double distance = main.getController().calculateDistance(
+			double distance = GameMath.calculateRange(
 					main.getFoodMarkets().get(i), house);
 			if (distance < 512) {
 				if (WheatAmmount > 0 ) {
@@ -286,7 +288,7 @@ public class House extends AnimatedSpriteObject {
 				deGradeLevel();}
 		}
 		for (int i = 0; i < main.getTheatres().size(); i++) {
-			double distance = main.getController().calculateDistance(
+			double distance = GameMath.calculateRange(
 					main.getTheatres().get(i), house);
 			if (distance < 512) {
 				house.GotTheatre = true;
@@ -300,7 +302,7 @@ public class House extends AnimatedSpriteObject {
 		if (main.getTheatres().size() == 0)
 			GotTheatre = false;
 		for (int i = 0; i < main.getFountains().size(); i++) {
-			double distance = main.getController().calculateDistance(
+			double distance = GameMath.calculateRange(
 					main.getFountains().get(i), house);
 			if (distance < 512) {
 				GotWater = true;

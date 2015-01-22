@@ -9,6 +9,8 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.color.Color;
 import org.andengine.util.debug.Debug;
 
+import other.GameMath;
+
 import com.ligr.strategygame.AnimatedSpriteObject;
 import com.ligr.strategygame.MainActivity;
 import com.ligr.strategygame.SpriteObject;
@@ -104,7 +106,7 @@ public class FoodMarket extends AnimatedSpriteObject {
 	 */
 	public void checkForStocks() {
 		for (int i = 0; i < main.getSilos().size(); i++) {
-			double distance = main.getController().calculateDistance(main.getSilos().get(i),
+			double distance = GameMath.calculateRange(main.getSilos().get(i),
 					this);
 			if (distance < 512 && main.getSilos().get(i).FoodAmmount > 0) {
 				for (this.FoodAmmount = this.FoodAmmount; this.FoodAmmount < this.MaxFoodAmmount; this.FoodAmmount++) {
